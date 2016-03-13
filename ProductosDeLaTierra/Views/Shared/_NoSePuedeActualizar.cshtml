@@ -1,0 +1,13 @@
+﻿@model ModelStateDictionary
+
+<div class="nosepuedeactualizar">
+    <span style="color: crimson; font-size: 16px"><i class="icon-cancel" ></i> No se puede modificar</span>
+    <ul>
+        @foreach (ModelState m in Model.Values) { 
+            foreach (ModelError x in m.Errors) { 
+                <li>@x.ErrorMessage</li>
+            }
+        }
+    </ul>
+</div>
+

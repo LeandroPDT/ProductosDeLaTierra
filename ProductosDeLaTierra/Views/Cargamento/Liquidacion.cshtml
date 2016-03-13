@@ -1,0 +1,64 @@
+﻿@model Site.Models.Cargamento
+@{
+    ViewBag.Title = "Liquidación";
+}
+
+<div class="newelements">
+
+    @if (!Request.IsAjaxRequest()) {
+        <h1>@b.Visitar(ViewBag.Title)</h1>
+    }
+    
+    <table class="formulario">
+        @if (Request.IsAjaxRequest()) {
+            <tr>
+                <th>
+                    <h3 style="text-align:left">@ViewBag.Title</h3>
+                    <br />
+                </th>
+                <td >
+                    <h3 style="text-align:right">@Model.ToString()</h3>
+                    <br />
+                </td>
+            </tr>
+        }
+        @if (Sitio.EsEmpleado) {
+        <tr>
+            <th>@Html.LabelFor(model => Model.Proveedor)</th>
+            <td><label class="intralabel">@Model.Proveedor</label> </td>
+        </tr>            
+        }
+        <tr>
+            <th>@Html.LabelFor(model => Model.Cliente)</th>
+            <td><label class="intralabel">@Model.Cliente</label> </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <br/>
+                <table class="simpletable2">
+                    <tr>
+                        <th style="text-align:right"><h4><i>Ganancia por mercaderías vendidas</i></h4></th>
+                        <th><h4><b>@Model.Ganancia.ToString("N2")</b></h4></th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:right"><h4><i>Costo de Flete</i></h4></th>
+                        <th><h4><b>- @Model.CostoFlete.ToString("N2")</b></h4></th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:right"><h4><i>Costo de Descarga</i></h4></th>
+                        <th><h4><b>- @Model.CostoDescarga.ToString("N2")</b></h4></th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:right"><h4><i>Comisión por Ventas</i></h4></th>
+                        <th><h4><b>- @Model.ComisionCobrada().ToString("N2")</b></h4></th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:right"><h3><i>Ganancia Total</i></h3></th>
+                        <th><h3><b>@Model.GananciaTotal().ToString("N2")</b></h3></th>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <br/>
+</div>

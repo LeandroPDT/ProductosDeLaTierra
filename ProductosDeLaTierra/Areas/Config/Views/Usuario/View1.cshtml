@@ -1,0 +1,21 @@
+﻿@model Site.Models.Usuario
+
+@{
+    ViewBag.Title = Model.ToString();
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@b.Visitar(ViewBag.Title)</h1>
+
+<div class="newelements">
+    @using (Html.BeginForm("Editar", "Usuario")) {
+        @Html.ValidationSummary()
+        @Html.HiddenFor(model => model.UsuarioID)
+
+        <table class="formulario">
+            <tr>
+                <th>@Html.LabelFor(model => model.Comision)</th>
+                <td>@Html.EditorFor(model => model.Comision)</td>
+            </tr>
+        </table>
+</div>

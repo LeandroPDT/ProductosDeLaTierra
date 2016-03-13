@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+@using StackExchange.Profiling;
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed|Roboto' rel='stylesheet' type='text/css'>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/site")
+    @RenderSection("Head", required: false)
+    @RenderSection("scripts", required: false)
+    @MiniProfiler.RenderIncludes(showControls: true, startHidden: false, maxTracesToShow: 5, position: RenderPosition.BottomRight)
+
+    @if (Sitio.Usuario != null && !Sitio.EsEmpleado) {
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-87979-50', 'auto');
+            ga('send', 'pageview');
+
+        </script>
+    }
+</head>
+<body>
+	<div id="wrapper">
+		<div id="loadingDiv">
+		</div>
+
+		<div id="header">
+			<div id="logo">
+				<a href="/">
+					<img src="/content/images/logo.png" width="200" height="42" alt="logo" />
+				</a>
+			</div>
+
+			<div id="logon">
+				@Html.Partial("_LogOnPartial")
+			</div>
+
+			<div id="menucontainer">
+				<ul class="jsddm">
+					@foreach (BizMenu m in Sitio.getMainMenu()) {
+						<li class="@(m.IsAnySubMenuActive() ? "active" : "" ) @m.CssClass" id="@m.ID">
+							<a class="topmenulink" href="@(m.Link.IsEmpty()?"#":m.Link) ">@m.Texto</a>
+							@if (m.subMenu != null) {
+								<ul>
+									@foreach (BizMenu sm in m.subMenu) {
+										if (sm.PermisoID.IsEmpty() || Seguridad.CanAccess(sm.PermisoID)) {
+											<li class="@( sm.IsActive() ? "active" :"" ) @sm.CssClass" id="@sm.ID"><a href="@sm.Link">@sm.Texto</a></li>
+										}
+										else {
+											<li class="nopermitido @sm.CssClass" id="@sm.ID" title="No tiene permiso para acceder"><a>@sm.Texto</a></li>
+										}
+									}
+								</ul>
+							}
+						</li>
+					}
+				</ul>
+			</div>
+
+		</div>
+
+		@if (TempData["ErrorMessage"] != null) {
+			<div class="showerror noprint">
+				@TempData["ErrorMessage"]
+			</div>
+		}
+
+		@if (TempData["InfoMessage"] != null) {
+			<div class="showsuccess noprint">
+				@TempData["InfoMessage"]
+			</div>
+		}
+
+		<div id="printheader" class="onlyprint">
+			<img src="/content/images/logo.png" />
+		</div>
+
+		<div id="content">
+			@RenderBody()
+		</div>
+
+		<div id="minidelete-dialog" title="Confirmación" style="display: none;">
+			<p>¿Está seguro de borrar?</p>
+		</div>
+
+		<div id="miniedit-dialog" style="display: none;"></div>
+		<div id="autohelp" style="display: none;"></div>
+		<div id="SeleccionarChequeDialog" title="" style="display: none;"></div>
+
+	</div>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+@model Ayuda
+
+@{
+    ViewBag.Title = "Editar Ayuda";
+}
+
+<h1>@b.Visitar(ViewBag.Title)</h1>
+
+
+@using (Html.BeginForm("Editar", "Ayuda", FormMethod.Post)) {
+    @Html.ValidationSummary()
+    @Html.Hidden("AyudaID")
+    @Html.Hidden("Fecha")
+    @Html.Hidden("US_ID")
+    <table class="formulario">
+    <tr>
+        <th><label for="Titulo">Titulo:</label>
+        <td>@Html.TextBox("Titulo", Model.Titulo, new { style = "width: 760px; padding: 5px;" })
+            @Html.ValidationMessageFor(m => m.Titulo) 
+        </td>
+    </tr>
+
+	<tr>
+		<th></th>
+		<td>@Html.TextArea("Notas", Model.Notas, new { style = "width: 760px; height: 460px" })
+		@Html.ValidationMessageFor(m => m.Notas) 
+        </td>
+	</tr>
+        
+    <tr>
+        <th></th>
+        <td><input type="submit" value="Guardar" class="defaultbutton" /></td>
+    </tr>
+    </table>
+
+}
+
+<div class="footermessage">
+    @Html.ActionLink("Volver a la lista", "Index")
+
+</div>
+
+
+@section head {
+    <script src="/Scripts/redactor/redactor.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/Scripts/redactor/css/redactor.css" />
+	<script type="text/javascript">
+	    $(document).ready(function () {
+	        $('#Notas').redactor({
+	            lang: 'es',
+	            autoformat: false,
+                toolbar: 'keops',
+                imageUpload: '/Ayuda/UploadImagen/@Model.AyudaID'
+            });
+	    });
+	</script>
+}
+

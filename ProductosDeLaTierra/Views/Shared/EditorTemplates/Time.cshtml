@@ -1,0 +1,16 @@
+﻿@model System.DateTime?
+
+@{
+    IDictionary<string, object> Attributes = new Dictionary<string, object>();
+    if (ViewData.ContainsKey("style")) {
+        Attributes.Add("style", (string)ViewData["style"]);
+    }
+    if (ViewData.ContainsKey("autohelp")) {
+        Attributes.Add("title", (string)ViewData["autohelp"]);
+    }
+    Attributes.Add("class", "hora");
+}
+   
+
+@Html.TextBox("", (Model.HasValue ? Model.Value.ToHHMM() : ""), Attributes)
+

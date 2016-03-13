@@ -1,0 +1,10 @@
+﻿@model Entidad
+           
+@if (Model.ID.IsEmpty()) {
+    <a href="#" tabindex="-1"><i class="icon-attach"></i> Debe guardar para adjuntar</a>
+}
+else {
+    <a tabindex="-1" class="masinfo" data-width="300" href="/ArchivosAdjuntos/Galeria/@Model.ID?Nombre=@Model.Nombre"><i class="icon-attach"></i> Adjuntar</a>
+    <a tabindex="-1" class="masinfo" href="/Entidad/Info/@Model.ID?Nombre=@Model.Nombre"><i class="icon-info"></i> Info</a>
+}
+<a href="/ayuda/para/@Model.Nombre"  tabindex="-1" title="Ayuda"><i class="icon-support"></i></a>

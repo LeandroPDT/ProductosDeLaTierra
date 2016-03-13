@@ -1,0 +1,73 @@
+@model ListarIncidentesViewModel
+@{
+    ViewBag.Title = "Incidentes";
+}
+<div class="botonera">
+    <a href="/Incidentes/Nuevo"  data-callback="location.reload()"><i class="icon-plus"></i> Registrar Incidente</a>
+</div>
+
+<h1>@b.Visitar(ViewBag.Title)</h1>
+
+@Html.ValidationSummary("No se ejecutar la busqueda.")
+@using (Html.BeginForm()) {
+    <div class="formbuscar">
+        <label>Buscar:</label> @Html.TextBox("q", Model.q, new {style = "width: 100px;"})
+        <label class="intralabel">@Html.CheckBox("ExcluirCerrados") Excluir cerrados </label>
+        <label class="intralabel">@Html.CheckBox("SoloSubscriptos") Solo los subscriptos por mi </label>
+        @if (Sitio.EsDeveloper()) {
+            <label class="intralabel">@Html.CheckBox("SoloSinResolver") Solo sin resolver</label>
+        }
+        <label class="intralabel">Ver un máximo de: </label> @Html.DropDownList("CantidadPorPagina", CantidadPorPagina.GetSelectList(Model.CantidadPorPagina))
+        <input type="submit" value="Buscar" class="defaultbutton"/>
+        <br />
+        <label class="intralabel">Tipo: </label>@Html.DropDownList("Tipo", TipoIncidente.GetSelectList(Model.Tipo, "--todos--"))
+    </div>
+}
+    
+@Html.ResultadoBusqueda(Model.Resultado, Model.CantidadPorPagina)  
+   
+<div class="lista">
+    <table class="nicetable sortable filtrable" style="min-width: 700px">
+    <thead>
+        <tr></tr>
+        <tr>
+            <td colspan="5" class="filtrablerow">
+                <span class="quicksearchicon"></span>
+                <input class="quicksearch" type="text" />
+            </td>
+            </tr>
+    </thead>
+    <tbody>
+    @foreach (Incidente Item in Model.Resultado) {
+        <tr>
+            <td>#@Item.IncidenteID.ToString()</td>
+            <td>
+                @if (Item.Cerrado) {
+                    <div style="float: right; margin-left: 5px" class="@Item.EstadoCssClass">@Item.Estado</div>
+                }
+                <b><a href="/Incidentes/ver/@Item.IncidenteID">@Item.Titulo</a></b>
+                <div>
+                <div class="smalltext" style="float: left">
+                    @Item.TipoIcon Creado por <span style="color: Black">@Item.Usuario</span> @BizLibMVC.Utiles.TimeElapsed(Item.Fecha) 
+                    @if (!Item.Cerrado && Item.ResueltoDev) { 
+                        <span style="padding: 0 10px" title="Ya resuelto en desarrollo. Será cerrado en la próxima actualización del sistema"><i class="icon-tools"></i></span>
+                    }
+                </div>
+                @if (Item.CantComentarios > 0) {
+                    <div style="float: right; margin-left: 10px; "><i class="icon-comments"></i> @Item.CantComentarios.ToSingleOrPlural("comentario", "comentarios") </div>
+                }
+                @if (Item.CantArchivos > 0) {
+                    <div style="float: right; margin-left: 10px;"><i class="icon-attach"></i> @Item.CantArchivos.ToSingleOrPlural("archivo", "archivos") </div>
+                }
+                </div>
+            </td>
+            <td>
+                <a href="/incidentes/ver/@Item.IncidenteID.ToString()" class="button">Ver</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+    </table>
+</div>
+
+

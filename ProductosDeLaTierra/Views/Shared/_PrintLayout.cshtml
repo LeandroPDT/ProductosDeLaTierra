@@ -1,0 +1,18 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="@Sitio.URI/Scripts/jQuery/jquery-ui-1.8.16.custom.css" rel="stylesheet" type="text/css" />
+    <link href="@Sitio.URI/content/site.css?v=@Sitio.Version()" rel="stylesheet" type="text/css" />
+    <link href="@Sitio.URI/Content/webfont/style.css?v=@Sitio.Version()" rel="stylesheet" type="text/css" />
+    <link href="@Sitio.URI/content/print.css?v=@Sitio.Version()" rel="stylesheet" type="text/css" />
+   
+    @RenderSection("Head", required: false)
+
+</head>
+
+<body>
+    @RenderBody()
+</body>
+</html>

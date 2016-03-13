@@ -1,0 +1,20 @@
+﻿@model Site.Models.Evento
+
+@if (Request.IsAjaxRequest()) {
+    <tr data-href="Editar/@Model.Tipo/@Model.EventoID.ToString()" style="cursor:pointer">
+        <th>
+            <h3 style="text-align:left">@Model.Tipo</h3>
+            <br />
+        </th>
+        <td colspan="2">
+            <h3 style="text-align:right">@Model.Cargamento.ToString()</h3>
+            <br />
+        </td>
+    </tr>
+}
+
+<script type="text/javascript">
+    $('tr[data-href]').on("click", function () {
+        document.location = $(this).data('href');
+    });
+</script>

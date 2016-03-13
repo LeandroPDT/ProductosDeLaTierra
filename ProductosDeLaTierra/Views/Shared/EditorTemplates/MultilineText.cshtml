@@ -1,0 +1,20 @@
+﻿@model string
+
+@{
+    IDictionary<string, object> Attributes = new Dictionary<string, object>();
+    if (ViewData.ContainsKey("style")) {
+        Attributes.Add("style", (string)ViewData["style"]);
+    }
+    if (ViewData.ContainsKey("autohelp")) {
+        Attributes.Add("title", (string)ViewData["autohelp"]);
+    }
+    if (ViewData.ContainsKey("class")) {
+        Attributes.Add("class", (string)ViewData["class"] + " multi-line");
+    }
+    else {
+        Attributes.Add("class", "multi-line");
+    }
+}
+     
+@Html.TextArea("", Model, Attributes)
+

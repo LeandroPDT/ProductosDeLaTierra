@@ -1,0 +1,17 @@
+﻿@model List<Log>
+           
+@if (Model.Count == 0) {
+    <div class="smalltext">No se encontró información <i class="icon-sad"></i></div>
+}
+else { 
+    var Grilla = new BizGrid(source: Model, canSort: false);
+    Grilla.Filtrable = false;
+    
+    @Grilla.GetHtml( columns: Grilla.Columns(
+                        Grilla.Column("Fecha", "Fecha"),
+                        Grilla.Column("Hora", "Hora", format: @<span>@(item.Fecha.ToShortTimeString())</span>),
+                        Grilla.Column("Tipo", "Acción"),
+                        Grilla.Column("Usuario")
+                    )
+                )
+}

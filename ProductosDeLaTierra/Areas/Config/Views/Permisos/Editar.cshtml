@@ -1,0 +1,41 @@
+﻿@model Site.Models.Permiso
+
+@{
+    ViewBag.Title = "Permiso";
+}
+
+@using (Html.BeginForm("Editar", "Permisos", FormMethod.Post, new { id = "PermisoForm" })) {
+    @Html.ValidationSummary()
+    @Html.HiddenFor(model => model.PermisoID)
+    <table class="formulario">
+	<tr>
+        <th>@Html.LabelFor(model => model.Nombre)</th>
+        <td>@Html.EditorFor(model => model.Nombre, new { style = "width: 400px" })
+            @Html.ValidationMessageFor(model => model.Nombre)
+        </td>
+
+	</tr>
+	<tr>
+        <th>@Html.LabelFor(model => model.Notas)</th>
+        <td>@Html.TextAreaFor(model => model.Notas)
+            @Html.ValidationMessageFor(model => model.Notas)
+        </td>
+
+	</tr>
+	<tr>
+        <th>@Html.LabelFor(model => model.EsABM)</th>
+        <td>@Html.EditorFor(model => model.EsABM)
+            @Html.ValidationMessageFor(model => model.EsABM)
+        </td>
+
+	</tr>
+	<tr>
+        <th>@Html.LabelFor(model => model.Activo)</th>
+        <td>@Html.EditorFor(model => model.Activo)
+            @Html.ValidationMessageFor(model => model.Activo)
+        </td>
+
+	</tr>
+    </table>
+}
+

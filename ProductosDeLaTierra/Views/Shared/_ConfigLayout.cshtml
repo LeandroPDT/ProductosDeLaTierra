@@ -1,0 +1,34 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<table style="width: 100%">
+<tr>
+    <td style="width: 130px" class="noprint">
+        <div class="sidetitle">config</div>
+        <div id="sidenav">
+            <ul>
+                @{var LastTitulo = "";}
+                @foreach (BizMenu m in Sitio.getConfigMenu()) {
+                    if (m.Link.IsEmpty()) {
+                        <li class="@m.CssClass" id="@m.ID"><h3>@m.Texto</h3></li>
+                        LastTitulo = m.Texto;
+                    }
+                    else { 
+                        <li class="@( m.IsActive() ? "active" : "") @m.CssClass" id="@m.ID"><a href="@m.Link">@m.Texto <span style="display: none">@LastTitulo</span></a></li>
+                    }
+                }
+            </ul>
+        </div>
+    </td>
+    <td>
+        <div id="content">
+            @RenderBody()
+        </div>
+    </td>
+
+</tr>
+</table>
+
+@section Head {
+    @RenderSection("Head", required: false)
+}

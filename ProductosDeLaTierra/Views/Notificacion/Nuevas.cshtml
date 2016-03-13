@@ -1,0 +1,19 @@
+@model ListarNotificacionViewModel
+
+<div class="notificacion-lista nicescroll">
+@if (Model.Resultado.Count == 0) { 
+    <div>No tiene notificaciones</div>
+}
+
+@foreach (var item in Model.Resultado) {
+    <div class="notificacion @(item.Leido ? "" : "notificacionpendiente" )">
+        <a href="@item.URL">
+            <b>@Html.Raw(item.Texto)</b>
+            @if (!item.Cuerpo.IsEmpty()) { 
+                <p class="cuerpo">@Html.Raw(item.Cuerpo)</p>
+            }
+            <span>@item.Fecha.TimeAgo()</span>
+        </a>
+    </div>
+}
+</div>

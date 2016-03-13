@@ -1,0 +1,53 @@
+#header, #logon, #menucontainer, .buscar, #footer, .botonera, button, input[type="reset"], input[type="button"], input[type="submit"], .ui-button, .noprint, .filtrablerow, .footermessage, .profiler-results, .bookmarkpage, .topsubnav, .floatGenerateExcelButton, .button, .ui-monthpicker-trigger, .minisearch {display: none !important} 
+body {margin: 0; color: black; font-family: Arial, Sans-Serif; font-size: 12pt !important; }
+#wrapper {width: 100%; min-width: 1024px; margin: 0; font-family: Arial, Sans-Serif; }
+table.formulario {}
+table.formulario th {min-width: 100px}
+table.formbuscar {font-size: 12pt !important }
+input, select {border-width: 0 0 1px 0; border-color: Gray; border-style: dashed; font-size: 12pt !important;}
+select {-moz-appearance: none; -webkit-appearance: none; appearance: none;}
+textarea {border: none; }
+.onlyprint {display: block }
+#printheader {border-bottom: 1px dotted #ccc; padding-bottom: 5px;}
+.carta {width: 100%; border: none; padding: 30px 0; font-size: 12pt; color: black}
+.textarea_container div {max-width: 80%;border-width: 0 0 1px 0; border-color: Gray; border-style: dashed; min-height: 18px;}
+.ui-tabs-nav { display: none; }
+.ui-tabs .ui-tabs-panel { display: block !important; border: none; padding: 0 0 10px 0; margin: 0 0 10px 0; border-radius: 0 }
+.ui-tabs {border: none}
+h3.tabtitle {display: block; margin: 10px 0 5px;border-bottom: 1px solid #1694CE; padding-bottom: 3px;}
+.ui-autocomplete-input {width: auto !important; min-width: 30px; max-width: 200px; }
+.ensayopresentado, .reportePortrait, .reporte {border: none; box-shadow: none; padding: 0; width: 1030px; margin: 0 auto } /* el ancho tiene que ser fijo para que chrome respete los tamaños*/
+.landscape {width: 1500px; } /* el ancho tiene que ser fijo para que chrome respete los tamaños*/
+.reportePortrait .reportecontenido, .reporte .reportecontenido {min-height: 1200px} 
+.landscape .reportecontenido {min-height: 900px}
+.tableFloatingHeader {display: none !important;}
+table.bigprint {font-size: 14pt !important; }
+a, a:visited {color: black; text-decoration: none;}
+.widerinprint100 {min-width: 100px}
+.widerinprint200 {min-width: 200px}
+.nowrapinprint {white-space:nowrap; max-width: 200px; overflow: hidden}
+
+
+table.reporttable
+{
+  border: solid 1px #e8eef4;
+  border-collapse: collapse;
+  background: white;
+  font-size: 10pt !important
+}
+table.reporttable td 
+{
+  padding: 5px;   
+  border: solid 1px #e8eef4;
+}
+
+table.reporttable th
+{
+  padding: 6px 5px;
+  text-align: center;
+  border: solid 1px #3E743A;  
+  background-color: #add6ad;
+  font-weight: bold;
+}
+table.reporttable tfoot, table.nicetable tr.totales {font-weight: bold;}
+table.reporttable tbody tr:nth-child(odd) {background: #fafafa}
