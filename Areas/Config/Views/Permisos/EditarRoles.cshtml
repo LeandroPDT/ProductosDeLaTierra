@@ -1,0 +1,35 @@
+﻿@model Site.Models.Permiso
+
+@{
+    ViewBag.Title = "Permiso";
+}
+
+@using (Html.BeginForm("Editar", "Permisos", FormMethod.Post, new { id = "PermisoForm" })) {
+    @Html.ValidationSummary()
+    @Html.HiddenFor(model => model.PermisoID)
+
+    <table class="simpletable newelements">
+    <tr>
+        <th>Rol</th>
+        <th>Acceder</th>
+        @if (Model.EsABM) { 
+            <th>Editar</th>
+            <th>Borrar</th>
+        }
+    </tr>
+    @for (int i = 0; i < Model.RolesConPermiso.Count(); i++) {
+        <tr>
+            <td>
+                @Html.HiddenFor(model => model.RolesConPermiso[i].PermisoConcedidoID)
+                @Html.RolSuperList("RolID", "Rol", Model.RolesConPermiso[i].RolID, Model.RolesConPermiso[i].Rol, "RolesConPermiso", i)
+            </td>
+            <td>@Html.EditorFor(model => model.RolesConPermiso[i].PuedeEntrar)</td>
+            @if (Model.EsABM) { 
+                <td>@Html.EditorFor(model => model.RolesConPermiso[i].PuedeEditar)</td>
+                <td>@Html.EditorFor(model => model.RolesConPermiso[i].PuedeBorrar)</td>
+            }
+        </tr>
+    }
+    </table>
+}
+

@@ -1,0 +1,7 @@
+﻿@model Site.Models.Evento
+@if (!Request.IsAjaxRequest()) {
+    <h1>@b.Visitar(ViewBag.Title)</h1>
+<div class="botonera">
+    @Html.Action("Toolbox", "Entidad", new { e = Entidad.GetFromModel(Model), area = "" })
+</div>
+}

@@ -1,0 +1,15 @@
+﻿@model Producto
+<div class="notificacion-lista">
+    <h3>@Model.ToString()</h3>
+    @if (Model.Proveedor > 0) {
+        <text>Proveedor:</text> <i>@Model.Proveedor</i>
+    }
+    @if (Model.CodigoArticulo > 0){
+        <text>Código de Artículo:</text> <i>@Model.CodigoArticulo</i>
+    }
+    @if(!Model.Descripcion.IsEmpty())
+        <text>Descripción:</text> <i>@Model.Descripcion</i>        
+    @if (Model.PesoUnitario > 0) {
+        <text>Peso Unitario (Kg):</text> <i>@Model.PesoUnitario</i>
+    }
+</div>

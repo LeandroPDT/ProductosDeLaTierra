@@ -1,0 +1,107 @@
+﻿@model ListarPermisosViewModel
+@{
+    ViewBag.Title = "Permisos";
+}
+<h1>@b.Visitar(ViewBag.Title)</h1>
+
+@using (Html.BeginForm()) {
+    <div class="formbuscar">
+        @Html.ValidationSummary()
+        <label>Con texto:</label>@Html.TextBox("q", Model.q, new {placeholder="En Nombre o Notas", style="width: 180px"})
+        <label class="intralabel">Ver un máximo de:</label>@Html.DropDownList("CantidadPorPagina", CantidadPorPagina.GetSelectList(Model.CantidadPorPagina, ""))
+        <input type="submit" value="Refrescar" class="defaultbutton"/>
+    </div>
+}
+
+@Html.ResultadoBusqueda(Model.Resultado, Model.CantidadPorPagina)
+    
+    <table class="nicetable filtrable sortable">
+    <thead>
+        <tr class="ui-widget-header">
+            <th>Nombre</th>
+            <th>Notas</th>
+            <th>Roles</th>
+            <th>Usuarios</th>
+            @if (Sitio.EsDeveloper()) { 
+                <th>Admin</th>
+            }
+        </tr>
+        <tr>
+            <td colspan="6" class="filtrablerow">
+                <span class="quicksearchicon"></span>
+                <input class="quicksearch" type="text" />
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Resultado) {
+            <tr>
+                <td>@item.Nombre</td>
+                <td>@item.Notas</td>
+                <td style="white-space: nowrap"><a href="#" class="EditRolesLink" id="ID-ROL-@item.PermisoID" PermisoID="@item.PermisoID">@item.CantRoles roles</a></td>
+                <td style="white-space: nowrap"><a href="#" class="EditUsuariosLink" id="ID-USUARIO-@item.PermisoID" PermisoID="@item.PermisoID">@item.CantUsuarios usuarios</a></td>
+                @if (Sitio.EsDeveloper()) { 
+                    <td style="white-space: nowrap"><a href="#" class="EditDataLink" PermisoID="@item.PermisoID">Editar ID:@item.PermisoID</a></td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="EditDialog" title="" class="Hidden"></div>
+
+@section Head {
+<script type="text/javascript">
+    $(function () {
+        var PermisoID;
+        var RoU;
+        $("#EditDialog").dialog({
+            autoOpen: false, width: 500, height: 300, modal: true,
+            buttons: {
+                "Guardar": function () {
+                    $.post("/Config/Permisos/editar",
+                        $("#PermisoForm").serialize(),
+                        function (data) {  //Post to action
+                            if (data == 'OK') {
+                                if (RoU == "R") {
+                                    $("#ID-ROL-" + PermisoID).load("/Permisos/CantRolesDescrip/" + PermisoID);
+                                }
+                                else {
+                                    $("#ID-USUARIO-" + PermisoID).load("/Permisos/CantUsuariosDescrip/" + PermisoID);
+                                }
+                                $("#EditDialog").dialog("close");
+                            }
+                            else {
+                                ShowError(data);
+                            }
+                        }
+                    );
+                },
+                "Cancelar": function () { $(this).dialog("close"); }
+            }
+        });
+        $(".EditRolesLink").live("click", function (event) {
+            event.preventDefault();
+            PermisoID = $(this).attr("PermisoID");
+            RoU = "R";
+            $("#EditDialog").html("")
+                .dialog("option", "title", "Editar roles con este permiso")
+                .load("/Config/Permisos/EditarRoles/" + PermisoID, function () { $("#EditDialog").dialog("open"); });
+        });
+        $(".EditUsuariosLink").live("click", function (event) {
+            event.preventDefault();
+            PermisoID = $(this).attr("PermisoID");
+            RoU = "U";
+            $("#EditDialog").html("")
+                .dialog("option", "title", "Editar usuarios con este permiso")
+                .load("/Config/Permisos/EditarUsuarios/" + PermisoID, function () { $("#EditDialog").dialog("open"); });
+        });
+        $(".EditDataLink").live("click", function (event) {
+            event.preventDefault();
+            PermisoID = $(this).attr("PermisoID");
+            $("#EditDialog").html("")
+                .dialog("option", "title", "Editar")
+                .load("/Config/Permisos/Editar/" + PermisoID, function () { $("#EditDialog").dialog("open"); });
+        });
+    });
+</script>
+}

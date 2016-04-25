@@ -1,0 +1,4 @@
+﻿Ojo con las nuevas versiones que hacen que deje de funcionar el filtrito
+y otras cosas malas.
+
+Habria que super evaluar de todos modos las nuevas versiones ya que tienen incluido filtros, sticky y demas

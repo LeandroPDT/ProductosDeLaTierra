@@ -1,0 +1,7 @@
+@model int
+
+<form class="newelements">
+@Html.Hidden("IncidenteID", Model)
+<label>Usuario: </label>@Html.UsuarioSuperList("US_ID", "Usuario", 0, "")
+</form>
+

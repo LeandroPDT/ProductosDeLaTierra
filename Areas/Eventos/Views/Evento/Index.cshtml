@@ -1,0 +1,51 @@
+﻿@model Site.Models.IndexEventoViewModel
+
+@{
+    ViewBag.Title = "Historial de eventos";
+    bool esProveedor = Usuario.HasRol(Sitio.Usuario.UsuarioID, "Proveedor");
+    bool esCliente = Usuario.HasRol(Sitio.Usuario.UsuarioID, "Cliente"); 
+}
+<h1>@b.Visitar(ViewBag.Title)</h1>
+
+@using (Html.BeginForm()) {
+    <div class="formbuscar">
+        <label class="intralabel">Cargamento:</label>@Html.EditorFor(model => Model.q, new{ @placeholder=  "Por Nro. Remito o Fecha de envío (DD/MM/YYYY)" , @style = "width:250px"})
+        <label class="intralabel"> Eventos Desde:</label>@Html.EditorFor(model => model.FechaDesde)
+        <label class="intralabel">Hasta:</label>        @Html.EditorFor(model => model.FechaHasta)
+        <br />
+        @if (Sitio.EsEmpleado || esCliente) {
+            <label class="intralabel">Proveedor:</label>@Html.UsuarioSuperList("ProveedorID", "Proveedor", Model.ProveedorID, Model.Proveedor, new UsuarioSuperListHtmlHelper.Options() { Rol = "Proveedor" })
+        }
+        @if (Sitio.EsEmpleado || esProveedor || !Sitio.Usuario.ProveedorID.IsEmpty()) { 
+            <label class="intralabel">Cliente:</label>@Html.UsuarioSuperList("ClienteID", "Cliente", Model.ClienteID, Model.Cliente, new UsuarioSuperListHtmlHelper.Options() { Rol = "Cliente" })
+        }
+        <br />
+        <label class="intralabel">Tipo de Evento:</label>@Html.DropDownListFor(model => Model.Tipo, EventoTipo.EventoTipoSelectList(Model.Tipo))
+        <label class="intralabel">Ver un máximo de:</label>@Html.DropDownList("CantidadPorPagina", CantidadPorPagina.GetSelectList(Model.CantidadPorPagina, ""))
+        
+        <input type="submit" value="Refrescar" class="defaultbutton" />
+
+    </div>
+}
+
+@Html.ResultadoBusqueda(Model.Resultado, Model.CantidadPorPagina)
+
+@{ var Grilla = new BizGrid(source: Model.Resultado);
+   var columns = new List<BizGridColumn>();
+   columns.AddRange(collection: Grilla.Columns(
+            Grilla.Column("Fecha"),
+            Grilla.Column( "Tipo"),
+            Grilla.Column("Cargamento")));
+   if (Sitio.EsEmpleado || esCliente ) { 
+       columns.Add(Grilla.Column("Proveedor"));
+   }
+   if (Sitio.EsEmpleado || esProveedor|| !Sitio.Usuario.ProveedorID.IsEmpty()) {
+       columns.Add(Grilla.Column("Cliente"));
+   }
+   columns.AddRange(collection:Grilla.Columns(
+            Grilla.Column("admin", "", format: @<span>
+                                                    <a href="/Eventos/Evento/Editar/@(new EventoTipo(item.TipoEventoID).Nombre)/@(new EventoTipo(item.TipoEventoID).SumaMercaderia ? item.CargamentoID.ToString() : item.EventoID.ToString())" class="button" data-callback="location.reload()">Editar</a>
+                    @if (Seguridad.CanDelete(new EventoTipo(item.TipoEventoID).Permiso)) {<a href="/Eventos/Evento/Borrar/@(new EventoTipo(item.TipoEventoID).Nombre)/@item.EventoID.ToString()" class="button minidelete"><i class="icon-remove"></i></a>}
+                </span>)));
+                                                       }
+                                                       @Grilla.GetHtml(columns: columns)

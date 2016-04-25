@@ -1,0 +1,1 @@
+insert into Rol(Nombre) values('Administrador de Proveedor')

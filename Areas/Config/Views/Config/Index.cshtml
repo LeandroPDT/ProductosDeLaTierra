@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Configuración general";
+}
+
+<div class="config">
+<input id="filtramenu" autofocus />
+<i class="icon-cog"></i>
+</div>
+
+
+@section head {
+    <script type="text/javascript">
+        $(function () {
+            $('#filtramenu').quicksearch('#sidenav ul li');
+        })
+    </script>
+
+}

@@ -1,0 +1,26 @@
+﻿@if (Request.IsAuthenticated) {
+    <table class="userbox">
+        <tr>
+            <td>
+                <a class="configlink" href="/incidentes">Incidentes</a>
+            </td>        
+			<td>
+				<a class="configlink" href="/config">Configuración</a>
+			</td>
+            <td>
+                <a href="/Notificacion/Nuevas" class="masinfo" id="notification-container" style="display: block">
+                    <i class="icon-bell"></i>
+                    <span id="notification-counter">@Notificacion.NoLeidos()</span>
+                </a>
+            </td>
+            <td>
+                <strong>@Sitio.Usuario.Nombre</strong>
+                <br />
+                <a href="/Account/MisDatos">Mis Datos</a><div class="vertspacer"></div><a href="/Account/LogOff">Salir</a>
+            </td>
+            <td>
+                <a href="/Account/MisDatos" class="foto"><img src="@Usuario.AvatarFolder@Sitio.Usuario.AvatarChico" /></a>
+            </td>
+        </tr>
+    </table>
+}

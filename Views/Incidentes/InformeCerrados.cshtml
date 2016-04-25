@@ -1,0 +1,31 @@
+@model InformeIncidentesCerradosViewModel
+@{
+    ViewBag.Title = "Informe Incidentes cerrados";
+}
+
+<div class="botonera">
+    <a href="/incidentes/InformeCerradosExcel"><i class="icon-file-excel"></i> Exportar a Excel</a>
+</div>
+
+
+<h1>@b.Visitar(ViewBag.Title)</h1>
+
+@Html.ValidationSummary("No se ejecutar la busqueda.")
+@using (Html.BeginForm()) {
+    <div class="formbuscar">
+		<label>Desde:</label>@Html.EditorFor(model => model.FechaDesde)
+        <label class="intralabel">Hasta:</label>@Html.EditorFor(model => model.FechaHasta)
+        <label class="intralabel">Ver un máximo de: </label> @Html.DropDownList("CantidadPorPagina", CantidadPorPagina.GetSelectList(Model.CantidadPorPagina))
+        <input type="submit" value="Buscar" class="defaultbutton"/>
+    </div>
+}
+    
+  
+@Html.ResultadoBusqueda(Model.Resultado, Model.CantidadPorPagina)  
+   
+    
+@{
+    var Grilla = new BizGrid(source: Model.Resultado);
+}
+
+@Grilla.GetHtml(columns: Model.Columns())   

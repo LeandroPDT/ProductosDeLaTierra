@@ -1,0 +1,38 @@
+[
+  {
+    "outputFileName": "Content/Home/icomoon/style.css",
+    "inputFiles": [
+      "Content/Home/icomoon/style.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/Home/css/animate.css",
+    "inputFiles": [
+      "Content/Home/css/animate.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/Home/css/style.css",
+    "inputFiles": [
+      "Content/Home/css/style.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/Home/css/owl.carousel.css",
+    "inputFiles": [
+      "Content/Home/css/owl.carousel.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/Home/css/owl.theme.css",
+    "inputFiles": [
+      "Content/Home/css/owl.theme.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/Home/js/custom.js",
+    "inputFiles": [
+      "Content/Home/js/custom.js"
+    ]
+  }
+]

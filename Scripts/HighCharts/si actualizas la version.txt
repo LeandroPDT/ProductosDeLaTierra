@@ -1,0 +1,17 @@
+﻿	Poner el credits en false y shadow (de plotOptions / series ) en false
+
+	Tambien cambiar el font a Arial
+
+
+	lang: {
+		loading: 'Cargando...',
+		months: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],
+		shortMonths: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+		weekdays: ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'],
+		decimalPoint: ',',
+		numericSymbols: ['k', 'M', 'G', 'T', 'P', 'E'], // SI prefixes used in axis labels
+		resetZoom: 'Resetear zoom',
+		resetZoomTitle: 'Resetear zoom nivel 1:1',
+		thousandsSep: '.'
+	},
+

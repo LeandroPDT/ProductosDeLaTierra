@@ -1,0 +1,83 @@
+﻿@model Site.Models.Producto
+
+@{
+    ViewBag.Title = Model.ToString();
+}
+
+@if (!Request.IsAjaxRequest()) {
+    <h1>@b.Visitar(ViewBag.Title)</h1>
+<div class="botonera">
+    @Html.Action("Toolbox", "Entidad", new { e = Entidad.GetFromModel(Model) })
+</div>
+}
+<div class="newelements">
+    @using (Html.BeginForm("Editar", "Producto")) {
+        @Html.ValidationSummary()
+        @Html.HiddenFor(model => Model.ProductoID)
+        if (!Sitio.EsEmpleado) { 
+            @Html.HiddenFor(model => Model.ProveedorID)
+        }
+    
+    <table class="formulario">
+        @if (Request.IsAjaxRequest()) {
+            <tr data-href="Producto/Editar/@Model.ProductoID.ToString()" style="cursor:pointer" @(!Model.IsNew()? "title=\"Ver más opciones\"":"")>
+                <th>
+                    <h3 style="text-align:left">Editar</h3>
+                    <br />
+                </th>
+                <td colspan="2">
+                    <h3 style="text-align:right">@Model.ToString()</h3>
+                    <br />
+                </td>
+            </tr>
+        }
+
+        @if (Sitio.EsEmpleado) {
+        <tr>
+            <th>@Html.LabelFor(model => Model.ProveedorID)</th>
+            <td>@Html.UsuarioSuperList("ProveedorID", "ProveedorIDNombre",Model.ProveedorID.ZeroToNull(),Model.Proveedor, new UsuarioSuperListHtmlHelper.Options(){Rol="Proveedor"})</td>
+        </tr>            
+        }
+        <tr>
+            <th>@Html.LabelFor(model => model.CodigoArticulo)</th>
+            <td>@Html.EditorFor(model => model.CodigoArticulo)</td>
+        </tr>
+        <tr>
+            <th>@Html.LabelFor(model => model.Descripcion)</th>
+            <td>@Html.EditorFor(model => model.Descripcion, new { @style = "width:200px" })</td>
+        </tr>
+        <tr>
+            <th>@Html.LabelFor(model => model.PesoUnitario)</th>
+            <td>@Html.EditorFor(model => model.PesoUnitario)@Site.Models.SpinnerMinusHtmlHelper.SpinnerMinus("PesoUnitario") @Site.Models.SpinnerPlusHtmlHelper.SpinnerPlus("PesoUnitario")</td>
+        </tr>
+        <tr>
+            <th>@Html.LabelFor(model => model.PrecioUnitario)</th>
+            <td>@Html.EditorFor(model => model.PrecioUnitario)@Site.Models.SpinnerMinusHtmlHelper.SpinnerMinus("PrecioUnitario") @Site.Models.SpinnerPlusHtmlHelper.SpinnerPlus("PrecioUnitario")</td>
+        </tr>
+
+        @*<tr>
+            <th>@Html.LabelFor(model => model.PrecioKg)</th>
+            <td>@Html.EditorFor(model => model.PrecioKg)@Site.Models.SpinnerMinusHtmlHelper.SpinnerMinus("PrecioKg") @Site.Models.SpinnerPlusHtmlHelper.SpinnerPlus("PrecioKg")</td>
+        </tr>*@
+
+        <tr>
+            <th>@Html.LabelFor(model => model.Notas)</th>
+            <td>@Html.EditorFor(model => model.Notas, new { @style = "width:200px" })</td>
+        </tr>
+    @if (!Request.IsAjaxRequest()) {
+        <tr>
+            <td>                @Html.ActionLink("Volver a la lista", "Index")</td>
+            <td><input type="submit" value="Guardar" class="defaultbutton" /></td>
+        </tr>
+    }
+    </table>
+    }
+</div>
+
+<script type="text/javascript">
+    $('tr[data-href]').on("click", function () {
+        var link = $(this).data('href');
+        if(!link.endsWith("0") && !link.endsWith("/"))
+            document.location = "http://"+'@Sitio.WebsiteURL'+"/"+link;
+    });
+</script>

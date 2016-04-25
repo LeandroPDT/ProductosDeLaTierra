@@ -1,0 +1,16 @@
+﻿@model PasswordResetData
+
+@{
+    Layout = "~/Views/Shared/_EmailLayout.cshtml";
+}
+
+Un cambio de contraseña fue requerido en @Sitio.WebsiteURL<br />
+Para efectuar el cambio siga este enlace<br />
+<a href="http://@Sitio.WebsiteURL/@Model.PasswordResetLink">http://@Sitio.WebsiteURL/@Model.PasswordResetLink</a><br />
+<br />
+Su nombre de usuario es: @Model.Username<br />
+<br />
+El link será válido hasta las <b>@Model.PasswordResetExpiration.ToShortTimeString()</b> del <b>@Model.PasswordResetExpiration.ToShortDateString()</b><br />
+Si usted no hizo la solicitud de cambio de contraseña, no tiene que hacer nada, solo descarte este email<br />
+
+

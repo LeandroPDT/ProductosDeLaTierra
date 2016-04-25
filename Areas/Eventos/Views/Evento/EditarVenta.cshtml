@@ -1,0 +1,46 @@
+﻿@model Site.Models.Evento
+
+@{
+    ViewBag.Title = Model.ToString();
+}
+@Html.Partial("_Header", Model)
+<div class="newelements">
+    @using (Html.BeginForm("Editar", "Evento")) {
+        @Html.ValidationSummary()
+        @Html.HiddenFor(model => model.EventoID)
+        @Html.HiddenFor(model => model.TipoEventoID)
+        @Html.HiddenFor(model => model.CargamentoID)
+        @Html.HiddenFor(model => model.MercaderiaID)
+    <table class="formulario">
+        @Html.Partial("_TableHeader")
+        <tr>
+            <th colspan="2">@Html.LabelFor(model => model.Cargamento.Proveedor)</th>
+            <td><label class="intralabel">@Model.Cargamento.Proveedor</label></td>
+        </tr>
+        @if (Sitio.EsEmpleado) {
+            <tr>
+                <th colspan="2">@Html.LabelFor(model => model.Cargamento.Cliente)</th>
+                <td><label class="intralabel">@Model.Cargamento.Cliente</label></td>
+            </tr>
+        }
+        <tr>
+            <th colspan="2"><label class="intralabel">Fecha Venta</label></th>
+            <td>@Html.EditorFor(model => model.Fecha)</td>
+        </tr>
+        <tr>
+            <th>@Html.LabelFor(model => model.Notas)</th>
+            <td colspan="2">@Html.EditorFor(model => model.Notas, new { @style = "width:300px" })</td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                @Html.Partial("EditarEventoMercaderia",Model)
+            </td>
+        </tr>
+    @if (!Request.IsAjaxRequest()) {
+        <tr>
+            <td><input type="submit" value="Guardar" class="defaultbutton" /></td>
+        </tr>
+    }
+    </table>
+    }
+</div>

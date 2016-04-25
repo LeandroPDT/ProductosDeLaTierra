@@ -1,0 +1,36 @@
+﻿@model HomeViewModel
+@{
+    ViewBag.Title = "Productos de la Tierra";
+}
+
+<table><tr>
+    <td>
+        <div class="bigmenu">
+            @if (Model.Bookmarked.Count > 0) { 
+                <h2>Marcados</h2>
+                foreach (PaginaVisita p in Model.Bookmarked) {
+                    <a  class="bookmarked" href="@p.Path"><i class="icon-bookmark"></i> @p.Titulo</a>
+                }
+                <div class="minisep"></div>
+            }
+            else { 
+                <h2>Más visitados</h2>
+            }
+            @foreach (PaginaVisita p in Model.MostUsed) {
+                <a class="comun" href="@p.Path">@p.Titulo</a>
+            }
+        </div>
+    </td>
+    <td>
+        <div class="bigmenu">
+            <h2>Recientes</h2>
+            @foreach (PaginaVisita p in Model.Recent) {
+                <a class="comun" href="@p.Path">@p.Titulo
+                    <div class="small">@p.LastVisited.TimeAgo()</div>
+                </a>
+            }
+        </div>
+    </td>
+
+</tr>
+</table>
