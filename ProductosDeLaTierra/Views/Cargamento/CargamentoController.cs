@@ -83,13 +83,12 @@ namespace Site.Controllers
 
         public ActionResult VerMercaderia(int id) {
             var VM = Models.Cargamento.SingleOrDefault(id);
-            return PartialView("VerMercaderia", VM);
+            if (VM!=null && Seguridad.CanAccess(Seguridad.Permisos.Remanente) && (Sitio.EsEmpleado||VM.HasUser(Sitio.Usuario.UsuarioID)||VM.HasUser(Sitio.Usuario.ProveedorID??0)))
+                return PartialView("VerMercaderia", VM);
+            else 
+                return AccessDeniedView();
         }
 
-        public ActionResult Liquidacion(int id) {
-            var VM = Models.Cargamento.SingleOrDefault(id);
-            return PartialView("Liquidacion", VM);
-        }
 
         /* por ahora no necesito seleccionar cargamentos individualmente
         [NoCache]

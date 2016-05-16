@@ -23,10 +23,10 @@
             </tr>
         }
         @if (Sitio.EsEmpleado) {
-        <tr>
-            <th>@Html.LabelFor(model => Model.Proveedor)</th>
-            <td><label class="intralabel">@Model.Proveedor</label> </td>
-        </tr>            
+            <tr>
+                <th>@Html.LabelFor(model => Model.Proveedor)</th>
+                <td><label class="intralabel">@Model.Proveedor</label> </td>
+            </tr>
         }
         <tr>
             <th>@Html.LabelFor(model => Model.Cliente)</th>
@@ -35,36 +35,38 @@
         <tr>
             <td colspan="3">
                 <table class="simpletable">
+                    <tr>
+                        <th>@Html.LabelFor(model => Model.Mercaderia.Mercaderias[0].Producto)</th>
+                        <th><label class="intralabel">Peso<br /> Unitario (Kg)</label></th>
+                        @*<th><label class="intralabel">Precio<br /> Unitario ($)</label></th>*@
+                        @*<th><label class="intralabel">Precio<br /> por Kg ($)</label></th>*@
+                        <th>@Html.LabelFor(model => Model.Mercaderia.Mercaderias[0].Cantidad)</th>
+                        <th><label class="intralabel">Peso<br /> (Kg)</label></th>
+                        @*<th>@Html.LabelFor(model => Model.Mercaderia.Mercaderias[0].Bultos)</th>*@
+                        @*<th><label class="intralabel">Precio<br /> ($)</label></th>*@
+                        @*<th>@Html.LabelFor(model => Model.Mercaderia.Mercaderias[0].Observaciones)</th>*@
+                    </tr>
+                    @for (int i = 0;i < Model.Mercaderia.Mercaderias.Count();i++) {
                         <tr>
-                            <th>@Html.LabelFor(model => Model.Mercaderia.Mercaderias[0].Producto)</th>
-                            <th><label class="intralabel">Peso<br /> Unitario (Kg)</label></th>
-                            <th><label class="intralabel">Precio<br /> Unitario ($)</label></th>
-                            <th><label class="intralabel">Precio<br /> por Kg ($)</label></th>
-                            <th>@Html.LabelFor(model => Model.Mercaderia.Mercaderias[0].Cantidad)</th>
-                            <th><label class="intralabel">Peso<br /> (Kg)</label></th>
-                            <th>@Html.LabelFor(model => Model.Mercaderia.Mercaderias[0].Bultos)</th>
-                            <th><label class="intralabel">Precio<br /> ($)</label></th>
-                            @*<th>@Html.LabelFor(model => Model.Mercaderia.Mercaderias[0].Observaciones)</th>*@
+                            <td>@Model.Mercaderia.Mercaderias[i].Producto</td>
+                            <td>@Model.Mercaderia.Mercaderias[i].PesoUnitario.ToString("N2")</td>
+                            @*<td>@Model.Mercaderia.Mercaderias[i].PrecioUnitario.ToString("N2")</td>*@
+                            @*<td>@Model.Mercaderia.Mercaderias[i].PrecioKg.ToString("N2")</td>*@
+                            <td>@Model.Mercaderia.Mercaderias[i].Cantidad</td>
+                            <td>@Model.Mercaderia.Mercaderias[i].Peso.ToString("N2")</td>
+                            @*<td>@Model.Mercaderia.Mercaderias[i].Bultos.ToString("N2")</td>*@
+                            @*<td>@Model.Mercaderia.Mercaderias[i].Precio.ToString("N2")</td>*@
                         </tr>
-                        @for (int i = 0;i < Model.Mercaderia.Mercaderias.Count();i++) {
-                            <tr>
-                                <td>@Model.Mercaderia.Mercaderias[i].Producto</td>
-                                <td>@Model.Mercaderia.Mercaderias[i].PesoUnitario.ToString("N2")</td>
-                                <td>@Model.Mercaderia.Mercaderias[i].PrecioUnitario.ToString("N2")</td>
-                                <td>@Model.Mercaderia.Mercaderias[i].PrecioKg.ToString("N2")</td>
-                                <td>@Model.Mercaderia.Mercaderias[i].Cantidad</td>
-                                <td>@Model.Mercaderia.Mercaderias[i].Peso.ToString("N2")</td>
-                                <td>@Model.Mercaderia.Mercaderias[i].Bultos.ToString("N2")</td>
-                                <td>@Model.Mercaderia.Mercaderias[i].Precio.ToString("N2")</td>
-                            </tr>
                         }
-                        <tr>
-                            <th colspan="5" style="text-align:right"><label class="intralabel">Total</label></th>
-                            <td>@Model.Mercaderia.Peso.ToString("N2")</td>
-                            <td>@Model.Mercaderia.Bultos.ToString("N2")</td>
-                            <td>@Model.Mercaderia.Precio.ToString("N2")</td>
-                        </tr>
-                </table>
+
+                    @*<tr>
+                        <th colspan="3" style="text-align:right"><label class="intralabel">Total</label></th>
+                        <td>@Model.Mercaderia.Peso.ToString("N2")</td>
+                        @*<td>@Model.Mercaderia.Bultos.ToString("N2")</td>
+                        <td>@Model.Mercaderia.Precio.ToString("N2")</td>
+        </tr>
+        *@
+    </table>
             </td>
         </tr>
     </table>

@@ -30,7 +30,9 @@ namespace Site {
                 "~/Scripts/jquery-file-upload/js/jquery.iframe-transport.js",
                 "~/Scripts/jquery-file-upload/js/jquery.fileupload.js",
                 "~/Scripts/date-es-AR.js",
-                "~/Scripts/site.js"));
+                "~/Scripts/site.js",
+                "~/Scripts/jspdf.min.js",
+                "~/Scripts/html2canvas.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/scripts/jQuery/jquery-ui-1.9.0.custom.css",

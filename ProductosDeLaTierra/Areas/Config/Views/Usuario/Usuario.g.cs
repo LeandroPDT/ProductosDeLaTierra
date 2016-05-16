@@ -102,6 +102,15 @@ namespace Site.Models
 		[DataType(DataType.Currency)]
         [Required]
 		public double Comision { get; set; }
+        
+
+        [Column("ProveedorID")]
+        [Display(Name = "Proveedor Administrado")]
+        public int? ProveedorID { get; set; }
+
+        [ResultColumn]
+        [Display(Name = "Proveedor Administrado")]
+        public String Proveedor { get; set; }
 
         public Usuario() {
             Avatar = "nn.gif";
@@ -133,8 +142,9 @@ namespace Site.Models
         public static PetaPoco.Sql BaseQuery(int TopN = 0) {
             var sql = PetaPoco.Sql.Builder;
             sql.AppendSelectTop(TopN);
-            sql.Append("usuario.*");
+            sql.Append("Usuario.*, Proveedor.Nombre as Proveedor");
             sql.Append("FROM Usuario");
+            sql.Append("LEFT JOIN Usuario Proveedor on Proveedor.UsuarioID= Usuario.ProveedorID");
             return sql;
         }
 
@@ -170,6 +180,11 @@ namespace Site.Models
         public bool IsValid(ModelStateDictionary ModelState) {
             if (DbHelper.CurrentDb().ExecuteScalar<int>("SELECT count(*) From Usuario where UsuarioID <> @0 and UserName = @1", this.UsuarioID, this.UserName) > 0) {
                 ModelState.AddModelError("All", "El nombre de usuario ya fue usado por otra persona");
+                return false;
+            }
+            ProveedorID.ZeroToNull();
+            if (!ProveedorID.IsEmpty() && !Usuario.HasRol(ProveedorID ?? 0, "Proveedor")) { 
+                ModelState.AddModelError("ProveedorID", "El usuario administrado no es un proveedor");
                 return false;
             }
             return true;
@@ -251,13 +266,16 @@ namespace Site.Models
         }
 
         public static bool HasRol(int id, string rol) {
-            var sql = BaseQuery();
+            return (from IDNombrePar par in RolUserIDList() where par.ID == id && par.Nombre==rol select par).ToList().Count > 0;            
+        }
+
+        public static List<IDNombrePar> RolUserIDList() {            
+            var sql = PetaPoco.Sql.Builder;
+            sql.Append("SELECT Usuario.UsuarioID as ID, rol.Nombre as Nombre");
+            sql.Append("FROM Usuario");
             sql.Append("INNER JOIN UsuarioRol usuarioRol ON Usuario.UsuarioID = usuarioRol.UsuarioID");
             sql.Append("INNER JOIN Rol rol ON usuarioRol.RolID = rol.RolID");
-            sql.Append("WHERE Usuario.UsuarioID = @0",id);
-            sql.Append("AND rol.Nombre = @0", rol);
-            List<Usuario> result = DbHelper.CurrentDb().Fetch<Usuario>(sql).ToList();
-            return result!= null && result.Count > 0;
+            return DbHelper.CurrentDb().Fetch<IDNombrePar>(sql);  
         }
 
 

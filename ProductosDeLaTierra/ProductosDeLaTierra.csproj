@@ -27,7 +27,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -311,6 +311,9 @@
     <Compile Include="Views\Producto\IndexProductoViewModel.cs" />
     <Compile Include="Views\Producto\Producto.cs" />
     <Compile Include="Views\Producto\ProductoController.cs" />
+    <Compile Include="Views\Reporte\Liquidacion.cs" />
+    <Compile Include="Views\Reporte\ReporteActividad.cs" />
+    <Compile Include="Views\Reporte\ReporteController.cs" />
     <Compile Include="Views\Shared\ApplicationController.cs" />
     <Compile Include="Views\Shared\SystemController.cs" />
     <Compile Include="Areas\Config\Views\Usuario\Usuario.g.cs" />
@@ -340,29 +343,27 @@
     <Content Include="App_Data\Creation\026. Incidente.sql" />
     <Content Include="App_Data\Creation\027. IncidenteComentario.sql" />
     <Content Include="App_Data\Creation\028. IncidenteSubscripcion.sql" />
+    <Content Include="App_Data\DbUp\001. Usuario.ProveedorID .sql" />
+    <Content Include="App_Data\DbUp\003. Permiso ReporteActividad.sql" />
+    <Content Include="App_Data\DbUp\002. Administrador de Proveedor.sql" />
     <Content Include="App_Data\scrap.sql" />
     <Content Include="Content\Images\15.gif" />
     <Content Include="Content\Images\calendar.gif" />
     <Content Include="Content\Images\cheque.png" />
     <Content Include="Content\Images\loading.gif" />
+    <Content Include="Content\Images\logo.jpg" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\noun_148031_cc.png" />
     <Content Include="Content\Images\noun_148031_cc.svg" />
     <Content Include="Content\print.css" />
     <Content Include="Content\Subidos\Usuario\nn.gif" />
     <Content Include="Content\Subidos\Usuario\nn50x50.gif" />
-    <Content Include="Content\webfont\demo-files\demo.css" />
-    <Content Include="Content\webfont\demo-files\demo.js" />
-    <Content Include="Content\webfont\demo.html" />
-    <Content Include="Content\webfont\fonts\Codia.svg" />
-    <Content Include="Content\webfont\Read Me.txt" />
+    <Content Include="Content\webfont\fonts\bizlib.svg" />
     <Content Include="Content\webfont\style.css" />
     <Content Include="favicon.ico" />
+    <Content Include="favicon.png" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Content\webfont\fonts\Codia.eot" />
-    <Content Include="Content\webfont\fonts\Codia.ttf" />
-    <Content Include="Content\webfont\fonts\Codia.woff" />
     <Content Include="Content\webfont\selection.json" />
     <Content Include="Scripts\blockUI\jquery.blockUI.js" />
     <Content Include="Scripts\Calculadora\jquery.calculadora.css" />
@@ -387,13 +388,21 @@
     <Content Include="Areas\Eventos\Views\Evento\Index.cshtml" />
     <Content Include="Areas\Eventos\Views\Evento\_TableHeader.cshtml" />
     <Content Include="Areas\Eventos\Views\Evento\_Header.cshtml" />
-    <Content Include="Areas\Config\Views\Usuario\View1.cshtml" />
+    <Content Include="Areas\Config\Views\_ViewStart.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <None Include="bundleconfig.json" />
+    <Content Include="Content\webfont\fonts\bizlib.eot" />
+    <Content Include="Content\webfont\fonts\bizlib.ttf" />
+    <Content Include="Content\webfont\fonts\bizlib.woff" />
+    <None Include="Properties\PublishProfiles\productosdelatierra - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\productosdelatierra - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Scripts\html2canvas.min.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
     <Content Include="Scripts\jquery-file-upload\css\jquery.fileupload.css" />
@@ -419,7 +428,6 @@
     <Content Include="Scripts\jquery.numericspinnernumpad-min.js" />
     <Content Include="Scripts\jquery.signalR-2.1.2.js" />
     <Content Include="Scripts\jquery.signalR-2.1.2.min.js" />
-    <Content Include="Scripts\jQuery\images\Thumbs.db" />
     <Content Include="Scripts\ContextMenu\jquery.ui-contextmenu.min.js.map" />
     <Content Include="Scripts\jquery-timeago-master\README.markdown" />
     <Content Include="Scripts\jquery-timeago-master\timeago.jquery.json" />
@@ -442,6 +450,7 @@
     <Content Include="Scripts\jQuery\jquery-ui-1.9.0.custom.css" />
     <Content Include="Scripts\jQuery\jquery-ui-1.9.0.min.js" />
     <Content Include="Scripts\jQuery\ui.datepicker-es.js" />
+    <Content Include="Scripts\jspdf.min.js" />
     <Content Include="Scripts\MonthPicker\jquery.ui.monthpicker.js" />
     <Content Include="Scripts\plupload\changelog.txt" />
     <Content Include="Scripts\plupload\js\i18n\cs.js" />
@@ -545,7 +554,6 @@
     <Content Include="Scripts\WebUi-PopOver\jquery.webui-popover.js" />
     <Content Include="Scripts\WebUi-PopOver\jquery.webui-popover.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="SimpleFTPPublish.exe" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -618,11 +626,11 @@
     <Content Include="Views\Incidentes\InformeCerrados.cshtml" />
     <Content Include="Views\Incidentes\Ver.cshtml" />
     <Content Include="Views\Cargamento\VerMercaderia.cshtml" />
-    <Content Include="Views\Cargamento\Liquidacion.cshtml" />
+    <Content Include="Views\Reporte\Liquidacion.cshtml" />
+    <Content Include="Views\Reporte\ReporteActividad.cshtml" />
+    <Content Include="Views\Web.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\DbUp\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
@@ -664,6 +672,9 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

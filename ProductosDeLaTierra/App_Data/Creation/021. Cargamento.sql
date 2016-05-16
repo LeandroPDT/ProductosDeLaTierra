@@ -1,4 +1,4 @@
-drop table Cargamento
+--drop table Cargamento
 
 create table dbo.Cargamento (
 	CargamentoID Int NOT NULL IDENTITY (1, 1) constraint PKCargamento PRIMARY KEY ,

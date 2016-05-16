@@ -2,6 +2,10 @@
 
 @{
     ViewBag.Title = Model.ToString();
+    if (Model.IsNew()) {
+        Model.Cargamento.CostoFlete = 0;
+        Model.Cargamento.CostoDescarga = 0;
+    }
 }
 @Html.Partial("_Header",Model)
 <div class="newelements">

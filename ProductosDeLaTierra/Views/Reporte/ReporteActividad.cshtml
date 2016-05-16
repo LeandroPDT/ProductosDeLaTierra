@@ -1,0 +1,67 @@
+﻿@model Site.Models.ReporteActividad
+
+@{
+    ViewBag.Title = "Reporte de Actividad";
+    var listaDeRolesYIDs = Usuario.RolUserIDList();
+    bool esProveedor = (from IDNombrePar par in listaDeRolesYIDs where par.ID == Sitio.Usuario.UsuarioID && par.Nombre == "Proveedor" select par).ToList().Count > 0;
+    bool esCliente = (from IDNombrePar par in listaDeRolesYIDs where par.ID == Sitio.Usuario.UsuarioID && par.Nombre == "Cliente" select par).ToList().Count > 0;
+    bool esAdminProveedor = (from IDNombrePar par in listaDeRolesYIDs where par.ID == Sitio.Usuario.UsuarioID && par.Nombre == "Administrador de Proveedor" select par).ToList().Count > 0;
+}
+
+<h1>@b.Visitar(ViewBag.Title)</h1>
+
+@using (Html.BeginForm()) {
+    <div class="formbuscar">
+        <label class="intralabel">Cargamento:</label>@Html.EditorFor(model => Model.Cargamento, new { @placeholder = "Por Nro. Remito o Fecha de envío (DD/MM/YYYY)", @style = "width:250px" })
+        <label class="intralabel">Enviados Desde:</label>@Html.EditorFor(model => model.FechaDesde)
+        <label class="intralabel">Hasta:</label>        @Html.EditorFor(model => model.FechaHasta)
+        <br />
+        @if (Sitio.EsEmpleado || esCliente) {
+            <label class="intralabel">Proveedor:</label>@Html.UsuarioSuperList("ProveedorID", "Proveedor", Model.ProveedorID, Model.Proveedor, new UsuarioSuperListHtmlHelper.Options() { Rol = "Proveedor" })
+        }
+        @if (Sitio.EsEmpleado || esProveedor || esAdminProveedor) {
+            <label class="intralabel">Cliente:</label>@Html.UsuarioSuperList("ClienteID", "Cliente", Model.ClienteID, Model.Cliente, new UsuarioSuperListHtmlHelper.Options() { Rol = "Cliente" })
+        }
+        <br />
+        <label class="intralabel">Artículo:</label>@Html.ProductoSuperList("ProductoID", "Producto", Model.ProductoID, Model.Producto, new ProductoSuperListHtmlHelper.Options() { ProveedorID = Model.ProveedorID })
+        <label class="intralabel">Ver un máximo de:</label>@Html.DropDownList("CantidadPorPagina", CantidadPorPagina.GetSelectList(Model.CantidadPorPagina, ""))
+        <input type="submit" value="Refrescar" class="defaultbutton" />
+
+    </div>
+}
+
+@Html.ResultadoBusqueda(Model.Resultado, Model.CantidadPorPagina)
+
+@{ var Grilla = new BizGrid(source: Model.Resultado);
+    var columns = new List<BizGridColumn>();
+    columns.AddRange(collection: Grilla.Columns(
+             Grilla.Column("NumeroRemito", "Nro. Remito"),
+             Grilla.Column("FechaEnvio", "Fecha Envío"),
+             Grilla.Column("Proveedor"),
+             Grilla.Column("Cliente"),
+             Grilla.Column("Articulo", "Producto"),
+             Grilla.Column("Enviado", "Enviado (Un.)"),
+             Grilla.Column("Recibido", "Recibido (Un.)"),
+             Grilla.Column("Vendido", "Vendido (Un.)"),
+             Grilla.Column("Decomisado", "Decomisado (Un.)"),
+             Grilla.Column("PrecioUnitarioPromedio", "Precio Unitario ($/Un.)"),
+             Grilla.Column("Total", "Total ($)"),
+             Grilla.Column("Remanente", "Remanente (Un.)"),
+             Grilla.Column("", "", format: @<a id='@(item.NumeroRemito.ToString() + item.ProductoID)' style='display:text-decoration:none;cursor:pointer;  display: @(item.Observaciones == ""? "none":"block")'>
+                                                    <i class='icon-search'></i>
+                                                      <script>
+                                                          $('#@(item.NumeroRemito.ToString() + item.ProductoID)').webuiPopover({
+                                                                width: 'auto',
+                                                                height: 'auto',
+                                                                closeable: true,
+                                                                cache: false,
+                                                                content: (`@(item.Observaciones.Replace("\n", "\t"))`).replace(new RegExp("\t", 'g'), "<br>")
+                                                            });
+                                                      </script>                                
+                                                  </a>),
+            Grilla.Column("","",format: @<a tabindex = "-1" class="masinfo" data-width="300"  style='text-decoration:none;cursor:pointer; display: @(item.TieneArchivosAdjuntos? "block":"none")' href="/ArchivosAdjuntos/Galeria/@item.CargamentoID?Nombre=Cargamento">
+                                            <h3><i class="icon-attach"></i></h3>
+                                        </a>)));
+
+}
+@Grilla.GetHtml(columns: columns)

@@ -68,10 +68,6 @@ namespace Site.Models {
         [Display(Name="Descripción")]
         public String Descripcion { get; set; }
         
-        [PetaPoco.Column("Observaciones")]
-		[Display(Name = "Observaciones")]
-		[DataType(DataType.MultilineText)]
-		public String Observaciones{ get; set; }
 
         
 		[Display(Name = "Producto")]
@@ -107,18 +103,25 @@ namespace Site.Models {
                 this.Precio = other.Precio;
                 this.Peso = other.Peso;
                 this.Bultos = other.Bultos;
+                // asi se mantendrán actualizados los valores que no son agregaciones.
+                this.PrecioKg = other.PrecioKg;
+                this.PrecioUnitario = other.PrecioUnitario;
+                this.PesoUnitario = other.PesoUnitario;
             }
             else {
                 this.Peso += other.Peso;
                 this.Cantidad += other.Cantidad;
-                this.Precio = other.Precio;
-                this.Bultos = other.Bultos;
-            }            
+                this.Precio += other.Precio;
+                this.Bultos += other.Bultos;
+            }     
 
-            // asi se mantendrán actualizados los valores que no son agregaciones.
-            this.PrecioKg = other.PrecioKg;
-            this.PrecioUnitario = other.PrecioUnitario;
-            this.PesoUnitario = other.PesoUnitario;
+            this.Cantidad = this.Cantidad>0?this.Cantidad :0 ;
+            this.Precio = this.Precio>0?this.Precio :0 ;
+            this.Peso = this.Peso>0?this.Peso :0 ;
+            this.Bultos = this.Bultos>0?this.Bultos :0 ;
+            this.PrecioKg = this.PrecioKg>0?this.PrecioKg :0 ;
+            this.PrecioUnitario = this.PrecioUnitario>0?this.PrecioUnitario :0;
+            this.PesoUnitario = this.PesoUnitario>0?this.PesoUnitario :0 ;
         }
 
         public bool sinExistencias() {

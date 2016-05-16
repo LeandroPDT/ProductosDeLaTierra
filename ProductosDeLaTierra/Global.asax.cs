@@ -183,7 +183,7 @@ namespace Site {
 
                 MailMessage msg = new MailMessage();
                 msg.To.Add("leandropalma@live.com.ar");
-                msg.Subject = "Error en Productos De La Tierra";
+                msg.Subject = "Error en ProductosDeLaTierra";
                 msg.SubjectEncoding = System.Text.Encoding.UTF8;
                 msg.Body = "Ocurrio el siguiente error en " + HttpContext.Current.Request.Url.ToString() + Environment.NewLine + ErrMessage;
                 msg.BodyEncoding = System.Text.Encoding.UTF8;

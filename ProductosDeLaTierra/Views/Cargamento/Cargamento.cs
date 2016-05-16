@@ -146,14 +146,6 @@ namespace Site.Models {
             }
         }
 
-        public double ComisionCobrada() {
-            var usuarioProveedor = Usuario.SingleOrDefault(ProveedorID);
-            return Ganancia * (usuarioProveedor??new Usuario()).Comision/100;
-        }
-
-        public double GananciaTotal() {
-            return Ganancia - CostoFlete - CostoDescarga - ComisionCobrada();
-        }
         
         public static PetaPoco.Sql BaseQuery(int TopN = 0) {
             var sql = PetaPoco.Sql.Builder;
@@ -173,7 +165,7 @@ namespace Site.Models {
 
 
         public override string ToString() {
-            return IsNew()?"Nuevo Cargamento":"Cargamento enviado el " + FechaEnvio.ToShortDateString()+ " - Nro. remito " + NumeroRemito.ToString();    
+            return IsNew() ? "Nuevo Cargamento" : "Cargamento Nro. " + NumeroRemito.ToString();// +" - enviado el " + FechaEnvio.ToShortDateString();    
         }
 
         public bool IsValid(ModelStateDictionary state) {
@@ -186,13 +178,13 @@ namespace Site.Models {
                 state.AddModelError("FechaEnvio", "Debe especificarse la fecha de envío del cargamento");
                 return false;
             }
-
-            // son dos consultas pesadas! refactorizar!
-            if (!Usuario.HasRol(ProveedorID,"Proveedor")) {
+                      
+            if ((from IDNombrePar par in Usuario.RolUserIDList() where par.ID == ProveedorID && par.Nombre=="Proveedor" select par).ToList().Count == 0) {
                 state.AddModelError("ProveedorID", "Debe especificarse un proveedor válido");
                 return false;
-            }
-            if (!Usuario.HasRol(ClienteID,"Cliente")) {
+            }   
+            
+            if ((from IDNombrePar par in Usuario.RolUserIDList() where par.ID == ClienteID && par.Nombre=="Cliente" select par).ToList().Count == 0) {
                 state.AddModelError("ClienteID", "Debe especificarse un cliente válido");
                 return false;
             }
@@ -203,7 +195,7 @@ namespace Site.Models {
                 }
             }
             else {
-                if (IsNew() && ProveedorID != Sitio.Usuario.UsuarioID) {
+                if (IsNew() && ProveedorID != Sitio.Usuario.UsuarioID && ProveedorID!=Sitio.Usuario.ProveedorID) {
                     state.AddModelError("ProveedorID", "No pueden registrarse Cargamentos de otros proveedores");
                     return false;
                 }
@@ -296,7 +288,7 @@ namespace Site.Models {
 
         // podrá gestionar si tiene el permiso y, o es empleado o participa del evento (con el rol que puede editarlo).
         public bool CurrentUserCanAccessToFunction(Seguridad.Feature function) {
-            return (Seguridad.CanAccessToFunction(Sitio.Usuario.UsuarioID,(int)Seguridad.Permisos.Cargamento,function) && (Sitio.EsEmpleado || HasUser(Sitio.Usuario.UsuarioID)));
+            return (Seguridad.CanAccessToFunction(Sitio.Usuario.UsuarioID,(int)Seguridad.Permisos.Cargamento,function) && (Sitio.EsEmpleado || HasUser(Sitio.Usuario.UsuarioID)||HasUser(Sitio.Usuario.ProveedorID??0)));
         }
         
         public static SelectList TipoVentaSelectList(String ValorActualSeleccionado) {

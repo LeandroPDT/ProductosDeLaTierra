@@ -4,11 +4,11 @@
     ViewBag.Title = Model.ToString();
 }
 
+@if (!Request.IsAjaxRequest()) {
+    <h1>@b.Visitar(ViewBag.Title)</h1>
 <div class="botonera">
     @Html.Action("Toolbox", "Entidad", new { e = Entidad.GetFromModel(Model) })
 </div>
-@if (!Request.IsAjaxRequest()) {
-    <h1>@b.Visitar(ViewBag.Title)</h1>
 }
 <div class="newelements">
     @using (Html.BeginForm("Editar", "Producto")) {
@@ -20,17 +20,18 @@
     
     <table class="formulario">
         @if (Request.IsAjaxRequest()) {
-        <tr>
-            <th>
-                <h3 style="text-align:left">Editar</h3>
-                <br />
-            </th>
-            <td colspan="2">
-                <h3 style="text-align:right">@Model.ToString()</h3>
-                <br />
-            </td>
-        </tr>
+            <tr data-href="Producto/Editar/@Model.ProductoID.ToString()" style="cursor:pointer" @(!Model.IsNew()? "title=\"Ver más opciones\"":"")>
+                <th>
+                    <h3 style="text-align:left">Editar</h3>
+                    <br />
+                </th>
+                <td colspan="2">
+                    <h3 style="text-align:right">@Model.ToString()</h3>
+                    <br />
+                </td>
+            </tr>
         }
+
         @if (Sitio.EsEmpleado) {
         <tr>
             <th>@Html.LabelFor(model => Model.ProveedorID)</th>
@@ -47,16 +48,18 @@
         </tr>
         <tr>
             <th>@Html.LabelFor(model => model.PesoUnitario)</th>
-            <td>@Html.EditorFor(model => model.PesoUnitario)</td>
+            <td>@Html.EditorFor(model => model.PesoUnitario)@Site.Models.SpinnerMinusHtmlHelper.SpinnerMinus("PesoUnitario") @Site.Models.SpinnerPlusHtmlHelper.SpinnerPlus("PesoUnitario")</td>
         </tr>
         <tr>
             <th>@Html.LabelFor(model => model.PrecioUnitario)</th>
-            <td>@Html.EditorFor(model => model.PrecioUnitario)</td>
+            <td>@Html.EditorFor(model => model.PrecioUnitario)@Site.Models.SpinnerMinusHtmlHelper.SpinnerMinus("PrecioUnitario") @Site.Models.SpinnerPlusHtmlHelper.SpinnerPlus("PrecioUnitario")</td>
         </tr>
-        <tr>
+
+        @*<tr>
             <th>@Html.LabelFor(model => model.PrecioKg)</th>
-            <td>@Html.EditorFor(model => model.PrecioKg)</td>
-        </tr>
+            <td>@Html.EditorFor(model => model.PrecioKg)@Site.Models.SpinnerMinusHtmlHelper.SpinnerMinus("PrecioKg") @Site.Models.SpinnerPlusHtmlHelper.SpinnerPlus("PrecioKg")</td>
+        </tr>*@
+
         <tr>
             <th>@Html.LabelFor(model => model.Notas)</th>
             <td>@Html.EditorFor(model => model.Notas, new { @style = "width:200px" })</td>
@@ -70,3 +73,11 @@
     </table>
     }
 </div>
+
+<script type="text/javascript">
+    $('tr[data-href]').on("click", function () {
+        var link = $(this).data('href');
+        if(!link.endsWith("0") && !link.endsWith("/"))
+            document.location = "http://"+'@Sitio.WebsiteURL'+"/"+link;
+    });
+</script>

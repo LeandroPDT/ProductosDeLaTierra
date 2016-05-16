@@ -79,7 +79,7 @@ namespace Site.Areas.Config.Controllers {
                 };
 
                 using (var scope = db.GetTransaction()) {
-
+                    rec.ProveedorID = rec.ProveedorID.ZeroToNull();
                     db.UpsertAndLog(rec, IsNew);
 
                     foreach (var item in rec.Items) {

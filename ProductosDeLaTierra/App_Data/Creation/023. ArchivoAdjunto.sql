@@ -1,12 +1,4 @@
-USE [ProductosDeLaTierra]
-GO
-/****** Object:  Table [dbo].[ArchivoAdjunto]    Script Date: 02/24/2016 13:27:26 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-SET ANSI_PADDING ON
-GO
+
 CREATE TABLE [dbo].[ArchivoAdjunto](
 	[ArchivoAdjuntoID] [int] IDENTITY(1,1) NOT NULL,
 	[Fecha] [datetime] NOT NULL DEFAULT (getdate()),

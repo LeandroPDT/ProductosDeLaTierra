@@ -74,6 +74,12 @@
                     </td>
                 </tr>
             }
+            @if (Sitio.EsEmpleado) { 
+                <tr>
+                    <th>@Html.LabelFor(model => Model.ProveedorID)</th>
+                    <td style="vertical-align:middle">@Html.UsuarioSuperList("ProveedorID", "ProveedorIDNombre",Model.ProveedorID.ZeroToNull(),Model.Proveedor, new UsuarioSuperListHtmlHelper.Options(){Rol="Proveedor"})</td>
+                </tr>            
+            }
             </table>
         </div>
         <div id="tabs-2">

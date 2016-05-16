@@ -24,14 +24,18 @@ namespace Site.Models {
         public List<Cargamento> Resultado { get; set;}
 
         public IndexCargamentoViewModel() {
+            var listaDeRolesYIDs = Usuario.RolUserIDList();
+            bool esProveedor = (from IDNombrePar par in listaDeRolesYIDs where par.ID == Sitio.Usuario.UsuarioID && par.Nombre == "Proveedor" select par).ToList().Count > 0;
+            bool esCliente = (from IDNombrePar par in listaDeRolesYIDs where par.ID == Sitio.Usuario.UsuarioID && par.Nombre == "Cliente" select par).ToList().Count > 0;
+
             q = Sitio.GetPref("Cargamento-q", "");
             CantidadPorPagina = Sitio.GetPref("Cargamento-CantidadPorPagina", 50);
-            FechaDesde = Sitio.GetPref("Cargamento-FechaDesde", DateTime.Today.FirstDayOfMonth());
+            FechaDesde = Sitio.GetPref("Cargamento-FechaDesde", new DateTime(DateTime.Today.Year,1,1));
             FechaHasta = Sitio.GetPref("Cargamento-FechaHasta", DateTime.Today);
-            ProveedorID = Sitio.EsEmpleado || Usuario.HasRol(Sitio.Usuario.UsuarioID,"Cliente")? Sitio.GetPref("Cargamento-ProveedorID", "").AsInt().ZeroToNull():Sitio.Usuario.UsuarioID;
             Proveedor = Sitio.GetPref("Cargamento-Proveedor", "");
-            ClienteID =  Sitio.EsEmpleado || Usuario.HasRol(Sitio.Usuario.UsuarioID,"Proveedor")? Sitio.GetPref("Cargamento-ClienteID", "").AsInt().ZeroToNull():Sitio.Usuario.UsuarioID;
+            ProveedorID = Sitio.EsEmpleado || esCliente? Sitio.GetPref("Cargamento-ProveedorID", "").AsInt().ZeroToNull():Sitio.Usuario.ProveedorID.IsEmpty()?Sitio.Usuario.UsuarioID:Sitio.Usuario.ProveedorID;
             Cliente = Sitio.GetPref("Cargamento-Cliente", "");
+            ClienteID =  Sitio.EsEmpleado ||  esProveedor? Sitio.GetPref("Cargamento-ClienteID", "").AsInt().ZeroToNull():Sitio.Usuario.ProveedorID.IsEmpty()?Sitio.Usuario.UsuarioID:0;
             TipoVenta = Sitio.GetPref("Cargamento-TipoVenta", "");
             Estado= Sitio.GetPref("Cargamento-Estado", "");
         }

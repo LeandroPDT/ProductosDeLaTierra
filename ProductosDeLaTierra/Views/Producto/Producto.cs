@@ -95,7 +95,7 @@ namespace Site.Models {
                 return false;
             }
             else {
-                if (ProveedorID != Sitio.Usuario.UsuarioID && !Sitio.EsEmpleado) {
+                if (ProveedorID != Sitio.Usuario.UsuarioID && !Sitio.EsEmpleado && ProveedorID != Sitio.Usuario.ProveedorID) {
                     state.AddModelError("ProveedorID", "No pueden registrarse productos de otros usuarios");
                     return false;
                 }
@@ -119,10 +119,14 @@ namespace Site.Models {
         public bool HasUser(int UsuarioID) {
             return (this.ProveedorID == UsuarioID );
         }
+
+        public bool IsNew(){
+            return ProductoID.IsEmpty();
+        }
                 
         // podrá gestionar si tiene el permiso y, o es empleado o participa del evento (con el rol que puede editarlo).
         public bool CurrentUserCanAccessToFunction(Seguridad.Feature function) {
-            return (Seguridad.CanAccessToFunction(Sitio.Usuario.UsuarioID,(int)Seguridad.Permisos.Cargamento,function) && (Sitio.EsEmpleado || HasUser(Sitio.Usuario.UsuarioID)));
+            return (Seguridad.CanAccessToFunction(Sitio.Usuario.UsuarioID,(int)Seguridad.Permisos.Cargamento,function) && (Sitio.EsEmpleado || HasUser(Sitio.Usuario.UsuarioID) || HasUser(Sitio.Usuario.ProveedorID??0)));
         }
 
     }

@@ -26,7 +26,7 @@ namespace Site.Models {
         public IndexProductoViewModel() {
             q = Sitio.GetPref("Producto-q", "");
             CantidadPorPagina = Sitio.GetPref("Producto-CantidadPorPagina", 50);
-            UsuarioID = Sitio.EsEmpleado? Sitio.GetPref("Producto-UsuarioID", "").AsInt().ZeroToNull():Sitio.Usuario.UsuarioID;
+            UsuarioID = Sitio.EsEmpleado? Sitio.GetPref("Producto-UsuarioID", "").AsInt().ZeroToNull():Sitio.Usuario.ProveedorID.IsEmpty()?Sitio.Usuario.UsuarioID:Sitio.Usuario.ProveedorID;
             Usuario = Sitio.GetPref("Producto-Usuario", "");
         }
 

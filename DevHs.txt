@@ -1,0 +1,17 @@
+12/02/2016:	3	Estructura inicial de Base de datos.
+14/02/2016:	3	Inicio Seccion Productos.
+15/02/2016:	3	Continuacion y chequeo Productos.
+16/02/2016:	3
+18/02/2016:	4	Inicio Cargamentos.
+19/02/2016:	4	Inicio Eventos.
+20/02/2016:	4
+21/02/2016:	5
+22/02/2016:	3
+22/02/2016:	5
+24/02/2016:	4	41
+29/02/2016:	5	46
+01/03/2016:	7	53
+02/03/2016:	2	55
+03/03/2016:	5	60
+06/03/2016:	7	67
+

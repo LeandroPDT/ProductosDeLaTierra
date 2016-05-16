@@ -25,7 +25,8 @@ namespace Site.Models {
             ModificarAyuda = 9,
             Liquidacion = 10,
             Modificar_Cualquier_Incidente = 11,
-            Remanente = 12
+            Remanente = 12,
+            ReporteActividad = 13
 	    }
 
 		public static void CheckNuevosPermisos() {

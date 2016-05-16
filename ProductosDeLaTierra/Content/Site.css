@@ -348,6 +348,12 @@ table.simpletable2 tfoot {font-weight: bold; border-top: 1px solid #ccc; }
 
 /* otros
 ---------------------------*/
+
+
+.enviado { color: #a00000;font-weight:bold;}
+.recibido { color: #ba8318;font-weight:bold;}
+.vendido { color: green;font-weight:bold;}
+
 .help {border: 1px solid white; margin: 0 5px; float: right;}
 #autohelp {position: fixed; right: 0; top: 110px; border: 1px solid #ffff66; background: #ffffe6; width: 100px; min-height: 50px; padding: 10px;}
 div.explica {font-size: 80%; text-shadow: 0px 1px 15px yellow; margin: -2px 0 5px 0;}
@@ -389,7 +395,7 @@ a.extrainfo, a.extrainfo:visited {color: black; text-decoration:none; border-bot
 		padding-right: 20px;
 	}	    	    
 	
-	
+.masinfo {display:inline-block;}
 .numbercell, .numericcell {text-align: right; white-space: nowrap;}
 .porvencercell {color: Orange}
 .vencidocell {color: Red}
@@ -404,14 +410,13 @@ a.extrainfo, a.extrainfo:visited {color: black; text-decoration:none; border-bot
     cursor: pointer;
 }
 
-
 .formulariotabular th {font-weight: bold; padding: 5px; background: #eaeaea; border: 1px solid silver; }
 .formulariotabular tbody tr {border-bottom: 1px solid #eaeaea; margin-bottom: 5px; }
 .formulariotabular td {padding: 5px; }
 .formulariotabular textarea {height: 30px;}
 
 .botonera {float: right;}
-.botonera a {margin-left: 10px; text-decoration: none; line-height: 120%;}
+.botonera a {margin-left: 10px; text-decoration: none; line-height: 120%; }
 .botonera .jsddm a {margin-left: 0px}
 
 .botoneraminiedit { text-align:right;}

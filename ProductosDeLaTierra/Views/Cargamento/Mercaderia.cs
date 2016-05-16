@@ -106,14 +106,15 @@ namespace Site.Models {
         public bool Equals(Mercaderia other) {
             validateMercaderias();
             other.validateMercaderias();
-            if (other.Mercaderias.Count == this.Mercaderias.Count && Peso == other.Peso && Precio==other.Precio && Bultos==other.Bultos) {
-                var gap = (from ItemMercaderia im in Mercaderias where !other.Mercaderias.Contains(im) select im).ToList();
-                if ( gap.Count > 0)
-                    return false;
+            if (other.Mercaderias.Count == this.Mercaderias.Count && Peso == other.Peso && Precio==other.Precio && Bultos==other.Bultos) {                
+                foreach (ItemMercaderia im in this.Mercaderias) {
+                    if ((from ItemMercaderia otherIm in other.Mercaderias where otherIm.ProductoID==im.ProductoID && (im.Peso != otherIm.Peso || im.Cantidad != otherIm.Cantidad ||im.Bultos != otherIm.Bultos) select im).ToList().Count >0 )
+                        return false;
+                }
+                return true;
             }
             else
                 return false;
-            return true;
         }
 
         public bool HasItems() {
@@ -128,9 +129,9 @@ namespace Site.Models {
 
         public Mercaderia clone() {
             var newMercaderia = new Mercaderia();
-            newMercaderia.Peso = this.Peso;
-            newMercaderia.Precio = this.Precio;
-            newMercaderia.Bultos = this.Bultos;
+            newMercaderia.Peso = (from ItemMercaderia im in Mercaderias select im.Peso).Sum();
+            newMercaderia.Precio = (from ItemMercaderia im in Mercaderias select im.Precio).Sum();
+            //newMercaderia.Bultos = (from ItemMercaderia im in Mercaderias select im.Bultos).Sum();
             foreach (ItemMercaderia im in this.Mercaderias) {
                 newMercaderia.Mercaderias.Add(im.clone());
             }

@@ -26,11 +26,11 @@ namespace Site.Models {
         public IndexEventoViewModel() {
             q = Sitio.GetPref("Evento-q", "");
             CantidadPorPagina = Sitio.GetPref("Evento-CantidadPorPagina", 50);
-            FechaDesde = Sitio.GetPref("Evento-FechaDesde", DateTime.Today.FirstDayOfMonth());
+            FechaDesde = Sitio.GetPref("Evento-FechaDesde", new DateTime(DateTime.Today.Year, 1, 1));//DateTime.Today.FirstDayOfMonth()
             FechaHasta = Sitio.GetPref("Evento-FechaHasta", DateTime.Today);
-            ProveedorID = Sitio.EsEmpleado || Usuario.HasRol(Sitio.Usuario.UsuarioID,"Cliente")? Sitio.GetPref("Evento-ProveedorID", "").AsInt().ZeroToNull():Sitio.Usuario.UsuarioID;
+            ProveedorID = Sitio.EsEmpleado || Usuario.HasRol(Sitio.Usuario.UsuarioID,"Cliente")? Sitio.GetPref("Evento-ProveedorID", "").AsInt().ZeroToNull():Sitio.Usuario.ProveedorID.IsEmpty()?Sitio.Usuario.UsuarioID:Sitio.Usuario.ProveedorID;
             Proveedor = Sitio.GetPref("Evento-Proveedor", "");
-            ClienteID =  Sitio.EsEmpleado || Usuario.HasRol(Sitio.Usuario.UsuarioID,"Proveedor")? Sitio.GetPref("Evento-ClienteID", "").AsInt().ZeroToNull():Sitio.Usuario.UsuarioID;
+            ClienteID =  Sitio.EsEmpleado || Usuario.HasRol(Sitio.Usuario.UsuarioID,"Proveedor")? Sitio.GetPref("Evento-ClienteID", "").AsInt().ZeroToNull():Sitio.Usuario.ProveedorID.IsEmpty()?Sitio.Usuario.UsuarioID:0;
             Cliente = Sitio.GetPref("Evento-Cliente", "");
             Tipo = Sitio.GetPref("Evento-Tipo", "");
         }
@@ -90,11 +90,10 @@ namespace Site.Models {
                 }
                 queryAux = queryAux.Substring(0, queryAux.Length - 1)+")";
                 if (unaccessibleTypesIDs.Count>0)
-                    sql.Append("AND Evento.TipoEventoID IN "+queryAux);
+                    sql.Append("AND Evento.TipoEventoID NOT IN "+queryAux);
             }
             sql.Append("ORDER BY Evento.Fecha DESC, Evento.CargamentoID DESC");
             Resultado = DbHelper.CurrentDb().Fetch<ListarEventoViewModel>(sql);
-            Resultado.Reverse();
         }
         
 
@@ -138,7 +137,7 @@ namespace Site.Models {
             [ResultColumn]
             public String Cargamento {
                 get {
-                    return "Cargamento enviado el " + FechaEnvio.ToShortDateString()+ " - Nro. remito " + NumeroRemito.ToString();
+                    return "Cargamento Nro. "+ NumeroRemito.ToString();// + FechaEnvio.ToShortDateString()+ " - Nro. remito " 
                 }
             }
 

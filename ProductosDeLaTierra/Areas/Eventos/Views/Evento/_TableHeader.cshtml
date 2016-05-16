@@ -1,7 +1,7 @@
 ﻿@model Site.Models.Evento
 
 @if (Request.IsAjaxRequest()) {
-    <tr data-href="Editar/@Model.Tipo/@Model.EventoID.ToString()" style="cursor:pointer">
+    <tr data-href="Editar/@Model.Tipo/@Model.EventoID.ToString()" style="cursor:pointer" @(!Model.IsNew()? "title=\"Ver más opciones\"":"")>
         <th>
             <h3 style="text-align:left">@Model.Tipo</h3>
             <br />
@@ -15,6 +15,8 @@
 
 <script type="text/javascript">
     $('tr[data-href]').on("click", function () {
-        document.location = $(this).data('href');
+        var link = $(this).data('href');
+        if(!link.endsWith("0") && !link.endsWith("\\"))
+            document.location = link;
     });
 </script>

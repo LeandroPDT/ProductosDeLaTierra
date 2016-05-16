@@ -2,12 +2,13 @@
 
 @{
     ViewBag.Title = "Cargamentos registrados";
-    bool esProveedor = Usuario.HasRol(Sitio.Usuario.UsuarioID, "Proveedor");
-    bool esCliente = Usuario.HasRol(Sitio.Usuario.UsuarioID, "Cliente"); 
+    var listaDeRolesYIDs = Usuario.RolUserIDList();
+    bool esProveedor = (from IDNombrePar par in listaDeRolesYIDs where par.ID == Sitio.Usuario.UsuarioID && par.Nombre == "Proveedor" select par).ToList().Count > 0;
+    bool esCliente = (from IDNombrePar par in listaDeRolesYIDs where par.ID == Sitio.Usuario.UsuarioID && par.Nombre == "Cliente" select par).ToList().Count > 0;
 }
 @if (esProveedor || Sitio.EsEmpleado) { 
     <div class="botonera">
-        <a href="/Eventos/Evento/Nuevo/Envio" class="miniedit" data-callback="location.reload()"><i class="icon-plus"></i> Registrar Envío</a>    
+        <a href="/Eventos/Evento/Nuevo/Envio" data-callback="location.reload()"><h3><i class="icon-plus"></i> Registrar Envío</h3></a>    
     </div>
 }
 <h1>@b.Visitar(ViewBag.Title)</h1>
@@ -45,19 +46,19 @@
    if (Sitio.EsEmpleado || esCliente) { 
        columns.Add(Grilla.Column("Proveedor"));
    }
-   if (Sitio.EsEmpleado || esProveedor) {
+   if (Sitio.EsEmpleado || esProveedor || !Sitio.Usuario.ProveedorID.IsEmpty()) {
        columns.Add(Grilla.Column("Cliente"));
        columns.Add(Grilla.Column("TipoVenta", "Tipo de venta"));
    }
    columns.AddRange(collection:Grilla.Columns(
-            Grilla.Column("Estado"), 
+       Grilla.Column("Estado","Estado", format: @<p class="@item.Estado.ToLower()">@item.Estado</p>), 
             Grilla.Column("admin", "", format: @<span>
-                    @if (Seguridad.CanEdit(Seguridad.Permisos.EventoEnvio) && item.Estado == "Enviado") {<a href="/Eventos/Evento/Editar/Envio/@item.CargamentoID.ToString()" class="button miniedit" data-callback="location.reload()">Editar Envío</a>}
-                    @if (Seguridad.CanEdit(Seguridad.Permisos.EventoRecepcion) && item.Estado == "Enviado") {<a href="/Eventos/Evento/Nuevo/Recepcion/@item.CargamentoID.ToString()" class="button miniedit" data-callback="location.reload()">Registrar Recepcíon</a>}
-                    @if (Seguridad.CanEdit(Seguridad.Permisos.EventoRecepcion) && item.Estado == "Recibido") { <a href="/Eventos/Evento/Editar/Recepcion/@item.CargamentoID.ToString()" class="button miniedit" data-callback="location.reload()">Editar Recepcíon</a>}
-                    @if (Seguridad.CanEdit(Seguridad.Permisos.EventoVenta) && item.Estado == "Recibido") { <a href="/Eventos/Evento/Nuevo/Venta/@item.CargamentoID.ToString()" class="button miniedit" data-callback="location.reload()">Registrar Venta</a>}
-                    @if (Seguridad.CanEdit(Seguridad.Permisos.EventoDecomisacion) && item.Estado == "Recibido") { <a href="/Eventos/Evento/Nuevo/Decomisacion/@item.CargamentoID.ToString()" class="button miniedit" data-callback="location.reload()">Decomisar Mercadería</a>}
-                    @if (Seguridad.CanAccess(Seguridad.Permisos.Liquidacion) && item.Estado != "Enviado") { <a href="/Cargamento/Liquidacion/@item.CargamentoID.ToString()" class="button minidialog" >Liquidación</a>}
+                    @if (Seguridad.CanAccess(Seguridad.Permisos.EventoEnvio) && item.Estado == "Enviado") {<a href="/Eventos/Evento/Editar/Envio/@item.CargamentoID.ToString()" class="button " data-callback="location.reload()">Editar Envío</a>}
+                    @if (Seguridad.CanAccess(Seguridad.Permisos.EventoRecepcion) && item.Estado == "Enviado") {<a href="/Eventos/Evento/Nuevo/Recepcion/@item.CargamentoID.ToString()" class="button " data-callback="location.reload()">Registrar Recepcíon</a>}
+                    @if (Seguridad.CanAccess(Seguridad.Permisos.EventoRecepcion) && item.Estado == "Recibido") { <a href="/Eventos/Evento/Editar/Recepcion/@item.CargamentoID.ToString()" class="button " data-callback="location.reload()">Editar Recepcíon</a>}
+                    @if (Seguridad.CanAccess(Seguridad.Permisos.EventoVenta) && item.Estado == "Recibido") { <a href="/Eventos/Evento/Nuevo/Venta/@item.CargamentoID.ToString()" class="button " data-callback="location.reload()">Registrar Venta</a>}
+                    @if (Seguridad.CanAccess(Seguridad.Permisos.EventoDecomisacion) && item.Estado == "Recibido") { <a href="/Eventos/Evento/Nuevo/Decomisacion/@item.CargamentoID.ToString()" class="button" data-callback="location.reload()">Decomisar Mercadería</a>}
+                    @if (Seguridad.CanAccess(Seguridad.Permisos.Liquidacion) && item.Estado != "Enviado") { <a href="/Reporte/Liquidacion/@item.CargamentoID.ToString()" class="button" >Liquidación</a>}
                     @if (Seguridad.CanAccess(Seguridad.Permisos.Remanente) && item.Estado != "Vendido") {<a href="/Cargamento/VerMercaderia/@item.CargamentoID.ToString()" class="button minidialog">Ver Remanente</a>}
                     @if (Seguridad.CanDelete(Seguridad.Permisos.Cargamento)){<a href="/Cargamento/Borrar/@item.CargamentoID.ToString()" class="button minidelete"><i class="icon-remove"></i></a>}
                 </span>)));

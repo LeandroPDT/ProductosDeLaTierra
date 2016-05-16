@@ -34,7 +34,7 @@ namespace Site.Controllers
         public ActionResult Nuevo() {
             Producto VM = new Producto();
             // si es empleado de la empresa tendra que elegir el usuario, sino el usuario es el actual.
-            VM.ProveedorID = Sitio.EsEmpleado ? VM.ProveedorID : Sitio.Usuario.UsuarioID;
+            VM.ProveedorID = Sitio.EsEmpleado ? VM.ProveedorID : Sitio.Usuario.ProveedorID.IsEmpty()?Sitio.Usuario.UsuarioID:Sitio.Usuario.ProveedorID??0;
             if (Request.IsAjaxRequest())
                 return PartialView("Editar", VM);
             else
@@ -55,7 +55,7 @@ namespace Site.Controllers
         [HttpPost]
 		[CustomAuthorizeEditar(Roles = Permiso)]
         public ActionResult Editar(Producto form, string actionType) {
-            if (ModelState.IsValid && form.IsValid(ModelState) && ValidateProducto(form,ModelState)) {
+            if (ModelState.IsValid && form.IsValid(ModelState) /*&& ValidateProducto(form,ModelState)*/) {
                 var db = DbHelper.CurrentDb();
                 Producto rec;
                 if (form.ProductoID != 0) {
@@ -168,16 +168,16 @@ namespace Site.Controllers
         }
 
         [NoCache]
-        public JsonResult ListaValidar(string term, int? ProveedorID) {
+        public JsonResult ListaValidar(string id, int ProveedorID) {
             var retval = new List<InfoProducto>();
-            if (!term.IsEmpty()) {
+            if (!id.IsEmpty()) {
                 var db = DbHelper.CurrentDb();
                 var sql = PetaPoco.Sql.Builder;
                 sql.Append("SELECT TOP 1 ProductoID as ID, ISNULL(Convert(varchar(12),Producto.CodigoArticulo ),'') + ' - ' + ISNULL(Convert(varchar(40),Descripcion) as Nombre, Producto.PesoUnitario as PesoUnitario, Producto.PrecioUnitario as PrecioUnitario, Producto.PrecioKg as PrecioKg, Producto.UsuarioID as ProveedorID");
                 sql.Append("FROM Producto");
-                sql.Append("Where (Producto.CodigoArticulo = @0 OR Producto.Descripcion=@0 )", term);
+                sql.Append("Where (Producto.CodigoArticulo = @0 OR Producto.Descripcion=@0 )", id);
                 if (!ProveedorID.IsEmpty()) {
-                    sql.Append("AND Producto.UsuarioID = @0",ProveedorID??0);
+                    sql.Append("AND Producto.UsuarioID = @0",ProveedorID);
                 }
 
                 retval = db.Query<InfoProducto>(sql).ToList();

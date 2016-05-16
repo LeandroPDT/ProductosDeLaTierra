@@ -100,14 +100,14 @@
             var peso = parseFloat($(el).val().replace(".", "").replace(",", "."));
             var precioKg = 0;
             row.find('.preciokg').each(function (i, el) {
-                preciokg = parseFloat($(this).val());
+                precioKg = parseFloat($(this).val());
             });
 
-            if (peso > 0 && preciokg > 0) {
+            if (peso > 0 && precioKg != null && precioKg > 0) {
                 row.find('.precio').each(function (i, control) {
                     row.find('.precio').each(function (i, control) {
                         var precio = parseFloat($(control).val().replace(".", "").replace(",", "."));
-                        precio = preciokg * peso;
+                        precio = precioKg * peso;
                         $(control).val(precio).change();
                     });
                 });
@@ -166,7 +166,7 @@
             row.find('.cantidad').each(function (i, el) {
                 cantidad = parseInt($(this).val());
             });
-            if (cantidad > 0 && preciounitario > 0) {
+            if (cantidad > 0 && preciounitario != null && preciounitario > 0) {
                 row.find('.precio').each(function (i, control) {
                     var precio = parseFloat($(control).val().replace(".", "").replace(",", "."));
                     precio = preciounitario * cantidad;
@@ -189,7 +189,7 @@
                 preciounitario = parseFloat($(this).val().replace(".", "").replace(",", "."));
             });
 
-            if (cantidad > 0 && preciounitario > 0) {
+            if (cantidad > 0 && preciounitario != null && preciounitario > 0) {
                 row.find('.precio').each(function (i, control) {
                     row.find('.precio').each(function (i, control) {
                         var precio = parseFloat($(control).val().replace(".", "").replace(",", "."));
@@ -240,7 +240,7 @@
                 }
                 else {
                     var valorControlDecrementado = parseFloat(value.replace(".", "").replace(",", ".")) + 1;
-                    $(control).val(valorControlDecrementado.toString()).change();
+                    $(control).val(valorControlDecrementado.toString().replace(".", ",")).change();
                 }
             }
         });
@@ -259,7 +259,7 @@
                     if (valorControlDecrementado < 0)
                         $(control).val('0').change();
                     else
-                        $(control).val(valorControlDecrementado.toString()).change();
+                        $(control).val(valorControlDecrementado.toString().replace(".", ",")).change();
                 }
             }
         });
@@ -965,7 +965,7 @@ function dolistinput(el, OnSuccess, OnFailture) {
                         url: '/' + el.data("controller") + '/ListaValidar/',
                         dataType: 'json',
                         type: 'POST',
-                        data: getdatafromparams(el.data("params"), "id", valoractual),
+                        data: getdatafromparams($(el).data('params'), "id", valoractual),
                         success: function (json) {
                             var valid = false;
                             if (json.length > 0) {

@@ -4,16 +4,13 @@
     Layout = "~/Views/Shared/_EmailLayout.cshtml";
 }
 
-Lo invitamos a ingresar a su sitio web @Sitio.WebsiteURL/extranet<br />
-Donde podrá consultar sus últimos movimientos y cuenta corriente. 
+Lo invitamos a ingresar a su cuenta en @Sitio.WebsiteURL<br />
+Donde podrá gestionar sus datos y movimientos comerciales. 
 <br />
 Sus datos de acceso son:<br />
 <br />
 <b>Usuario: </b>@Model.UserName<br />
 <b>Contraseña: </b>@Model.Password<br />
 <br />
-Ante cualquier duda, contactese con su asesor comercial
-<br />
-<br />
-Atentamente<br />
+Ante cualquier duda, contactese con @Sitio.EmailContaco
 

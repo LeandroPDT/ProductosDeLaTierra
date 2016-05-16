@@ -2,6 +2,7 @@
 @if (!Request.IsAjaxRequest()) {
     <h1>@b.Visitar(ViewBag.Title)</h1>
 <div class="botonera">
-    @Html.Action("Toolbox", "Entidad", new { e = Entidad.GetFromModel(Model), area = "" })
+    <a tabindex="-1" class="masinfo" data-width="300" href="/ArchivosAdjuntos/Galeria/@Model.CargamentoID?Nombre=Cargamento"><h3><i class="icon-attach"></i> Adjuntar</h3></a>
+    <a href="/ayuda/para/@(new EventoTipo(Model.TipoEventoID).Nombre)" class="masinfo" tabindex="-1" title="Ayuda"><h3><i class="icon-support"></i> Ayuda</h3></a>
 </div>
 }

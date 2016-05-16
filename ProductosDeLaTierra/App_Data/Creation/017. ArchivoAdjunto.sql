@@ -1,5 +1,4 @@
-﻿-- DROP  Table ArchivoAdjunto
-
+﻿
 CREATE TABLE ArchivoAdjunto (
 	ArchivoAdjuntoID int IDENTITY(1,1) NOT NULL CONSTRAINT PKArchivoAdjunto PRIMARY KEY CLUSTERED ( ArchivoAdjuntoID ) ,
 	ID int not null,	

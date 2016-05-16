@@ -7,7 +7,8 @@ using BizLibMVC;
 namespace Site.Models {
     public static class Sitio {
 
-        public const string WebsiteURL = "productosdelatierra.com.ar";
+        public const string EmailContaco = "contacto.productosdelatierra@gmail.com";
+        public const string WebsiteURL = "productosdelatierra.org";
         public static string URI {
             get {
                 return System.Web.HttpContext.Current.Request.Url.Scheme + "://" + System.Web.HttpContext.Current.Request.Url.Authority; 
@@ -281,11 +282,14 @@ namespace Site.Models {
             BizMenu m = default(BizMenu);
 
             if (System.Web.HttpContext.Current.Request.IsAuthenticated) {
-                m = new BizMenu("Cargamentos", "/Cargamento", "", "");
+                m = new BizMenu("Cargamentos", "/Cargamento", "", 7);
                 m.subMenu = CargamentoSubMenu();
 				retval.Add(m);
 				m = new BizMenu("Productos", "/Producto", "", "",8);
 				//m.subMenu = EventosSubMenu();
+				retval.Add(m);
+				m = new BizMenu("Reportes", "/Reporte", "", "",13);
+				m.subMenu = ReporteSubMenu();
 				retval.Add(m);
             }
             return retval;
@@ -295,6 +299,13 @@ namespace Site.Models {
         public static List<BizMenu> CargamentoSubMenu() {
             var submenu = new List<BizMenu>();
             submenu.Add(new BizMenu("Historial", "/Eventos/Evento/Index", ""));
+            return submenu;
+        }
+
+
+        public static List<BizMenu> ReporteSubMenu() {
+            var submenu = new List<BizMenu>();
+            submenu.Add(new BizMenu("Actividad", "/Reporte/ReporteActividad", ""));
             return submenu;
         }
         

@@ -4,4 +4,4 @@
 	 ( NAME = N'ProductosDeLaTierra_Log', FILENAME = N'D:\SQLDATA\SQL2012\ProductosDeLaTierra_Log.ldf' , SIZE = 2048KB , MAXSIZE = 2048GB , FILEGROWTH = 16384KB )
 GO
 
-BACKUP DATABASE DataPig TO  DISK = N'd:\temp\ProductosDeLaTierra.bak' WITH NOFORMAT, INIT,  NAME = N'ProductosDeLaTierra Backup', SKIP, NOREWIND, NOUNLOAD,  STATS = 10
+BACKUP DATABASE [ProductosDeLaTierra] TO  DISK = N'd:\temp\ProductosDeLaTierra.bak' WITH NOFORMAT, INIT,  NAME = N'ProductosDeLaTierra Backup', SKIP, NOREWIND, NOUNLOAD,  STATS = 10

@@ -12,7 +12,7 @@
     <h1>@b.Visitar(ViewBag.Title)</h1>
 }
 <div class="newelements">
-    @using (Html.BeginForm("Editar", "Producto")) {
+    @using (Html.BeginForm("Editar", "Cargamento")) {
         @Html.ValidationSummary()
         @Html.HiddenFor(model => Model.ProductoID)
         if (!Sitio.EsEmpleado) { 
