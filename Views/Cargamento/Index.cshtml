@@ -1,0 +1,67 @@
+﻿@model Site.Models.IndexCargamentoViewModel
+
+@{
+    ViewBag.Title = "Cargamentos registrados";
+    var listaDeRolesYIDs = Usuario.RolUserIDList();
+    bool esProveedor = (from IDNombrePar par in listaDeRolesYIDs where par.ID == Sitio.Usuario.UsuarioID && par.Nombre == "Proveedor" select par).ToList().Count > 0;
+    bool esCliente = (from IDNombrePar par in listaDeRolesYIDs where par.ID == Sitio.Usuario.UsuarioID && par.Nombre == "Cliente" select par).ToList().Count > 0;
+}
+@if (esProveedor || Sitio.EsEmpleado) { 
+    <div class="botonera">
+        <a href="/Eventos/Evento/Nuevo/Envio" data-callback="location.reload()"><h3><i class="icon-plus"></i> Registrar Envío</h3></a>    
+    </div>
+}
+<h1>@b.Visitar(ViewBag.Title)</h1>
+
+@using (Html.BeginForm()) {
+    <div class="formbuscar">
+        <label class="intralabel">Cargamento:</label>@Html.EditorFor(model => Model.q, new{ @placeholder=  "Por Nro. Remito o Fecha de envío (DD/MM/YYYY)" , @style = "width:250px"})
+        <label class="intralabel">Enviados Desde:</label>@Html.EditorFor(model => model.FechaDesde)
+        <label class="intralabel">Hasta:</label>        @Html.EditorFor(model => model.FechaHasta)
+        <br />
+        @if (Sitio.EsEmpleado || esCliente) {
+            <label class="intralabel">Proveedor:</label>@Html.UsuarioSuperList("ProveedorID", "Proveedor", Model.ProveedorID, Model.Proveedor, new UsuarioSuperListHtmlHelper.Options() { Rol = "Proveedor" })
+        }
+        @if (Sitio.EsEmpleado || esProveedor) { 
+            <label class="intralabel">Cliente:</label>@Html.UsuarioSuperList("ClienteID", "Cliente", Model.ClienteID, Model.Cliente, new UsuarioSuperListHtmlHelper.Options() { Rol = "Cliente" })
+        }
+        <br />
+        <label class="intralabel">Estado:</label>       @Html.DropDownListFor(model => model.Estado, Cargamento.EstadoSelectList(Model.Estado))
+        @if (Sitio.EsEmpleado || esProveedor) {
+            <label class="intralabel">Tipo de Venta:</label>       @Html.DropDownListFor(model => model.TipoVenta, Cargamento.TipoVentaSelectList(Model.TipoVenta))
+        }        
+        <label class="intralabel">Ver un máximo de:</label>@Html.DropDownList("CantidadPorPagina", CantidadPorPagina.GetSelectList(Model.CantidadPorPagina, ""))
+        <input type="submit" value="Refrescar" class="defaultbutton" />
+
+    </div>
+}
+
+@Html.ResultadoBusqueda(Model.Resultado, Model.CantidadPorPagina)
+
+@{ var Grilla = new BizGrid(source: Model.Resultado);
+   var columns = new List<BizGridColumn>();
+   columns.AddRange(collection:Grilla.Columns(
+            Grilla.Column("NumeroRemito", "Nro. Remito"),
+            Grilla.Column("FechaEnvio", "Fecha de Envío")));
+   if (Sitio.EsEmpleado || esCliente) { 
+       columns.Add(Grilla.Column("Proveedor"));
+   }
+   if (Sitio.EsEmpleado || esProveedor || !Sitio.Usuario.ProveedorID.IsEmpty()) {
+       columns.Add(Grilla.Column("Cliente"));
+       columns.Add(Grilla.Column("TipoVenta", "Tipo de venta"));
+   }
+   columns.AddRange(collection:Grilla.Columns(
+       Grilla.Column("Estado","Estado", format: @<p class="@item.Estado.ToLower()">@item.Estado</p>), 
+            Grilla.Column("admin", "", format: @<span>
+                    @if (Seguridad.CanEdit(Seguridad.Permisos.EventoEnvio) && item.Estado == "Enviado") {<a href="/Eventos/Evento/Editar/Envio/@item.CargamentoID.ToString()" class="button " data-callback="location.reload()">Editar Envío</a>}
+                    @if (Seguridad.CanEdit(Seguridad.Permisos.EventoRecepcion) && item.Estado == "Enviado") {<a href="/Eventos/Evento/Nuevo/Recepcion/@item.CargamentoID.ToString()" class="button " data-callback="location.reload()">Registrar Recepcíon</a>}
+                    @if (Seguridad.CanEdit(Seguridad.Permisos.EventoRecepcion) && item.Estado == "Recibido") { <a href="/Eventos/Evento/Editar/Recepcion/@item.CargamentoID.ToString()" class="button " data-callback="location.reload()">Editar Recepcíon</a>}
+                    @if (Seguridad.CanEdit(Seguridad.Permisos.EventoVenta) && item.Estado == "Recibido") { <a href="/Eventos/Evento/Nuevo/Venta/@item.CargamentoID.ToString()" class="button " data-callback="location.reload()">Registrar Venta</a>}
+                    @if (Seguridad.CanEdit(Seguridad.Permisos.EventoDecomisacion) && item.Estado == "Recibido") { <a href="/Eventos/Evento/Nuevo/Decomisacion/@item.CargamentoID.ToString()" class="button" data-callback="location.reload()">Decomisar Mercadería</a>}
+                    @if (Seguridad.CanAccess(Seguridad.Permisos.Liquidacion) && item.Estado != "Enviado") { <a href="/Reporte/Liquidacion/@item.CargamentoID.ToString()" class="button" >Liquidación</a>}
+                    @if (Seguridad.CanAccess(Seguridad.Permisos.Remanente) && item.Estado != "Vendido") {<a href="/Cargamento/VerMercaderia/@item.CargamentoID.ToString()" class="button minidialog">Ver Remanente</a>}
+                    @if (Seguridad.CanDelete(Seguridad.Permisos.Cargamento)){<a href="/Cargamento/Borrar/@item.CargamentoID.ToString()" class="button minidelete"><i class="icon-remove"></i></a>}
+                </span>)));
+    }
+
+@Grilla.GetHtml(columns: columns)

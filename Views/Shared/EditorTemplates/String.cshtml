@@ -1,0 +1,29 @@
+﻿@model string
+
+@{
+    IDictionary<string, object> Attributes = new Dictionary<string, object>();
+    if (ViewData.ModelMetadata.AdditionalValues.ContainsKey("MaxLength")) {
+        Attributes.Add("MaxLength", (int)ViewData.ModelMetadata.AdditionalValues["MaxLength"]);
+    }
+    if (ViewData.ContainsKey("style")) {
+        Attributes.Add("style", (string)ViewData["style"]);
+    }
+    if (ViewData.ContainsKey("class")) {
+        Attributes.Add("class", (string)ViewData["class"]);
+    }
+    if (ViewData.ContainsKey("readonly")) {
+        Attributes.Add("readonly", (string)ViewData["readonly"]);
+    }
+    if (ViewData.ContainsKey("autofocus")) {
+        Attributes.Add("autofocus", (string)ViewData["autofocus"]);
+    }
+    if (ViewData.ContainsKey("placeholder")) {
+        Attributes.Add("placeholder", (string)ViewData["placeholder"]);
+    }
+    if (ViewData.ContainsKey("autohelp")) {
+        Attributes.Add("title", (string)ViewData["autohelp"]);
+    }
+}
+     
+@Html.TextBox("",ViewData.TemplateInfo.FormattedModelValue, Attributes)
+

@@ -1,0 +1,24 @@
+﻿@model System.Single?
+
+@{
+    IDictionary<string, object> Attributes = new Dictionary<string, object>();
+    if (ViewData.ContainsKey("style")) {
+        Attributes.Add("style", (string)ViewData["style"]);
+    }
+    if (ViewData.ContainsKey("autohelp")) {
+        Attributes.Add("title", (string)ViewData["autohelp"]);
+    }
+    if (ViewData.ContainsKey("readonly")) {
+        Attributes.Add("readonly", (string)ViewData["readonly"]);
+    }
+    if (ViewData.ContainsKey("class")) {
+        Attributes.Add("class", (string)ViewData["class"] + " decimales");
+    }
+    else {
+        Attributes.Add("class", "decimales");
+    }
+    Attributes.Add("autocomplete", "off");
+}
+     
+@Html.TextBox("", (Model.HasValue ? Model.Value.ToString("#,##0.00##") : string.Empty), Attributes)
+

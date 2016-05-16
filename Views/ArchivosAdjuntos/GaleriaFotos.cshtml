@@ -1,0 +1,20 @@
+﻿@model Entidad
+
+<ul>
+    @foreach (ArchivoAdjunto f in Model.ArchivosAdjuntos) {
+        <li>
+            @if (f.EsImagen) {
+                <a href="@f.PathAndFile" rel="unamonos">
+                    <img src="@f.PathAndThumb" alt="" width="200" height="150" />
+                </a>
+            }
+            <div>
+                <a href="/ArchivosAdjuntos/Borrar/@f.ArchivoAdjuntoID" class="minidelete"><i class="icon-remove"></i></a>
+                <a href="@f.PathAndFile">
+                    <i class="@f.Icon"></i> @f.Titulo
+                    <br /><span class="fechagaleria">@f.Fecha.ToShortDateString()</span>
+                </a>
+            </div>
+        </li>
+    }
+</ul>

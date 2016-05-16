@@ -1,0 +1,25 @@
+﻿@model EstadoSubscripcionViewModel
+
+<div id="estadosubscripcion">
+@if (Model.EstaSubscripto) { 
+    <span class="subscripto"><i class="icon-bell"></i> Usted está subscripto a este incidente.</span> <a class="postlink" href="/Incidentes/Desuscribir/@Model.IncidenteID">Desuscribir</a>
+}
+else { 
+    <span class="desuscripto">Usted <b>no</b> está subscripto a este incidente.</span> <a class="postlink" href="/Incidentes/Subscribir/@Model.IncidenteID"><i class="icon-bell"></i> Subscribir</a>
+}
+</div>
+
+
+<script type="text/javascript">
+    $('.postlink').click(function (e) {
+        e.preventDefault();
+        $.post($(this)[0].href, function (data) {  //Post to action
+            if (data == 'OK') {
+                $("#estadosubscripcion").load("/Incidentes/EstadoSubscripcion/@Model.IncidenteID");
+            }
+            else {
+                ShowError(data);
+            }
+        });
+    });
+</script>

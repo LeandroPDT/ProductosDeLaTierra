@@ -1,0 +1,71 @@
+﻿@model Site.Models.Evento
+
+@{
+    ViewBag.Title = Model.ToString();
+}
+
+
+    @Html.Partial("_Header", Model)
+<div class="newelements">
+    @using (Html.BeginForm("Editar", "Evento")) {
+        @Html.ValidationSummary()
+        @Html.HiddenFor(model => model.EventoID)
+        @Html.HiddenFor(model => model.TipoEventoID)
+        @Html.HiddenFor(model => model.CargamentoID)
+        @Html.HiddenFor(model => model.MercaderiaID)
+        @Html.HiddenFor(model => model.Cargamento.FechaEnvio)
+        if (!Sitio.EsEmpleado) {
+            @Html.HiddenFor(model => model.Cargamento.ProveedorID, new { @value = Sitio.Usuario.UsuarioID.ToString() })
+        }
+    <table class="formulario">
+        @Html.Partial("_TableHeader")
+        <tr>
+            <th colspan="2"><label class="intralabel">Fecha</label></th>
+            <td>@Html.EditorFor(model => model.Fecha)
+                <script type="text/javascript">
+                    $(function () {
+                        $("#Fecha").change(
+                            function () {
+                                $("#Cargamento_FechaEnvio").val($("#Fecha").val());
+                        
+                            });
+                        $("#Cargamento_FechaEnvio").val($("#Fecha").val())
+                    });
+                </script>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">@Html.LabelFor(model => model.Cargamento.NumeroRemito)</th>
+            <td>@Html.EditorFor(model => model.Cargamento.NumeroRemito)</td>
+        </tr>
+        @if (Sitio.EsEmpleado) {
+        <tr>
+            <th colspan="2">@Html.LabelFor(model => model.Cargamento.Proveedor)</th>
+            <td>@Html.UsuarioSuperList("Cargamento.ProveedorID", "Cargamento.Proveedor",Model.Cargamento.ProveedorID,Model.Cargamento.Proveedor,new UsuarioSuperListHtmlHelper.Options(){Rol = "Proveedor"})</td>
+        </tr>    
+        }
+        <tr>
+            <th colspan="2">@Html.LabelFor(model => model.Cargamento.Cliente)</th>
+            <td>@Html.UsuarioSuperList("Cargamento.ClienteID", "Cargamento.Cliente",Model.Cargamento.ClienteID,Model.Cargamento.Cliente,new UsuarioSuperListHtmlHelper.Options(){Rol = "Cliente"})</td>
+        </tr>            
+        <tr>
+            <th colspan="2">@Html.LabelFor(model => model.Cargamento.TipoVenta)</th>
+            <td>@Html.DropDownListFor(model => model.Cargamento.TipoVenta,Cargamento.TipoVentaSelectList(Model.Cargamento.TipoVenta))</td>
+        </tr>            
+        <tr>
+            <th>@Html.LabelFor(model => model.Cargamento.Observaciones)</th>
+            <td colspan="2">@Html.EditorFor(model => model.Cargamento.Observaciones, new { @style = "width:300px" })</td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                @Html.Partial("EditarEventoMercaderia",Model)
+            </td>
+        </tr>
+    @if (!Request.IsAjaxRequest()) {
+        <tr>
+            <td><input type="submit" value="Guardar" class="defaultbutton" /></td>
+        </tr>
+    }
+    </table>
+    }
+</div>

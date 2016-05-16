@@ -1,0 +1,54 @@
+﻿@model Site.Models.Producto
+
+@{
+    ViewBag.Title = Model.ToString();
+}
+
+@if (!Request.IsAjaxRequest()) {
+    <div class="botonera">
+        @Html.Action("Toolbox", "Entidad", new { e = Entidad.GetFromModel(Model) })
+    </div>
+
+    <h1>@b.Visitar(ViewBag.Title)</h1>
+}
+<div class="newelements">
+    @using (Html.BeginForm("Editar", "Cargamento")) {
+        @Html.ValidationSummary()
+        @Html.HiddenFor(model => Model.ProductoID)
+        if (!Sitio.EsEmpleado) { 
+            @Html.HiddenFor(model => Model.ProveedorID)
+        }
+    <h3>@Model.ToString()</h3>
+    <br/>
+    <table class="formulario">
+        @if (Sitio.EsEmpleado) {
+        <tr>
+            <th>@Html.LabelFor(model => Model.ProveedorID)</th>
+            <td>@Html.UsuarioSuperList("ProveedorID", "ProveedorIDNombre",Model.ProveedorID.ZeroToNull(),Model.Proveedor, new UsuarioSuperListHtmlHelper.Options(){Rol="Proveedor"})</td>
+        </tr>            
+        }
+        <tr>
+            <th>@Html.LabelFor(model => model.CodigoArticulo)</th>
+            <td>@Html.EditorFor(model => model.CodigoArticulo)</td>
+        </tr>
+        <tr>
+            <th>@Html.LabelFor(model => model.Descripcion)</th>
+            <td>@Html.EditorFor(model => model.Descripcion)</td>
+        </tr>
+        <tr>
+            <th>@Html.LabelFor(model => model.PesoUnitario)</th>
+            <td>@Html.EditorFor(model => model.PesoUnitario)</td>
+        </tr>
+        <tr>
+            <th>@Html.LabelFor(model => model.Notas)</th>
+            <td>@Html.EditorFor(model => model.Notas)</td>
+        </tr>
+    @if (!Request.IsAjaxRequest()) {
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Guardar" class="defaultbutton" /></td>
+        </tr>
+    }
+    </table>
+    }
+</div>

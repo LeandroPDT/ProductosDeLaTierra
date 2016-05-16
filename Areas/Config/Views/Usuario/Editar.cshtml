@@ -1,0 +1,108 @@
+﻿@model Site.Models.Usuario
+
+@{
+    ViewBag.Title = Model.ToString();
+}
+
+
+@if (!Model.UsuarioID.IsEmpty()) {
+<div class="botonera">    
+<form action="/config/Usuario/EnviarPassword/@Model.UsuarioID" method="post">
+    <input type="submit" class="button" value="Resetear y enviar nueva contraseña al usuario" />
+</form>
+</div>
+}
+
+<h1>@b.Visitar(ViewBag.Title)</h1>
+
+@using (Html.BeginForm("Editar", "Usuario", new { id = Model.UsuarioID })) {
+    @Html.ValidationSummary()
+    @Html.HiddenFor(model => model.UsuarioID)
+    
+
+    <div id="tabs">
+	    <ul>
+		    <li><a href="#tabs-1">Datos</a></li>
+		    <li><a href="#tabs-2">Roles</a></li>
+        </ul>
+	    <div id="tabs-1">
+            <table class="formulario" style="width: 500px">
+	        <tr>
+                <th>@Html.LabelFor(model => model.UserName)</th>
+                <td>@Html.EditorFor(model => model.UserName, new { style = "width: 300px" })
+                    @Html.ValidationMessageFor(model => model.UserName)
+                    <div class="smalltext">El usuario que usará para ingresar al sitio</div>
+                </td>
+
+	        </tr>
+	        <tr>
+                <th>@Html.LabelFor(model => model.Nombre)</th>
+                <td>@Html.EditorFor(model => model.Nombre, new { style = "width: 400px" })
+                    @Html.ValidationMessageFor(model => model.Nombre)
+                    <div class="smalltext">El nombre real y completo de la persona</div>
+                </td>
+
+	        </tr>
+	        <tr>
+                <th>@Html.LabelFor(model => model.Email)</th>
+                <td>@Html.EditorFor(model => model.Email, new { style = "width: 400px" })
+                    @Html.ValidationMessageFor(model => model.Email)
+                    <div class="smalltext">Se usará para comunicarse con el usuario y para recuperación de contraseña</div>
+                </td>
+	        </tr>
+	        <tr>
+                <th>@Html.LabelFor(model => model.Activo)</th>
+                <td>@Html.EditorFor(model => model.Activo)
+                    @Html.ValidationMessageFor(model => model.Activo)
+                    <div class="smalltext">Solo los usuarios activos pueden ingresar al sitio</div>
+                </td>
+	        </tr>
+	        <tr>
+                <th>@Html.LabelFor(model => model.IsLockedOut)</th>
+                <td>@Html.EditorFor(model => model.IsLockedOut)
+                    @Html.ValidationMessageFor(model => model.IsLockedOut)
+                    <div class="smalltext">Los usuarios quedan bloqueados al equivocarse la contraseña repetidas veces</div>
+                </td>
+	        </tr>
+            @if (Usuario.HasRol(Model.UsuarioID, "Proveedor")) { 
+                <tr>
+                    <th>@Html.LabelFor(model => model.Comision)</th>
+                    <td>
+                        @Html.EditorFor(model => model.Comision)
+                        @Html.ValidationMessageFor(model => model.Comision)
+                        <div class="smalltext">Comisión cobrada por los clientes a este usuario</div>
+                    </td>
+                </tr>
+            }
+            @if (Sitio.EsEmpleado) { 
+                <tr>
+                    <th>@Html.LabelFor(model => Model.ProveedorID)</th>
+                    <td style="vertical-align:middle">@Html.UsuarioSuperList("ProveedorID", "ProveedorIDNombre",Model.ProveedorID.ZeroToNull(),Model.Proveedor, new UsuarioSuperListHtmlHelper.Options(){Rol="Proveedor"})</td>
+                </tr>            
+            }
+            </table>
+        </div>
+        <div id="tabs-2">
+            <table class="simpletable">
+            <tr>
+                <th>Rol</th>
+            </tr>
+            @for (int i = 0; i < Model.Items.Count(); i++) {
+                <tr>
+                    <td>
+                        @Html.HiddenFor(m => m.Items[i].UsuarioRolID)
+                        @Html.RolSuperList("RolID", "Rol", Model.Items[i].RolID, Model.Items[i].Rol, "Items", i)
+                    </td>
+                </tr>
+            }
+            </table>
+
+        </div>
+    </div>
+    <input type="submit" value="Guardar y cerrar" class="defaultbutton" />
+}
+
+
+<div class="footermessage">
+    @Html.ActionLink("Volver a la lista", "Index")
+</div>

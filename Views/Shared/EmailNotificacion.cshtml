@@ -1,0 +1,15 @@
+﻿@model List<Notificacion>
+
+@{
+    Layout = "~/Views/Shared/_EmailLayout.cshtml";
+}
+
+@foreach (var item in Model) {
+<p style="@Sitio.EmailStyles.p">
+    <a href="@item.FullURL" style="text-decoration: none;">
+        <b>@item.Texto</b>
+    </a>
+    <br />@item.Fecha.ToShortDateString() a las @item.Fecha.ToShortTimeString()
+    <br />&nbsp;
+</p>
+}

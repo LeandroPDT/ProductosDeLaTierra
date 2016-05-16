@@ -1,0 +1,131 @@
+﻿@model Site.Models.Liquidacion
+@{
+    ViewBag.Title = Model.ToString();
+}
+<div id="imprimible" class="newelements">
+
+    @if (!Request.IsAjaxRequest()) {
+        <h1>@b.Visitar(ViewBag.Title)</h1>
+    }
+    
+    <table class="formulario">
+        @if (Sitio.EsEmpleado) {
+        <tr>
+            <th>@Html.LabelFor(model => Model.Proveedor)</th>
+            <td><label class="intralabel">@Model.Proveedor</label> </td>
+        </tr>            
+        }
+        <tr>
+            <th>@Html.LabelFor(model => Model.Cliente)</th>
+            <td><label class="intralabel">@Model.Cliente</label> </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <br/>
+                <table class="simpletable2">
+                    <tr>
+                        <th>Fecha<br/>de Venta</th>
+                        <th>Artículo</th>
+                        <th>Cantidad (Un.)</th>
+                        <th>Precio<br />Unitario ($)</th>
+                        <th>Total ($)</th>
+                    </tr>
+                    @foreach (Liquidacion.LiquidacionItem li in Model.ItemsVendidos) {
+                    <tr>
+                        <th>@li.Fecha.ToShortDateString()</th>
+                        <th style="text-align:left">@li.Articulo</th>
+                        <th>@li.Cantidad</th>
+                        <th>@li.Precio.ToString("N2")</th>
+                        <th>@li.Total.ToString("N2")</th>
+                    </tr>                        
+                    }
+                    <tr>
+                        <th colspan="4" style="text-align:right"><h4><i>Total Gral ($)</i></h4></th>
+                        <th><h4><b>@Model.Ganancia.ToString("N2")</b></h4></th>
+                    </tr>
+                    <tr>
+                        <th colspan="4" style="text-align:right"><h4><i>Costo de Flete ($)</i></h4></th>
+                        <th><h4><b>- @Model.CostoFlete.ToString("N2")</b></h4></th>
+                    </tr>
+                    <tr>
+                        <th colspan="4" style="text-align:right"><h4><i>Costo de Descarga ($)</i></h4></th>
+                        <th><h4><b>- @Model.CostoDescarga.ToString("N2")</b></h4></th>
+                    </tr>
+                    <tr>
+                        <th colspan="4" style="text-align:right"><h4><i>Comisión por Ventas ($)</i></h4></th>
+                        <th><h4><b>- @Model.ComisionCobrada.ToString("N2")</b></h4></th>
+                    </tr>
+                    <tr>
+                        <th colspan="4" style="text-align:right"><h3><i>Total Neto ($)</i></h3></th>
+                        <th><h3><b>@Model.GananciaTotal.ToString("N2")</b></h3></th>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <br/>
+</div>
+
+<a id="descargaPDF" href="#"><i class="icon-download"></i> Descargar como PDF</a>
+
+<script type="text/javascript">
+
+
+    (function () {
+        html2canvas.getBounds = function getBounds(node) {
+            if (node.getBoundingClientRect) {
+                var clientRect = node.getBoundingClientRect();
+                var width = node.offsetWidth == null ? clientRect.width : node.offsetWidth;
+                return {
+                    top: Math.floor(clientRect.top),
+                    bottom: Math.floor(clientRect.bottom || (clientRect.top + clientRect.height)),
+                    right: Math.floor(clientRect.left + width),
+                    left: Math.floor(clientRect.left),
+                    width: width,
+                    height: node.offsetHeight == null ? clientRect.height : node.offsetHeight
+                };
+            }
+            return {};
+        };
+
+        var
+            form = $('#imprimible'),
+            cache_width = form.width(),
+            a4 = [595.28, 841.89];  // for a4 size paper width and height
+        $("#descargaPDF").click(
+            function printPDF() {
+                $('body').scrollTop(0);
+                createPDF();
+            });
+        //create pdf
+        function createPDF() {
+            var theCanvas = getCanvas();
+            theCanvas.then(function (canvas) {
+                //canvas.width(1600);
+                var
+                img = canvas.toDataURL("image/png"),
+                doc = new jsPDF({
+                    unit: 'px',
+                    format: 'a4'
+                });
+                var imgPDT = document.createElement('img');
+                imgPDT.src = '/content/images/logo.jpg';
+                doc.addImage(imgPDT, 'JPEG', 40, 20, 200, 40);
+                doc.addImage(img, 'JPEG', 50, 80, canvas.width * 0.8, canvas.height * 0.8);
+                var docName = "@(Model.ToString()).pdf";
+                doc.save(docName.replace(' ', '_').replace('.', '-'));
+                form.width(cache_width);
+            });
+        }
+
+        // create canvas object
+        function getCanvas() {
+            form.width((a4[0] * 1.33333) - 80).css('max-width', 'none');
+            return html2canvas(form,{
+                imageTimeout:2000,
+                removeContainer:true
+            });
+        }
+
+    }());
+</script>

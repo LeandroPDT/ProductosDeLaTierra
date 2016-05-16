@@ -1,0 +1,226 @@
+@model Incidente
+
+@{
+    ViewBag.Title = "Incidente #" + Model.IncidenteID.ToString();
+}
+
+<div class="incidente">
+    <div class="sidebar">
+        <div><span class="estado @Model.EstadoCssClass">@Model.Estado</span></div>
+        <div><i class="icon-comments"></i> @Model.CantComentarios.ToSingleOrPlural("comentario", "comentarios")</div>
+        <div><i class="icon-attach"></i> @Model.CantArchivos.ToSingleOrPlural("archivo", "archivos")</div>
+    </div>
+
+
+    <div class="avatar-bubble">
+        <div class="avatar">
+            <img src="@Usuario.AvatarFolder@Model.AvatarChico" />
+        </div>
+        <div class="bubble">
+            @if (Model.PuedeModificar) { 
+            <div class="botonera">
+                <a href="/Incidentes/Editar/@Model.IncidenteID" class="jbtn-editar">Editar</a>
+            </div>
+            }
+
+            <div class="volanta">@Model.TipoIcon <b>@Model.Usuario</b> abrió este incidente (#@Model.IncidenteID.ToString()) @BizLibMVC.Utiles.TimeElapsed(Model.Fecha)</div>
+            <h1>@Model.Titulo</h1>
+
+
+            <div class="cuerpo">
+                @Html.Raw(Model.Notas)
+            </div>
+        </div>
+        <div class="participantes">
+            <div class="avatar inlineseparator" style="line-height: 23px; color: #333">@Model.Participantes.Count participantes</div>
+            @foreach (var u in Model.Participantes) {
+                <div class="avatar">
+                    <img src="@Usuario.AvatarFolder@u.AvatarChico" title="@u.Nombre"/>
+                </div>
+            }
+            <a class="miniedit agregarusuario" href="/Incidentes/AgregarUsuario/@Model.IncidenteID" title="Agregar usuario a las notificaciones del incidente" data-callback="location.reload()"><i class="icon-plus-2"></i></a>
+        </div>
+    </div>
+
+    <ul class="timeline">
+    @foreach (IncidenteComentario tl in Model.Timeline ) {
+        if (!tl.Mensaje.IsEmpty()) {
+            <li>
+                <div class="avatar-bubble">
+                    <div class="avatar">
+                        <img src="@Usuario.AvatarFolder@tl.AvatarChico" />
+                    </div>
+                    <div class="bubble">
+                        <div class="encabezado">
+                            <div class="autor">
+                                <i class="icon-comments"></i> <b>@tl.Usuario</b> comentó
+                            </div>
+                            <div class="cuando">
+                                @BizLibMVC.Utiles.TimeElapsed(tl.Fecha)
+                                @if (tl.PuedeModificar) {
+                                    <a href="/Incidentes/borrarcomentario/@tl.IncidenteComentarioID " class="minidelete"><i class="icon-remove"></i></a>
+                                }
+                            </div>
+                        </div>
+                        <div class="cuerpo">
+                            @Html.Raw(tl.Mensaje.Replace(Environment.NewLine, "<br/>"))
+                        </div>
+                    </div>
+                </div>
+            </li>
+        }
+        else if (!tl.Archivo.IsEmpty()) {
+            <li class="archivobox">
+                <i class="icon-attach"></i> <img src="@Usuario.AvatarFolder@tl.AvatarChico" class="usuario" /> <b>@tl.Usuario</b> subió el archivo&nbsp;
+                <a href="@tl.URL" id="@tl.DomID" class="@tl.CssClass">@tl.ArchivoNombre</a>&nbsp;@BizLibMVC.Utiles.TimeElapsed(tl.Fecha)
+
+                @if (tl.PuedeModificar) {
+                    <a href="/Incidentes/borrarcomentario/@tl.IncidenteComentarioID " class="minidelete"><i class="icon-remove"></i></a>
+                }
+
+                @if (tl.EsImagen) {
+                    <div class="archivoimagen"><a href="@tl.URL"><img src="@tl.URL" style="max-width: 960px; margin: 5px 0; display: block"/></a></div>
+                }
+            </li>
+        }
+        else if (!tl.Status.IsEmpty()) {
+            <li class="changestatusbox">
+                <span class="estado @tl.EstadoCssClass">@tl.Estado</span>
+                <img src="@Usuario.AvatarFolder@tl.AvatarChico" class="usuario" /> <b>@tl.Usuario</b> cambió el estado del incidente @BizLibMVC.Utiles.TimeElapsed(tl.Fecha)
+            </li>
+        }
+    }
+    </ul>
+
+
+    <div class="accionesfinales">
+
+        <a id="pickfiles" href="#" style="padding: 0"><i class="icon-upload"></i> Subir archivos</a>
+        @if (Model.PuedeModificar) {
+            if (Model.Cerrado) {
+                <a href="/Incidentes/Abrir/@Model.IncidenteID.ToString()"><i class="icon-key"></i> Reabrir</a>
+            }
+            else {
+                <a style="color: crimson;" href="/Incidentes/Cerrar/@Model.IncidenteID.ToString()"><i class="icon-cancel-circle"></i> Cerrar</a>
+            }
+        }
+        @if (Sitio.EsDeveloper()) {
+            if (Model.ResueltoDev) {
+                <a href="/Incidentes/Resolvelo/@Model.IncidenteID.ToString()?ResueltoDev=false"><i class="icon-sad"></i> Desresolver</a>
+            }
+            else {
+                <a href="/Incidentes/Resolvelo/@Model.IncidenteID.ToString()?ResueltoDev=true"><i class="icon-smiley"></i> Resolver</a>
+            }
+        }
+    </div>
+
+    <div class="finincidente noprint">
+        <div id="container">
+	        <div id="filelist"></div>
+        </div>
+
+
+        <div class="avatar-bubble">
+            <div class="avatar">
+                <img src="@Usuario.AvatarFolder@Sitio.Usuario.AvatarChico" />
+            </div>
+            <div class="bubble">
+                <div class="encabezado">
+                    <div class="autor">Comentar</div>
+                </div>
+                <div class="cuerpo" style="text-align: right">
+                    <form class="comentar" action="/Incidentes/Comentar/@Model.IncidenteID" method="post">
+                        <textarea name="Mensaje" id="Mensaje" rows="6"></textarea>
+                        <input type="submit" value="Comentar" class="button"/>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    
+    </div>
+
+
+    @Html.Action("EstadoSubscripcion", new { id = Model.IncidenteID })
+
+</div>
+
+<div class="footermessage">
+    @Html.ActionLink("Volver a la lista", "Index")
+    @Html.ActionLink("Crear nuevo", "nuevo")
+</div>
+
+
+@section head {
+
+<script type="text/javascript">
+    // Custom example logic
+    $(function () {
+        var uploader = new plupload.Uploader({
+            runtimes: 'gears,html5,flash,silverlight',
+            browse_button: 'pickfiles',
+            container: 'container',
+            max_file_size: '10mb',
+            url: '/Incidentes/Upload/@Model.IncidenteID',
+            flash_swf_url: '/scripts/plupload/js/plupload.flash.swf',
+            silverlight_xap_url: '/scripts/plupload/js/plupload.silverlight.xap',
+            filters: [
+			    { title: "Fotos y documentos", extensions: "jpg,gif,png,txt,doc,docx,xls,xlsx,pdf,ppt,pptx" }
+		    ],
+            resize: { width: 1024, height: 768, quality: 90 }
+        });
+
+        uploader.bind('Init', function (up, params) {
+            //$('#filelist').html("<div>Current runtime: " + params.runtime + "</div>");
+        });
+
+        $('#uploadfiles').click(function (e) {
+            uploader.start();
+            e.preventDefault();
+        });
+
+        uploader.init();
+
+        uploader.bind('FilesAdded', function (up, files) {
+            $.each(files, function (i, file) {
+                $('#filelist').append(
+				'<div id="' + file.id + '">' +
+				file.name + ' (' + plupload.formatSize(file.size) + ') <b></b> <i><img src="/content/images/loading.gif"></i>' +
+			'</div>');
+            });
+
+            up.refresh(); // Reposition Flash/Silverlight
+            up.start(); // start inmediately
+
+        });
+
+        uploader.bind('UploadProgress', function (up, file) {
+            $('#' + file.id + " b").html(file.percent + "%");
+        });
+
+        uploader.bind('Error', function (up, err) {
+            $('#filelist').append("<div>Error: " + err.code +
+			", Message: " + err.message +
+			(err.file ? ", File: " + err.file.name : "") +
+			"</div>"
+		);
+
+            up.refresh(); // Reposition Flash/Silverlight
+        });
+
+        uploader.bind('FileUploaded', function (up, file) {
+            $('#' + file.id + " b").html("100%");
+            $('#' + file.id + " i").html("<span style='color: green'>Listo!</span>");
+            $('#' + file.id).delay(500).hide();
+            if (this.total.queued == 0) {
+                window.location.reload();
+            }
+        });
+    });
+</script>
+
+
+
+
+}
+

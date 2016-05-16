@@ -1,0 +1,58 @@
+@model ListarAyudaViewModel
+@{
+    ViewBag.Title = "Ayuda";
+}
+<div class="botonera">
+    <a href="/Ayuda/Nuevo" data-callback="location.reload()"><h3><i class="icon-plus"></i> Nueva Ayuda</h3></a>
+</div>
+
+<h1>@b.Visitar(ViewBag.Title)</h1>
+
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary()
+    <div class="formbuscar">
+        <label>Buscar:</label> @Html.TextBox("q", Model.q, new {style = "width: 100px;"})
+        <label class="intralabel">Ver un máximo de: </label> @Html.DropDownList("CantidadPorPagina", CantidadPorPagina.GetSelectList(Model.CantidadPorPagina))
+        <input type="submit" value="Buscar" class="defaultbutton"/>
+    </div>
+}
+    
+@Html.ResultadoBusqueda(Model.Resultado, Model.CantidadPorPagina)  
+   
+<div class="lista">
+    <table class="nicetable sortable filtrable" style="min-width: 700px">
+    <thead>
+        <tr></tr>
+        <tr>
+            <td colspan="5" class="filtrablerow">
+                <span class="quicksearchicon"></span>
+                <input class="quicksearch" type="text" />
+            </td>
+            </tr>
+    </thead>
+    <tbody>
+    @foreach (Ayuda Item in Model.Resultado) {
+        <tr>
+            <td>#@Item.AyudaID.ToString()</td>
+            <td>
+                <b><a href="/Ayuda/ver/@Item.AyudaID">@Item.Titulo</a></b>
+                <div>
+                @if (Item.CantComentarios > 0) {
+                    <div style="float: right; margin-left: 10px; "><i class="icon-comments"></i> @Item.CantComentarios.ToSingleOrPlural("comentario", "comentarios") </div>
+                }
+                @if (Item.CantArchivos > 0) {
+                    <div style="float: right; margin-left: 10px;"><i class="icon-attach"></i> @Item.CantArchivos.ToSingleOrPlural("archivo", "archivos") </div>
+                }
+                </div>
+            </td>
+            <td>
+                <a href="/Ayuda/ver/@Item.AyudaID.ToString()" class="button">Ver</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+    </table>
+</div>
+
+

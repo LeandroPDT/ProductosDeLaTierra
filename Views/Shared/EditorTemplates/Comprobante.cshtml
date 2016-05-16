@@ -1,0 +1,31 @@
+﻿@model string
+
+@{
+    IDictionary<string, object> Attributes = new Dictionary<string, object>();
+    if (ViewData.ContainsKey("style")) {
+        Attributes.Add("style", (string)ViewData["style"]);
+    }
+    if (ViewData.ContainsKey("class")) {
+        Attributes.Add("class", (string)ViewData["class"] + " comprobante");
+    }
+    else {
+        Attributes.Add("class", "comprobante");
+    }
+    if (ViewData.ContainsKey("readonly")) {
+        Attributes.Add("readonly", (string)ViewData["readonly"]);
+    }
+    if (ViewData.ContainsKey("placeholder")) {
+        Attributes.Add("placeholder", (string)ViewData["placeholder"]);
+    }
+    else {
+        Attributes.Add("placeholder", "X-0000-00000000");
+    }
+    if (ViewData.ContainsKey("autohelp")) {
+        Attributes.Add("title", (string)ViewData["autohelp"]);
+    }
+}
+
+
+     
+@Html.TextBox("",ViewData.TemplateInfo.FormattedModelValue.ToString().ToFormattedComprobante(), Attributes)
+

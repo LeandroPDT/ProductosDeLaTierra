@@ -1,0 +1,45 @@
+﻿@model Site.Models.IndexProductoViewModel
+
+@{
+    ViewBag.Title = "Productos registrados";
+}
+
+<div class="botonera">
+    <a href="/Producto/Nuevo" data-callback="location.reload()"><h3><i class="icon-plus"></i> Registrar Producto</h3></a>
+    
+</div>
+
+<h1>@b.Visitar(ViewBag.Title)</h1>
+
+@using (Html.BeginForm()) {
+    <div class="formbuscar">
+        <label class="intralabel">Artículo:</label>@Html.ProductoSuperList("ProductoID", "q", Model.ProductoID, Model.q, new ProductoSuperListHtmlHelper.Options(){ProveedorID=Model.UsuarioID})
+        @if (Sitio.EsEmpleado) {
+        <label class="intralabel">Proveedor:</label>@Html.UsuarioSuperList("UsuarioID", "Usuario", Model.UsuarioID, Model.Usuario,new UsuarioSuperListHtmlHelper.Options(){Rol="Proveedor"})
+        }
+        <label class="intralabel">Ver un máximo de:</label>@Html.DropDownList("CantidadPorPagina", CantidadPorPagina.GetSelectList(Model.CantidadPorPagina, ""))
+        <input type="submit" value="Refrescar" class="defaultbutton" />
+
+    </div>
+}
+
+@Html.ResultadoBusqueda(Model.Resultado, Model.CantidadPorPagina)
+
+@{ var Grilla = new BizGrid(source: Model.Resultado);
+   var columns = new List<BizGridColumn>();
+   columns.AddRange(collection:Grilla.Columns(
+            Grilla.Column("CodigoArticulo", "Código de Artículo"),
+            Grilla.Column("Descripcion", "Descripción"),
+            Grilla.Column("PesoUnitario", "Peso Unitario (Kg)"),
+            Grilla.Column("PrecioUnitario", "Precio Unitario ($)"),
+            Grilla.Column("PrecioKg", "Precio por Kg ($)")));
+   if (Sitio.EsEmpleado) { 
+       columns.Add(Grilla.Column("Proveedor"));
+   }     
+   columns.Add(Grilla.Column("admin", "", format: @<span>
+                    <a href="/Producto/Editar/@item.ProductoID.ToString()" class="button miniedit" data-callback="location.reload()">Editar</a>
+                    <a href="/Producto/Borrar/@item.ProductoID.ToString()" class="button minidelete"><i class="icon-remove"></i></a>
+                </span>));
+    }
+
+@Grilla.GetHtml(columns: columns)

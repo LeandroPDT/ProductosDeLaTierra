@@ -1,0 +1,1409 @@
+/*
+   color verde del logo oscuro #3E743A
+*/
+
+/* reset */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+	border:0 none;
+	font-family:inherit;
+	font-style:inherit;
+	font-weight:inherit;
+	margin:0;
+	outline:0 none -moz-use-text-color;
+	padding:0;
+	vertical-align:top;
+}
+
+/* Pagina de estilos Principal
+--------------------------------*/
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;    
+    font-size: 12px;
+    color: black;
+}
+#wrapper {
+    width: 98%;
+    min-width: 960px;
+    margin: 0 auto;
+    position: relative;
+}
+
+
+#header {
+    border-bottom: 1px dotted #ccc;    
+    overflow: hidden;
+}
+#logo {float: left; margin: 15px 20px 0 0; }
+#logon {top: 0px; right: 0; position: absolute;}
+#menucontainer {float: left; overflow: hidden; margin: 32px 0 0 0px; }
+#content {
+	margin: 0;
+    padding: 5px 0;
+	min-height: 500px;
+}
+#footer {
+    color: #ccc;
+    margin: 10px 0;
+    padding: 10px 0;
+    text-align: center;
+}
+#footer a {color: #ccc;}
+
+/* general Inline items
+-----------------------------------*/
+h1, h2, h3, h4 {
+    font-family: 'Roboto Condensed', Arial, sans-serif;
+}
+h1 {font-size: 26px;
+    font-weight: normal;
+    color: #333;
+    padding-bottom: 5px;
+   
+}
+h2 {font-size: 24px;
+    font-weight: normal;
+    padding: 0 0 2px 0;
+    margin: 0 0 7px 0;
+    color: black
+}
+
+h3 {font-size: 16px; color: #1694CE; line-height: 16px;}
+h4 {font-size: 14px; margin: 0; color: Black; }
+h3.tabtitle {display: none}
+
+
+a {color: #3C82B4;}
+a:visited {color: #3C82B4}
+
+table {border-collapse: collapse;}
+table td {vertical-align: top }
+
+code {font-family: consolas, monospace}
+
+input, textarea, span.input, span.likeinput, select {font-family: 'Arial'; font-size: 12px; margin: 3px 0; border: 1px solid #ccc; padding: 2px}
+span.input, span.likeinput {padding: 2px 30px 2px 2px; color: black; display:inline-block}
+input[readonly="readonly"], input:disabled, input:read-only, select[readonly="readonly"] {background: #eaeaea}
+
+
+a img {border: none;}
+iframe {border: none;}
+div.hr {height: 1px; background-color: #fafafa; margin: 2px 0;}
+
+.textito  {font-size: 10px; text-transform: uppercase; text-decoration: none; }
+.textito a, .textito {font-size: 10px; text-transform: uppercase; text-decoration: none; color: #666; font-weight: normal; }
+.centered {text-align: center;}
+.uppercase { text-transform: uppercase;}
+.comprobante { text-transform: uppercase;}
+
+.inlinespacer {margin-left: 10px}
+
+.stripped tbody tr:nth-child(even), .nicetable tbody tr:nth-child(even) {background-color: #eaeaea}
+
+
+/* formulario
+---------------------------------------*/
+.formulario th {text-align: right; vertical-align: top; padding: 0px 5px 0 0;}
+.formulario td {padding: 0px}
+.formulario textarea {width: 100%;}
+.formulario td table th {text-align: center; vertical-align: top; padding: 5px;} 
+.nakedtable th {text-align: center; vertical-align: top; padding: 5px 2px; font-weight: bold;}
+.nakedtable td {padding: 3px 2px; }
+
+label {font-weight: bold; padding: 0 3px 0 0; line-height: 25px; }
+.intralabel {margin: 0 0 0 10px; }
+.firstlabel {display: inline-block; width: 80px; overflow: hidden; }
+select.likelabel {border: none; margin: 0; -moz-appearance: none; -webkit-appearance: none; appearance: none; font-weight: bold; padding: 0px; outline:0px; -webkit-padding-end: 0px; -webkit-padding-start: 0px;}
+
+/* vcard
+----------------*/
+.vcard {}
+.vcard a {text-decoration:none; color: #666;}
+.vcard a:hover {text-decoration:none; color: black;}
+.vcard .org {color: Black;}
+
+
+/* print y display
+-----------------------------------*/
+.noprint {}
+.onlyprint {display:none;}
+.hidden {display:none;}
+
+/* info y error */
+.error {margin: 2px 0;}
+.info {border: 1px solid green; margin: 2px 0; background-color: #D1EFDB; padding: 5px 10px;}
+.info p, .error p {margin: 0;}
+.showerror, .showsuccess {display: none}
+
+.smalltext {color: #666; font-size: 10px; margin: 0;}
+.warning {background-color: yellow;}
+
+.entero {text-align: right; width: 80px;}
+.fecha {width: 80px;}
+.hora {width: 50px;}
+
+
+/* jquery */
+.ui-tabs-panel {background: white !important;}
+.ui-widget {font-size: inherit; font-family: inherit;}
+.ui-button .ui-button-text {color: #444644;}
+.ui-button {font-size: 10px;}
+.ui-datepicker-trigger {border: none; background: none; width: 15px; margin-right: 5px; padding: 0; cursor: pointer; }
+.ui-monthpicker-trigger {border: none; background: none; width: 15px; margin-right: 5px; padding: 5px 0 0 0; cursor: pointer; }
+ 
+/* build in validation
+---------------------------------------*/
+.validation-summary-errors {color: Red;}
+.input-validation-error {border: 1px solid red;}
+.field-validation-error {font-size: 10px; color: Red; }
+.validation-summary-errors ul {
+    text-indent: 0px;
+    list-style-position: inside;
+    list-style-type: square;
+    padding: 0px 0;
+    margin: 0px;
+}
+.validation-summary-errors span {font-weight: bold;}
+
+/* TABLE
+----------------------------------------------------------*/
+table.nicetable
+{
+  border: solid 1px #e8eef4;
+  border-collapse: collapse;
+  background: white;
+  font-size: 11px;
+}
+table.nicetable td 
+{
+  padding: 5px;   
+  border: solid 1px #e8eef4;
+}
+
+table.nicetable th
+{
+  padding: 6px 5px;
+  text-align: center;
+  border: solid 1px #92BBDA;  
+  background-color: #C8DEEE;
+  font-weight: bold;
+}
+table.nicetable tfoot, table.nicetable tr.totales {font-weight: bold;}
+table.nicetable tbody tr:nth-child(odd) {background: #fafafa}
+.quicksearch {border: none; 
+	background-color: transparent; 
+	font-size: 12px;
+	width: 80%; 
+	padding: 0; display: none;}
+.quicksearchicon {background: url(/scripts/quicksearch/filter.png) no-repeat center; height: 8px; width: 9px; display: block; float: left; margin: 0px 5px;}
+
+/* Sortable
+------------------------*/
+table.sortable thead .header,
+.tablesorter-default .header,
+.tablesorter-default .tablesorter-header {
+	background-image: none;
+	background-position: center right;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+
+table.sortable thead .headerSortUp,
+table.sortable thead .tablesorter-headerSortUp,
+table.sortable thead .tablesorter-headerAsc {
+	background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7);
+}
+table.sortable thead .headerSortDown,
+table.sortable thead .tablesorter-headerSortDown,
+table.sortable thead .tablesorter-headerDesc {
+	background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7);
+}
+
+/*table.sortable thead tr .header {
+	cursor: pointer;
+}
+table.sortable tbody tr.odd td {
+	background-color:#fafafa;
+}
+table.sortable thead tr .headerSortUp {
+	background: url(/scripts/tablesorter/asc.gif)  no-repeat right center;
+}
+table.sortable thead tr .headerSortDown {
+	background: url(/scripts/tablesorter/desc.gif) no-repeat right center;
+}*/
+
+
+/* floatGenerateExcelButton
+------------------------------*/
+.floatGenerateExcelButton
+{
+    display: none;
+    text-align: left;
+    cursor: pointer;
+    color: silver;
+    font-size: 10px;
+    padding: 5px;
+}
+.floatGenerateExcelButton i { }
+
+
+/* SimpleTable 
+------------------------------*/
+table.simpletable {border-collapse: collapse; font-size: 11px; }
+table.simpletable th {border: 1px solid #ccc; padding: 2px 5px; background: #eaeaea; font-weight: bold;}
+table.simpletable td {border: 1px solid #ccc; padding: 2px 5px;}
+table.simpletable tfoot {font-weight: bold}
+
+table.simpletable2 {border-collapse: collapse;  }
+table.simpletable2 th {border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; padding: 2px 5px; font-weight: bold;}
+table.simpletable2 td {padding: 2px 5px;}
+table.simpletable2 tfoot {font-weight: bold; border-top: 1px solid #ccc; }
+
+
+/* formularioitems table
+------------------------------*/
+.formularioitems th {font-weight: bold;  }
+.formularioitems td {padding: 2px 5px; text-align: center;}
+.formularioitems input[type='checkbox'] {margin: 5px 5px;}
+
+/* logon
+---------------------------*/
+#logon a {
+    text-decoration: none;
+    font-size: 90%;
+    letter-spacing: 0.1px;
+}
+
+/* menu styles 
+---------------------------*/
+.jsddm {
+    margin: 0;
+    padding: 0;
+}
+.jsddm li {	
+    float: left;
+	list-style: none;
+    font-size: 16px;
+    font-family: 'Roboto', Arial;
+}
+
+.jsddm li a.topmenulink {font-size: 18px;}
+
+.jsddm li a {	display: block;
+	padding: 5px 9px;
+	text-decoration: none;
+	border-right: 1px solid white;
+	color: #666;
+	white-space: nowrap;
+}
+
+
+.jsddm li.active a {color: black;}
+.separador a {border-top: 1px solid #eaeaea;}
+.jsddm li a:hover {	color: black}
+.jsddm li ul {	margin: 0;
+		padding: 0;
+		position: absolute;
+		visibility: hidden;
+        z-index: 99999;
+        min-width: 150px;
+		border: 1px solid silver
+}
+.jsddm li.last ul {-webkit-transform: translate(-130px,0px); transform: translate(-130px,0px);}
+		
+.jsddm li ul li {float: none;
+    font-size: 14px;
+	display: inline
+
+}
+			
+.jsddm li ul li a {	width: auto;
+	background: white;
+	color: #24313C;
+    padding: 9px 9px;
+}
+.jsddm li ul li a:hover {background: #eaeaea}
+.jsddm li ul li.informe a {
+    padding: 9px 10px 9px 30px;
+    background: white url(/content/images/menuinforme.png) no-repeat left center;
+}
+.jsddm li ul li.informe a:hover {background: #eaeaea url(/content/images/menuinforme.png) no-repeat left center;}
+
+.jsddm li ul li.nopermitido a  {
+   text-decoration: line-through;
+   color: Silver;
+   pointer-events: none;
+   cursor: default;
+}
+
+.fromright li ul {right: 0;}
+.botonera .jsddm li a.topmenulink {
+    font-size: 12px;
+    color: #3072b3;
+}
+.botoneraminiedit .jsddm li a.topmenulink {
+    font-size: 12px;
+    color: #3072b3;
+}
+
+/* otros
+---------------------------*/
+
+
+.enviado { color: #a00000;font-weight:bold;}
+.recibido { color: #ba8318;font-weight:bold;}
+.vendido { color: green;font-weight:bold;}
+
+.help {border: 1px solid white; margin: 0 5px; float: right;}
+#autohelp {position: fixed; right: 0; top: 110px; border: 1px solid #ffff66; background: #ffffe6; width: 100px; min-height: 50px; padding: 10px;}
+div.explica {font-size: 80%; text-shadow: 0px 1px 15px yellow; margin: -2px 0 5px 0;}
+span.explica {font-size: 80%; background: #FFFFE1; margin: -2px 0 5px 0;}
+
+
+.resultadobusqueda {background-color: #F2F5F7; padding: 7px;margin: 10px 0; border-top: 0px solid #ccc; text-transform: uppercase; font-size: 10px; }
+.futuro {background-color: #FFFFCC; border: 2px dashed #FFCC33; padding: 10px; margin: 5px 0; }
+
+
+.contacto {margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed gray;line-height: normal;}
+.contacto h2 {margin: 0; padding: 0;}
+
+.decimales, .entero {text-align: right; width: 80px;}
+
+span.masinfo {border-bottom: 1px dashed #ccc}
+a.extrainfo, a.extrainfo:visited {color: black; text-decoration:none; border-bottom: 1px solid #ccc}
+
+/* Superlist
+---------------------------*/
+.superlistinvalid {border: 1px solid red;}
+.superlist {white-space: nowrap; }
+.superlist .ui-button, .autocompletebutton { margin-left: -1px; height: 22px; font-size: 9px; font-family: sans-serif !important; padding: 1px}
+.superlist .ui-button-icon-only .ui-button-text, .autocompletebutton .ui-button-text { padding: 0.40em; } 
+.superlist .ui-autocomplete-input, .ui-autocomplete-input { margin: 3px 0; padding: 2px 2px 3px }
+.ui-autocomplete-category {
+	font-weight: bold;
+	padding: 2px 4px 0;
+	margin: 8px 0 0;
+	line-height: 1.5;
+}
+/*.ui-menu-item a {padding: 2px 2px 2px 15px !important}*/
+.ui-autocomplete {
+		max-height: 200px;
+		overflow-y: auto;
+		/* prevent horizontal scrollbar */
+		overflow-x: hidden;
+		/* add padding to account for vertical scrollbar */
+		padding-right: 20px;
+	}	    	    
+	
+.masinfo {display:inline-block;}
+.numbercell, .numericcell {text-align: right; white-space: nowrap;}
+.porvencercell {color: Orange}
+.vencidocell {color: Red}
+
+.masinfowrapper {max-height: 400px; overflow-y: auto}
+
+.formbuscar {margin: 5px 0; }
+.formbuscar table th {padding-left: 10px}
+.defaultbutton {background: #FFCF88; border: 1px solid orange; font-weight: bold; 
+    padding: 3px 7px; 
+    border-radius:3px;
+    cursor: pointer;
+}
+
+.formulariotabular th {font-weight: bold; padding: 5px; background: #eaeaea; border: 1px solid silver; }
+.formulariotabular tbody tr {border-bottom: 1px solid #eaeaea; margin-bottom: 5px; }
+.formulariotabular td {padding: 5px; }
+.formulariotabular textarea {height: 30px;}
+
+.botonera {float: right;}
+.botonera a {margin-left: 10px; text-decoration: none; line-height: 120%; }
+.botonera .jsddm a {margin-left: 0px}
+
+.botoneraminiedit { text-align:right;}
+.botoneraminiedit a {margin-left: 10px; text-decoration: none; line-height: 120%;}
+.botoneraminiedit .jsddm a {margin-left: 0px}
+
+.monthpicker {width: 50px;}
+.textoverflow {
+text-overflow: ellipsis;
+}
+.footermessage {margin-top: 30px}
+.footermessage a {margin-right: 15px;}
+.nota {margin-bottom: 10px;}
+
+.carta {width: 600px; border: 1px solid silver; padding: 30px; min-height: 500px; font-size: 14px; color: black; page-break-after: always;}
+.carta p {margin: 10px 0}
+.carta h3 {margin: 10px 0 0 0}
+.carta:last-child { page-break-after: auto; }
+
+.EditLink, .DeleteLink, .AddLink, .minibutton {
+    background: #D7EBF9;
+    border: 1px solid #AED0EA;
+    color: #2779AA;
+    font-weight: bold;
+    padding: 2px 3px;
+    cursor: pointer;
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    border-radius:2px;
+    font-size: 11px;
+    text-decoration: none;
+}
+span.likelink {
+    border-bottom: 1px solid #3C82B4;
+    color: #3C82B4;
+    cursor: pointer;
+}
+i.likelink {
+    color: #3C82B4;
+    cursor: pointer;
+}
+.likelinknound, a.likelinknound, a.likelinknound:visited {
+    color: #3C82B4;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.agrupado {border-left: 2px solid #1694CE; padding: 0 0 0 10px; margin: 5px 0}
+
+/* SideNav
+--------------------------*/
+#sidenav {
+    margin: 0;
+    padding-top: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+    border-right: 1px solid #eaeaea;;
+    min-height: 500px;
+}
+#sidenav li {	
+   list-style: none;
+}
+
+#sidenav li a {	
+    display: block;
+    padding: 2px 5px 2px 7px;
+    text-decoration: none;
+    color: #666;
+}
+#sidenav li.active a {color: black;background: url(/content/images/triangulito.png) no-repeat left center}
+#sidenav li a:hover {color: black}
+
+.sidetitle {
+    background-color: #1694CE; 
+    color: White;
+    padding: 7px; 
+    margin: 0 10px 0 0; 
+    text-transform: uppercase; 
+    font-size: 10px; 
+}
+
+/* buscar 
+--------------------------*/
+.search-box {
+    margin: 5px 0 0 0;
+    width: 240px;
+    float: right;
+}
+.search-box input {
+	float:right;
+	margin:0;
+	padding:2px;
+	width:200px;
+}
+.search-box .textbox {
+	background: white url(/content/Images/search.png) no-repeat left center;
+	border: 1px solid #CCCCCC;
+	margin:0;
+	max-width:230px;
+	padding-left:16px;
+        
+}
+
+.configlink {
+    text-transform: uppercase; 
+    font-size: 10px; 
+    text-decoration: none;
+    padding: 5px 10px;
+    display: block;
+    margin: 0 10px 0 0;
+}
+
+.userbox {padding: 0 30px; }
+.userbox td {text-align: right; padding: 2px}
+.userbox .foto img {width: 35px; height: 35px; }
+.userbox strong {font-weight: bold; line-height: 170%;font-size: 13px }
+.userbox a {text-transform: uppercase; }
+.userbox .vertspacer {margin-right: 5px; padding-right: 5px; border-right: 1px solid gray; display: inline}
+
+.conseparadorpunteado {margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed silver;
+    font-size: 14px;
+    color: black;
+}
+.conseparadorpunteado h2 {margin: 0; padding: 0;font-size: 20px;}
+.conseparadorpunteado h3 {color: black};
+	
+/* pivot (cubo)
+--------------------------*/
+table.pivot ul {list-style-image:none; list-style-type:none; }
+table.pivot {border-collapse : collapse;border : solid 1px black;text-align : right;}
+table.pivot td.resultcell {white-space:nowrap;}
+table.pivot th, table.pivot td{padding :5px;}
+table.pivot tr.head{font-size : larger;text-align : center;}
+table.pivot .total{background-color : #eee;  white-space:nowrap;}
+table.pivot tr.total th{text-align : left;}
+table.pivot tr.total td, table.pivot tr.total th{border-top : solid 1px black;}
+table.pivot td.total{border-left : solid 1px black;}
+table.pivot tr.head th.groupby{background-color : #ddd;}
+table.pivot tr.head th.pivotcol{background-color : #eee;font-size : smaller;border : solid 1px black;}
+table.pivot th.groupby{text-align:left;font-weight : normal;}
+table.pivot .foldunfold {
+    text-decoration : underline; 
+    cursor:pointer;  
+    white-space:nowrap;
+    color : Black;
+	background-image : url('/scripts/pivot/colapsar.png');
+	background-repeat : no-repeat;
+	background-position:left;
+	padding-left:18px;
+}
+
+table.pivot .foldunfold.collapsed{background-image : url('/scripts/pivot/expandir.png');}
+table.pivot tr.level0 {background-color: #EDF3FE;}
+table.pivot tr.level1 {background-color: #EFEFEF;}
+	
+	
+/* dynamicTable 
+------------------------------*/
+table.dynamictable {border-collapse: collapse; font-size: 12px; border-bottom: 1px solid #ccc; }
+table.dynamictable th {border: 1px solid #BDD6EA; padding: 2px 5px; background: #DDECF7; font-weight: bold;}
+table.dynamictable td.Depositosdata {border-top: 1px solid #ccc; }
+table.dynamictable td {border-left: 1px solid #ccc; border-right: 1px solid #ccc; padding: 2px 5px;}
+
+#loadingDiv {background-image : url('/content/images/15.gif'); padding: 5px; position: fixed; top: 0px; width: 100%; display: none;}
+
+.nosepuedeactualizar {color: red; padding: 5px; margin: 5px 0; border-left: 2px solid red}
+.nosepuedeactualizar ul {    
+    text-indent: 0px;
+    list-style-position: inside;
+    list-style-type: none;
+    padding: 0px 0;
+    margin: 0px 15px;
+}
+.hayproblemas {font-size: 14px; color: orange; padding: 5px; margin: 5px 0; border-left: 2px solid orange}
+
+#galeria {min-height: 200px; min-width: 220px; max-height: 500px; overflow-y: scroll; overflow-x: hidden}
+#galeria ul {list-style-image:none; list-style-type:none; }
+#galeria ul li {margin-bottom: 10px;}
+#galeria a {text-decoration: none; font-weight: bold; font-size: 12px;}
+#galeria .fecha {text-decoration: none; font-weight: normal; font-size: 10px;}
+#galeria img {margin-bottom: 3px;}
+#galeria .minilivedelete {display: block; float: right; padding: 5px}
+
+.nicescroll::-webkit-scrollbar{width:10px;height:10px;border-left:solid 1 #000;}
+.nicescroll::-webkit-scrollbar-button:start:decrement{display:block;height:5px;}
+.nicescroll::-webkit-scrollbar-button:end:increment{display:block;height:5px;}
+.nicescroll::-webkit-scrollbar-button:vertical:increment{background-color:transparent;}
+.nicescroll::-webkit-scrollbar-track:enabled{background-color:rgba(113,112,107,0.1);-webkit-border-radius:5px;}
+.nicescroll::-webkit-scrollbar-thumb:vertical{height:50px;background-color:rgba(0,0,0,.2);-webkit-border-radius:5px;}
+.nicescroll::-webkit-scrollbar-thumb:horizontal{width:50px;background-color:rgba(0,0,0,.2);-webkit-border-radius:5px;}
+
+.botonera .botones {float: right;}
+.botoneraminiedit .botones {float: right;}
+table.tarifa td {border: 1px solid #eaeaea; padding: 10px; font-family: courier new;}
+
+span.admin, div.admin, td.admin   {min-width: 91px; width: 91px; display: block;}
+span.adminprint, div.adminprint  {min-width: 130px; width: 130px; display: block;}
+
+.config {text-align: center; position: relative;}
+.config i  {font-size: 450px; color: #E4F4FC; display: block; position:absolute;
+        left:0;
+        right:0;
+        margin-left:auto;
+        margin-right:auto;
+        
+ }
+.config input  {font-size: 92px; color: #666; display: block; position:absolute;
+        left:0;
+        right:0;
+        margin-left:auto;
+        margin-right:auto;
+        text-align: center;
+        border: 0;
+        top: 210px;
+        background: transparent;
+        z-index: 99999;
+        outline: none;
+ }
+ .config input:focus{
+    outline: none;
+}
+
+
+
+/* resumenmantenimiento
+--------------------------------*/
+.resumenmantenimiento {margin-top: 20px;}
+.resumenmantenimiento th {
+    color: #1694CE;
+    font-size: 16px;
+    border: 1px solid silver;
+}
+.resumenmantenimiento td {
+    width: 200px;
+    border: 1px solid silver;
+    padding: 10px;
+}
+
+/* incidente
+--------------------------------*/
+.incidente {width: 960px}
+.incidente .sidebar {float: right; margin: 0 0 20px 20px; text-align: center;}
+.incidente .sidebar div {margin: 0 0 10px 0}
+.incidente ul.timeline, .incidente ul.timeline li {margin: 0 0 10px 0; padding: 0; list-style: none; display: block;}
+.avatar-bubble {
+    width: 760px;
+    margin: 20px 0;
+    padding-left: 60px;
+    position: relative;
+}
+.avatar-bubble > .avatar {
+    float: left;
+    margin-left: -60px;
+    position: relative;
+}
+.bubble {
+    background: none repeat scroll 0 0 #EEEEEE;
+    border-radius: 3px 3px 3px 3px;
+    padding: 3px;
+}
+.bubble .volanta {
+    font-size: 11px;
+    margin: 0;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+    white-space: nowrap;
+    padding: 5px;
+}
+
+.bubble .infobar {
+    background: -moz-linear-gradient(#F8F8F8, #E1E1E1) repeat scroll 0 0 transparent;
+    border-bottom: 1px solid #CCCCCC;
+    padding: 5px;
+    color: #666;    
+}
+
+.bubble .encabezado {
+    background: -moz-linear-gradient(#F8F8F8, #E1E1E1) repeat scroll 0 0 transparent;
+    border-bottom: 1px solid #CCCCCC;
+    height: 33px;
+    padding: 0 10px 0 6px;
+
+}
+
+.bubble .autor {
+    float: left;
+    font-size: 11px;
+    height: 33px;
+    line-height: 33px;
+    margin: 0;
+    max-width: 600px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+    white-space: nowrap;
+}
+
+.bubble .cuando {
+    float: right;
+    font-size: 11px;
+    height: 33px;
+    line-height: 33px;
+    margin: 0;
+}
+
+.bubble .cuerpo {
+    background: none repeat scroll 0 0 #FBFBFB;
+    color: #333333;
+    font-size: 12px;
+    padding: 10px;
+    position: relative;
+    overflow-x: auto; 
+    overflow-y: hidden
+}
+.incidente .archivobox {line-height: 33px; vertical-align: middle; margin: 10px 0; clear: both}
+.incidente .archivobox i {font-size: 16px}
+.incidente .archivobox .minidelete i {font-size: 11px}
+.incidente .archivobox img.usuario {width: 24px; height: 24px}
+
+.incidente .changestatusbox {line-height: 33px; vertical-align: middle; margin: 10px 0; clear: both}
+.incidente .changestatusbox img.usuario {width: 26px; height: 26px; vertical-align: middle }
+.incidente .changestatusbox .estado {font-size: 11px; padding: 5px 5px}
+
+.incidente .cuerpo img {max-width: 720px;}
+
+.sidebar .estado {font-size: 16px; padding: 5px 15px; margin: 0 0 20px 0; display: block}
+.cerrado {background: #BD2C00; color: white; padding: 5px; font-weight: bold; border: 1px solid #DF3200; border-radius: 3px;}
+.abierto {background: #6CC644; color: white; padding: 5px; font-weight: bold; border: 1px solid #92D575; border-radius: 3px;}
+
+.alta {color: red; padding: 1px; font-family: courier-new}
+.baja {color: green; padding: 1px; font-family: courier-new}
+
+
+#estadosubscripcion {margin-top: 25px}
+
+.subscripto {color: #D96C00}
+.desuscripto {color: #999}
+
+.finincidente {border-top: 3px dashed silver; padding-top: 10px; margin-top: 10px;}
+.finincidente .sidebar {margin-top: 20px;}
+
+.avatar img, .foto img, .timeline img.usuario {border-radius: 3px;}
+
+.incidente .participantes {overflow: hidden}
+.incidente .participantes .avatar {float: left; margin: 3px 3px 0 0 }
+.incidente .participantes .avatar img {width: 26px; height: 26px;}
+.incidente .participantes .agregarusuario {margin: 3px 3px 0 0; width: 22px; height: 22px; display: inline-block; border: 2px dotted silver;border-radius: 3px; text-decoration: none; line-height: 23px; text-align: center; color: silver; }
+
+.incidente .accionesfinales {margin-top: 25px;}
+.incidente .accionesfinales a {font-size: 120%; text-decoration: none; margin: 0 15px 0 0; line-height: 200%}
+
+/* comentarios
+--------------------------------------- */
+form.comentar textarea {width: 99%;}
+
+#pickfiles {font-size: 14px; text-decoration: none; padding: 0 15px 0 0;}
+#pickfiles i {font-size: 120%}
+
+.minidelete {text-decoration: none; padding: 0 5px;}
+
+.avatarholder {padding-right: 20px;}
+.avatarholder img {border: 1px solid silver; padding: 7px;}
+
+
+.bookmarkpage i {font-size: 16px;cursor: pointer;}
+.bookmarkpage .icon-bookmark {color: orange}
+.bookmarkpage .icon-bookmark-2 {color: silver}
+
+
+
+/* cupid green (inspired by okcupid.com)
+*******************************************************************************/
+.cupid-green {
+  background-color: #7fbf4d;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #7fbf4d), color-stop(100%, #63a62f));
+  background-image: -webkit-linear-gradient(top, #7fbf4d, #63a62f);
+  background-image: -moz-linear-gradient(top, #7fbf4d, #63a62f);
+  background-image: -ms-linear-gradient(top, #7fbf4d, #63a62f);
+  background-image: -o-linear-gradient(top, #7fbf4d, #63a62f);
+  background-image: linear-gradient(top, #7fbf4d, #63a62f);
+  border: 1px solid #63a62f;
+  border-bottom: 1px solid #5b992b;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0 1px 0 0 #96ca6d;
+  -moz-box-shadow: inset 0 1px 0 0 #96ca6d;
+  box-shadow: inset 0 1px 0 0 #96ca6d;
+  color: #fff;
+  font: bold 11px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+  line-height: 1;
+  padding: 6px 8px 8px 8px;
+  text-align: center;
+  text-shadow: 0 -1px 0 #4c9021;
+  display: inline-block;}
+  .cupid-green:hover {
+    background-color: #76b347;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #76b347), color-stop(100%, #5e9e2e));
+    background-image: -webkit-linear-gradient(top, #76b347, #5e9e2e);
+    background-image: -moz-linear-gradient(top, #76b347, #5e9e2e);
+    background-image: -ms-linear-gradient(top, #76b347, #5e9e2e);
+    background-image: -o-linear-gradient(top, #76b347, #5e9e2e);
+    background-image: linear-gradient(top, #76b347, #5e9e2e);
+    -webkit-box-shadow: inset 0 1px 0 0 #8dbf67;
+    -moz-box-shadow: inset 0 1px 0 0 #8dbf67;
+    box-shadow: inset 0 1px 0 0 #8dbf67;
+    cursor: pointer; }
+  .cupid-green:active {
+    border: 1px solid #5b992b;
+    border-bottom: 1px solid #538c27;
+    -webkit-box-shadow: inset 0 0 8px 4px #548c29, 0 1px 0 0 #eeeeee;
+    -moz-box-shadow: inset 0 0 8px 4px #548c29, 0 1px 0 0 #eeeeee;
+    box-shadow: inset 0 0 8px 4px #548c29, 0 1px 0 0 #eeeeee; }
+
+
+/* button
+*******************************************************************************/
+.button, a.button {
+    position: relative;
+    overflow: visible;
+    display: inline-block;
+    padding: 0.5em 1em;
+    border: 1px solid #d4d4d4;
+    margin: 0;
+    text-decoration: none;
+    text-align: center;
+    text-shadow: 1px 1px 0 #eaeaea;
+    font:11px/normal Arial, sans-serif;
+    color: #1D5987;
+    white-space: nowrap;
+    cursor: pointer;
+    outline: none;
+    background-color: #ececec;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f4f4f4), to(#ececec));
+    background-image: -moz-linear-gradient(#f4f4f4, #ececec);
+    background-image: -ms-linear-gradient(#f4f4f4, #ececec);
+    background-image: -o-linear-gradient(#f4f4f4, #ececec);
+    background-image: linear-gradient(#f4f4f4, #ececec);
+    -moz-background-clip: padding; /* for Firefox 3.6 */
+    background-clip: padding-box;
+    border-radius: 0.2em;
+    /* IE hacks */
+    zoom: 1;
+    *display: inline;
+}
+.button:visited {
+    color: #1D5987;
+}
+
+.button:hover,
+.button:focus,
+.button:active,
+.button.active {
+    border-color: #3072b3;
+    border-bottom-color: #2a65a0;
+    text-decoration: none;
+    text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+    color: #fff;
+    background-color: #3c8dde;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#599bdc), to(#3072b3));
+    background-image: -moz-linear-gradient(#599bdc, #3072b3);
+    background-image: -o-linear-gradient(#599bdc, #3072b3);
+    background-image: linear-gradient(#599bdc, #3072b3);
+}
+
+.button:active,
+.button.active {
+    border-color: #2a65a0;
+    border-bottom-color: #3884cd;
+    background-color: #3072b3;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#3072b3), to(#599bdc));
+    background-image: -moz-linear-gradient(#3072b3, #599bdc);
+    background-image: -ms-linear-gradient(#3072b3, #599bdc);
+    background-image: -o-linear-gradient(#3072b3, #599bdc);
+    background-image: linear-gradient(#3072b3, #599bdc);
+}
+
+/* overrides extra padding on button elements in Firefox */
+.button::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+
+
+/* bigmenu
+--------------------------------------- */
+.bigmenu a.bookmarked {display: block; text-decoration: none; 
+    font-size: 16px; 
+    padding: 0px 10px 0px 0px; 
+    margin: 7px 0px; 
+    color: #333;
+    border-left: 0px solid #1694CE;
+    }
+
+.bigmenu a.comun {display: block; text-decoration: none; 
+    font-size: 16px; 
+    padding: 0px 10px 0px 10px; 
+    margin: 7px 0px; 
+    color: #333;
+    border-left: 1px solid #1694CE;
+    }
+.bigmenu .icon-bookmark {color: orange}
+.bigmenu {padding-right: 30px; width: 300px;}
+.bigmenu .minisep {margin-top: 5px; padding-top: 5px; border-top: 1px dashed silver;}
+.bigmenu .small {font-size: 10px; color: gray}
+
+.EditLugaresLink {text-decoration: none;}
+
+.sumatoria {text-align: right; color: #1694CE; font-weight: bold;}
+
+.listawidget .widget {
+    background: #F6F6F6;
+    border: 1px solid #CCCCCC;
+    outline: medium none;
+    margin: 0 0 5px 0;
+    padding: 5px;
+}
+
+.listawidget h3 {font-size: 26px}
+.listawidget .minibutton, .columnawidget .minibutton {margin: 0 -5px 0 10px;}
+
+.columnaswidget {
+    margin: 5px 5px 0px 15px;
+}
+.columnawidget {
+    background: white;
+    border: 1px solid #CCCCCC;
+    padding: 5px;
+    
+}    
+
+
+.landscape {width: 1500px; }
+
+.nakedtable .nopadding th {padding: 0 3px 0 0; text-align: right}
+.nakedtable .nopadding td {padding: 0}
+.nakedtable .nopadding input {margin: 0}
+
+.nowrap, table.nowrap td, table.nowrap th  {white-space: nowrap}
+
+/* intento de arreglar la solapas feas de jquery. No queda muy lindo... */
+.ui-tabs ul.ui-corner-all {}
+.ui-tabs ul.ui-widget-header {background: none; border: none; border-bottom: 1px solid #89BBE1; border-bottom-right-radius: 0;border-bottom-left-radius: 0}
+.ui-tabs {border: none;}
+
+
+table.vertical th {
+    font-weight: bold;
+    text-align: right; padding: 2px
+}
+table.vertical td {
+    text-align: left; padding: 2px
+}
+
+table.smalldialog th {
+    font-weight: bold;
+    text-align: left; padding: 2px
+}
+table.smalldialog td {
+    text-align: left; padding: 2px
+}
+    table.smalldialog td b {
+        padding: 0 0 0 5px;
+    }
+
+/* cuadro de reasignacion */
+.cuadroreasignacion {
+    margin: 20px 0;
+    border: 1px solid #1694CE;
+    padding: 10px;
+}
+
+
+.reporte {border: 1px solid silver; box-shadow: 5px 5px 5px #eaeaea; padding: 5px; overflow: hidden; width: 970px; -webkit-print-color-adjust:exact; }
+.reporte h1 {color: #333; font-size: 38px;text-transform: uppercase; font-weight: bolder}
+.reporte h3 {font-size: 24px;margin: 10px 0 5px 0; padding: 0; color: #333;font-weight: bold}
+.reporte .header {border-bottom: 3px solid #3E743A; padding-bottom: 5px; margin-bottom: 5px; }
+.reporte .datostitulo {float: right; font-family: 'Roboto Condensed', Arial, sans-serif; }
+.reporte .datostitulo label {font-weight: normal; font-size: 16px; vertical-align: middle; padding-right: 10px; } 
+.reporte .datostitulo p {font-weight: normal; font-size: 28px;vertical-align: middle; margin: 0; padding: 0;} 
+.reporte .parametros th {font-weight: bold; text-align: left; padding-right: 5px;}
+.reporte .parametros label {line-height: normal}
+.reporte .proveedor {width: 400px; border-left: 2px solid silver; padding: 5px; margin: 10px 0; background: #eaeaea; }
+.reporte .proveedor h2 {display: none; color: #1694CE; margin: -5px -5px 5px -5px; padding: 0px 5px; font-size: 14px;}
+.reporte .items {width: 100%; margin: 0px 0; }
+.reporte .items tbody {}
+.reporte .items th {border-bottom: 2px solid silver; background: silver; font-weight: bold; color: #333; padding: 5px 10px; white-space: nowrap; text-align: left; -webkit-print-color-adjust:exact;}
+.reporte .darkheader th {border: 1px solid white; background: black; font-weight: bold; color: white; padding: 5px 10px; white-space: nowrap; text-align: left; -webkit-print-color-adjust:exact;}
+.reporte .items td {border: 1px solid silver; padding: 3px 5px;}
+.reporte .items tfoot {font-weight: bold; border-bottom: 1px solid silver; border-top: 2px solid silver !important; padding: 3px 5px;}
+.reporte .items .take100 {width: 70%}
+.reporte .items tr.dobleheader th {border: 2px solid silver; white-space: normal; }
+.reporte .items tr.bordertop {border-top: 2px solid silver; }
+
+.reporte .disclaimer {font-size: 10px; margin: 10px 0 0 0 }
+.reporte .lineredbottom {border-bottom: 3px solid #3C82B4; padding-bottom: 5px; margin-bottom: 5px;}
+
+.reporte table.multilinea {width: 100%; margin: 10px 0 20px; border: 1px solid gray}
+.reporte table.multilinea th {background: #eaeaea; border: 1px solid gray; font-weight: bold; text-align: center; padding: 3px; }
+.reporte table.multilinea td {padding: 3px}
+.reporte table.multilinea tfoot	{font-weight: bold; border-top: 1px solid gray;  }
+.reporte table.multilinea td.segundalinea {border-bottom: 1px solid silver; font-style: italic}
+.reporte table.multilinea tr.separador {border-top: 1px solid silver; }
+
+table.firmas {width: 100%; margin: 10px 0; }
+table.firmas th {border: 1px solid silver; font-weight: normal; text-align: center; padding: 3px; width: 25%;}
+table.firmas td {height: 65px; border: 1px solid silver; vertical-align: bottom; text-align: center;}
+
+table.tofill {min-width: 500px; margin: 20px 0; }
+table.tofill th {font-weight: bold; padding: 10px 10px 10px 0; width: 25%;vertical-align: middle; text-align: left}
+table.tofill td {border-bottom: 1px dashed gray; vertical-align: middle; }
+
+
+
+
+.dashboard {}
+.dashboard h1 {background: white}
+.dashboard .cuadro {margin: 10px; background: white; padding: 10px; box-shadow:  0px 1px 5px 1px #ececec; border: 1px solid #ececec; }
+.dashboard .cuadro h2 {background: #eaeaea; margin: -10px -10px 10px -10px; padding: 10px; font-size: 13px; font-weight: bold; border-bottom: 1px solid #eaeaea}
+.dashboard ul.ranking {margin: 0; padding: 0; list-style: none;}
+.dashboard ul.ranking li {margin: 0 0 10px 0; padding: 0 7px 5px 7px; overflow: hidden; color: gray; font-size: 9px;}
+.dashboard ul.ranking li.rank-1 h3 {font-size: 22px;padding: 2px 0}
+.dashboard ul.ranking li.rank-1 {font-size: 12px; }
+.dashboard ul.ranking li.rank-2 h3 {font-size: 20px;padding: 2px 0}
+.dashboard ul.ranking li.rank-2 {font-size: 10px; }
+.dashboard table.bignumbers {margin: 10px; font-size: 120%; text-align: center; padding: 10px;}
+.dashboard table.bignumbers td, .dashboard table.bignumbers th {padding: 0 20px; border: 1px solid #ececec;}
+.dashboard .supernumber {font-size: 200%; font-family: 'Cabin Condensed', 'Segoe UI', Arial }
+.dashboard table.spaced {font-size: 120%;}
+.dashboard table.spaced td, .dashboard table.spaced th {padding: 2px 20px;}
+.dashboard table.spaced th {border-bottom: 1px solid silver; padding-bottom: 5px;margin-bottom: 20px; font-weight: bold}
+.dashboard table.spacedsmall {font-size: 100%;}
+.dashboard table.spacedsmall td, .dashboard table.spacedsmall th {padding: 2px 10px;}
+.dashboard table.spacedsmall th {border-bottom: 1px solid silver; padding-bottom: 5px; font-weight: bold}
+.dashboard table.spacedsmall tbody tr:nth-child(even) {background: #eaeaea}
+.dashboard table.spacedsmall tbody tr:first-child td {padding: 10px 10px 2px;}
+
+
+
+td.spacer, div.spacer {height: 10px;}
+.ui-autocomplete .ui-menu-item {
+    min-width: 150px;
+}
+
+.rotate {
+-webkit-transform: rotate(-90deg);
+-moz-transform: rotate(-90deg);
+-ms-transform: rotate(-90deg);
+-o-transform: rotate(-90deg);
+filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}   
+
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+
+.avoidflicker > ul, .avoidflicker > div {display:none}
+.avoidflicker:before {
+    content: "\e088";
+	font-family: 'BizLib';
+    font-size: 14px;
+	-webkit-font-smoothing: antialiased;
+    -webkit-animation: spin 1s infinite linear;
+    animation: spin 1s infinite linear;
+    position: relative;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 14px;
+    height: 14px;
+    color: #1694CE;
+}
+
+.avoidflicker:after{
+    content: "Cargando";
+    font-size: 12px;
+    color: #1694CE;
+}
+
+ins {
+    background-color: #c6ffc6;
+    text-decoration: none;
+}
+
+del {
+    background-color: #ffc6c6;
+}
+
+/* top sub nav
+---------------------------*/
+.topsubnav {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border-bottom: 1px solid #eaeaea;
+}
+.topsubnav li {	
+    float: left;
+	list-style: none;
+    font-size: 16px;
+}
+.topsubnav h3 {	
+    float: left;
+    list-style: none;
+    text-transform: uppercase; 
+    font-size: 11px; 
+    text-decoration: none;
+    padding: 5px 10px;
+    background: silver;
+    color: white;
+}
+.topsubnav a {	
+    float: left;
+    list-style: none;
+    text-transform: uppercase; 
+    font-size: 11px; 
+    text-decoration: none;
+    padding: 5px 10px;
+    color: silver
+}
+.topsubnav li.active a {	
+    font-weight: bold;
+}
+
+/* set the accent color on the menu */
+.topsubnav.controlacceso {
+    border-bottom: 1px solid deeppink;
+}
+.topsubnav.controlacceso h3 {
+    background: deeppink;
+}
+.topsubnav.controlacceso a {	
+    color: deeppink;
+}
+.topsubnav.controlacceso li.active a {	
+    color: deeppink;
+}
+.timesheetheader {background: #eaeaea; color: darkgray}
+.timesheetheader td {padding: 10px;}
+.timesheetheader a {color: darkgray; text-decoration: none; font-size: 120%}
+.timesheetheader h3 {color: gray; font-size: 200%}
+.timesheet th {background: #eaeaea; color: darkgray; font-family: 'Roboto Condensed', Arial; font-size: 200%; width: 30px; text-align: right; padding: 3px 5px; border-top: 1px solid white;}
+.timesheet .registro {float: left; border: 1px solid #eaeaea; margin: 2px; padding: 3px;}
+
+.controlaccesoresumen .registro {overflow: hidden;}
+.controlaccesoresumen .registro .lahora {font-family: 'Roboto Condensed', Arial; font-size: 150%; width: 40px;  text-align: center;}
+.controlaccesoresumen .registro .eldetalle {font-size: 80%; width: 40px;}
+.controlaccesoresumen td {min-width: 25px;}
+
+.agregarLineaRow td {border: none !important; text-align: right}
+.agregarLinea {color: gray; font-weight: normal;font-style: normal; padding: 5px 0; display: block; cursor: pointer; }
+
+span.aviso {font-family: 'Roboto Condensed', Arial; font-size: 120%; margin: 3px 10px; line-height: 180%; text-transform: uppercase; }
+
+table.totales {
+    margin: 10px 0;
+}
+
+table.totales th, table.totales td {
+    border: 1px solid silver;
+    text-align: center;
+    vertical-align: middle;
+    padding: 2px 15px;
+    
+}
+table.totales th {
+    font-weight: bold;
+    background: #eaeaea;
+}
+table.totales td {
+    
+}
+
+.progress-bar {
+    font-size: 80%;
+    color: black;
+    background-image: url(/content/images/1x1.jpg);
+    background-repeat: no-repeat;
+    background-position-y: bottom;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 1px 2px;
+    -webkit-text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+#hightlightforamoment {
+     border: 2px solid orange;
+     -webkit-transition: border 1000ms linear;
+     -moz-transition: border 1000ms linear;
+     -o-transition: border 1000ms linear;
+     transition: border 1000ms linear;
+}
+
+/* a deprecar, se usa solo en poliza*/
+.search_box {margin:0 0 0 10px; right:0; width:200px; float: right; position: relative }
+.search_box input {float:right; margin:0;width:180px;background:White url(/content/images/search.png) no-repeat left center; border: 1px solid #CCCCCC; max-width:230px;padding: 3px 3px 3px 16px !important;}
+#search_suggest { position: absolute; z-index: 99999; right: 0; top: 30px; width:320px; display:none; max-height: 400px; border: 1px solid silver;  background: white; }
+#search_suggest ul {list-style-image:none; list-style-type:none; overflow-y: auto; overflow-x: hidden; max-height: 300px}
+#search_suggest ul li {margin-bottom: 0px; border-bottom: 1px solid silver; padding: 5px 5px 5px 5px}
+
+/* nuevo minisearch*/
+a.minisearch {text-decoration: none; font-size: 16px}
+#minisearch input {width: 100%; font-size: 12px; padding: 5px}
+#minisearch ul {list-style-image:none; list-style-type:none; overflow-y: auto; overflow-x: hidden;}
+#minisearch ul li {margin-bottom: 0px; border-bottom: 1px dotted #ccc; padding: 5px 5px 5px 5px}
+
+fieldset {border: 1px solid silver; padding: 5px; margin-bottom: 5px; }
+fieldset.inline {float: left; margin-right: 10px; }
+legend { padding: 0 5px;}
+
+#notification-container {
+    position: relative;
+	margin: 5px 25px 0 0;
+	color: #3C82B4;	
+    cursor: pointer;
+}
+
+#notification-counter {   
+    position: absolute;
+    top: -2px;
+    left: 12px;
+    background-color: rgba(212, 19, 13, 1);
+    color: #fff;
+    border-radius: 6px;
+    padding: 1px 3px;
+    font: 10px Verdana;
+    display: none;
+}
+.notificacion {
+	width: 250px;
+	border-bottom: 1px solid#eaeaea;
+	padding: 5px;
+}
+.notificacion b {font-weight: normal; line-height: 130%;}
+.notificacion a {text-decoration: none; color: #333}
+.notificacion span {display: block; color: gray; font-size: 90%}
+.notificacionpendiente {
+	border-left: 2px solid orange;
+}
+.notificacion-lista {max-height: 500px; overflow-y: scroll; overflow-x: hidden}
+
+ul.comun {margin: 0 0 0 15px;}
+
+#sabiasque {border: 3px dotted silver; padding: 20px; border-radius: 10px; font-size: 150%; max-width: 500px; }
+#sabiasque p {font-size: 16px; font-weight: normal; margin-bottom: 10px; line-height: 150% }
+#sabiasque img {display: block; max-width: 100%;}
+#sabiasque .nav {margin-top: 20px; text-align: right;}
+/*#sabiasque h2 {font-family: Rock Salt, cursive; font-size: 16px; font-weight: bold;}*/
+
+#alertas {max-width: 500px; margin-bottom: 15px;}
+#alertas h2, #alertas i { color: crimson }
+#alertas .alerta {padding: 5px 0; border-bottom: 1px solid #eaeaea}
+#alertas .alerta a {padding: 0 5px;  text-decoration: none}
+
+kbd {
+    -moz-border-radius:3px;
+    -moz-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+    -webkit-border-radius:3px;
+    -webkit-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+    background-color:#f7f7f7;
+    border:1px solid #ccc;
+    border-radius:3px;
+    box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+    color:#333;
+    display:inline-block;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:11px;
+    line-height:1.4;
+    margin:0 .1em;
+    padding:.1em .6em;
+    text-shadow:0 1px 0 #fff;
+}
+
+.futuredate {background: yellow}
+
+#history {
+	border-right: 1px dashed silver;
+	border-left: 1px dashed silver;
+	border-top: 1px dashed silver;
+	padding: 5px;
+	margin-top: 5px;
+	color: gray;
+	max-height: 60px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+    #history div {
+        border-bottom: 1px dashed silver;
+        padding: 3px 0;
+    }	
+.fillin {font-weight: bold; border-bottom: 1px dashed gray; min-width: 250px; display: inline-block; min-height: 20px; margin: 0 5px;}
+
+.legajocomercialtipo-PR {background: #16a085;-webkit-print-color-adjust:exact; }
+.legajocomercialtipo-N {background: #2980b9;-webkit-print-color-adjust:exact;}
+.legajocomercialtipo-A {background: #d35400;-webkit-print-color-adjust:exact; }
+.legajocomercialtipo-RE {background: #c0932b;-webkit-print-color-adjust:exact;}
+.legajocomercialtipo {color: white; font-size: 26px; border-radius: 22px; padding: 5px 10px; line-height: 50px;-webkit-print-color-adjust:exact;}
+
+.cal {min-width: 800px}
+.cal th {border: 1px solid silver; padding: 5px; background: #eaeaea }
+.cal td {border: 1px solid silver; padding: 5px; min-height: 150px; }
+.cal .acciones {display: none;}
+.cal .weekday-1 {background: #eaeaea}
+
+.fichaquincena {margin: 5px 0}
+.fichaquincena th {padding: 3px; border: 1px solid silver; background: #eaeaea}
+.fichaquincena td {padding: 3px; border: 1px solid silver; vertical-align: middle; }
+.fichaquincena tr.sáb td {background: #eaeaea}
+.fichaquincena tr.dom td {background: silver}
+.fichaquincena .nombredia b {font-size: 120%;}
+.fichaquincena .nombredia i {font-style:normal}
+
+.listinPersonas {margin: 5px 0 20px; max-height: 400px; overflow-y: scroll; overflow-x: hidden; width: 330px;}
+.listinPersonas .personalselector {padding: 5px 0; cursor: pointer; overflow: hidden;}
+.listinPersonas .legajo {color: gray}
+.listinPersonas .nombre {display: inline-block; width: 210px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.listinPersonas .totales {display: inline-block; float: right; margin: 0 5px;}
+.listinPersonas .totales .total {border-radius: 5px; padding: 3px; background: ; color: white; font-weight: bold; font: 10px Verdana; }
+.listinPersonas .totales .cero {background: crimson; color: white}
+.listinPersonas .totales .muypoco {background: orange; color: white}
+.listinPersonas .totales .normal {background: #1694CE; color: white}
+.listinPersonas .totales .mucho {background: #0F658E; color: white}
+.listinPersonas .totales .muchisimo {background: #093A53; color: white}
+
+
+.SeleccionarChequeImg {
+    padding: 3px 0 0 2px;
+    cursor: pointer;
+}
+
+.VentaPaso {float: left; padding: 10px; border-radius: 7px; margin: 0 10px 5px 0; text-align: center; height: 24px; }
+.VentaPaso h3 {color: white;}
+.VentaPasoFaltante {background: #eaeaea; }
+.VentaPasoFaltante h3 { color: silver}
+.VentaPaso span {font-size: 9px; color: white;}
+
+
+@media print {
+    #header, #logon, #menucontainer, .buscar, #footer, .botonera, .botoneraminiedit, button, input[type="reset"], input[type="button"], input[type="submit"], .ui-button, .noprint, .filtrablerow, .footermessage, .profiler-results, .bookmarkpage, .topsubnav, .floatGenerateExcelButton, .button, .ui-monthpicker-trigger, .minisearch {display: none !important} 
+    body {margin: 0; color: black; font-family: Arial, Sans-Serif; font-size: 12pt !important; }
+    #wrapper {width: 100%; min-width: 1024px; margin: 0; font-family: Arial, Sans-Serif; }
+    table {font-size: 12pt !important; }
+    table.formulario {}
+    table.formulario th {min-width: 100px}
+    table.formbuscar {font-size: 12pt !important }
+    input, select {border-width: 0 0 1px 0; border-color: Gray; border-style: dashed; font-size: 12pt !important;}
+    select {-moz-appearance: none; -webkit-appearance: none; appearance: none;}
+    textarea {border: none; }
+    .onlyprint {display: block }
+    #printheader {border-bottom: 1px dotted #ccc; padding-bottom: 5px;}
+    .carta {width: 100%; border: none; padding: 30px 0; font-size: 12pt; color: black}
+    .textarea_container div {max-width: 80%;border-width: 0 0 1px 0; border-color: Gray; border-style: dashed; min-height: 18px;}
+    .ui-tabs-nav { display: none; }
+    .ui-tabs .ui-tabs-panel { display: block !important; border: none; padding: 0 0 10px 0; margin: 0 0 10px 0; border-radius: 0 }
+    .ui-tabs {border: none}
+    h3.tabtitle {display: block; margin: 10px 0 5px;border-bottom: 1px solid #1694CE; padding-bottom: 3px;}
+    .ui-autocomplete-input {width: auto !important; min-width: 30px; max-width: 200px; }
+    .ensayopresentado, .reportePortrait, .reporte {border: none; box-shadow: none; padding: 0; width: 1030px; margin: 0 auto } /* el ancho tiene que ser fijo para que chrome respete los tamaños*/
+    .landscape {width: 1500px; } /* el ancho tiene que ser fijo para que chrome respete los tamaños*/
+    .reportePortrait .reportecontenido, .reporte .reportecontenido {min-height: 1200px} 
+    .landscape .reportecontenido {min-height: 900px}
+    .tableFloatingHeader {display: none !important;}
+    table.bigprint {font-size: 14pt !important; }
+    a, a:visited {color: black; text-decoration: none;}
+    .widerinprint100 {min-width: 100px}
+    .widerinprint200 {min-width: 200px}
+    .nowrapinprint {white-space:nowrap; max-width: 200px; overflow: hidden}
+}
+.A4 {
+    width: 595pt;
+    height: 841pt;
+    font-size: 9pt;
+}
+.A4 table, .A4 table td, .A4 table th {
+    font-size: 9pt;
+}
+.margen {border-top: 2px solid gray; background: #dedede; font-weight: bold;}
+.foot {font-weight: bold;}
+
+.maximoalto600 {max-height: 500px; display: block; overflow-y: scroll}
+.maximoalto300 {max-height: 300px; display: block; overflow-y: scroll}

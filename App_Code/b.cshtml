@@ -1,0 +1,4 @@
+﻿@helper Visitar( string Titulo ) {
+    @Titulo <span class="bookmarkpage" rel="@Request.Path" title="@Titulo"><i id="b" class="@(Site.Models.Sitio.RegistrarVisitaReturnBookmarked(Request.Path, Titulo) ? "icon-bookmark" : "icon-bookmark-2")"></i></span>
+    
+}

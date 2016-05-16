@@ -1,0 +1,52 @@
+﻿@model ListarRolesViewModel
+@{
+    ViewBag.Title = "Roles";
+}
+
+<div class="botonera">
+    <a href="/Config/Roles/Nuevo"><h3><i class="icon-plus"></i> Nuevo Rol</h3></a>
+</div>
+
+<h1>@b.Visitar(ViewBag.Title)</h1>
+
+@using (Html.BeginForm()) {
+    <div class="formbuscar">
+        @Html.ValidationSummary()
+        <label>Texto a buscar:</label>@Html.TextBox("q", Model.q)
+        <label class="intralabel">Ver un máximo de:</label>@Html.DropDownList("CantidadPorPagina", CantidadPorPagina.GetSelectList(Model.CantidadPorPagina, ""))
+        <input type="submit" value="Refrescar" class="defaultbutton"/>
+    </div>
+}
+
+@Html.ResultadoBusqueda(Model.Resultado, Model.CantidadPorPagina)
+    
+<table class="nicetable filtrable sortable">
+<thead>
+    <tr class="ui-widget-header">
+        <th>Nombre</th>
+        <th>Activo</th>
+        <th>Notas</th>
+        <th style="width: 90px"></th>
+    </tr>
+    <tr>
+        <td colspan="3" class="filtrablerow">
+            <span class="quicksearchicon"></span>
+            <input class="quicksearch" type="text" />
+        </td>
+    </tr>
+</thead>
+<tbody>
+    @foreach (var item in Model.Resultado) {
+        <tr>
+            <td>@item.Nombre</td>
+            <td>@item.Descrip</td>
+            <td>
+                @Html.ActionLink("Editar", "Editar", new { id = item.RolID }, new { @class = "jbtn-editar" })
+                @Html.ActionLink("Borrar", "Borrar", new { id = item.RolID }, new { @class = "jbtn-borrar" })
+            </td>
+
+        </tr>
+    }
+</tbody>
+</table>
+
