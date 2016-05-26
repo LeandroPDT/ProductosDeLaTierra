@@ -129,6 +129,8 @@ namespace Site.Areas.Eventos.Controllers{
                     ModelState.AddModelError("", ex.Message);
                 }
             }
+            if (rec.mostrarRemanente())
+                form.Mercaderia = form.Cargamento.Mercaderia.clone();
             if (Request.IsAjaxRequest())
                 return Content("Error " + ModelState.ToHTMLString());
             else

@@ -4,7 +4,8 @@
         <tr>
             <th>@Html.LabelFor(model => Model.Mercaderia.Mercaderias[0].Producto)</th>
             <th><label class="intralabel">Peso<br /> Unitario (Kg)</label></th>
-            <th>@Html.LabelFor(model => Model.Mercaderia.Mercaderias[0].Cantidad)</th>
+            <th><label class="intralabel">@Html.LabelFor(model => Model.Mercaderia.Mercaderias[0].Cantidad) (Un.)</label></th>
+            @if (Model.mostrarRemanente()) {<th><label class="intralabel">Cantidad<br />Remanente (Un.)</label></th>}
             @if (Model.Tipo == "Venta" ) {
                 <th><label class="intralabel">Precio<br /> Unitario ($)</label></th> 
             }
@@ -26,11 +27,12 @@
                 
                 @*@if (Model.Tipo == "Venta") {<td>@Html.EditorFor(model => Model.Mercaderia.Mercaderias[i].PrecioKg, new { @class = "preciokg ", @style = "width:60px" }) @Site.Models.SpinnerMinusHtmlHelper.SpinnerMinus("Mercaderia_Mercaderias_" + i.ToString() + "__PrecioKg") @Site.Models.SpinnerPlusHtmlHelper.SpinnerPlus("Mercaderia_Mercaderias_" + i.ToString() + "__PrecioKg") </td>}*@
                 
-                <td>@Html.EditorFor(model => Model.Mercaderia.Mercaderias[i].Cantidad, new { @class = "cantidad ", @style = "width:60px" }) @Site.Models.SpinnerMinusHtmlHelper.SpinnerMinus("Mercaderia_Mercaderias_" + i.ToString() + "__Cantidad") @Site.Models.SpinnerPlusHtmlHelper.SpinnerPlus("Mercaderia_Mercaderias_" + i.ToString() + "__Cantidad") </td>
+                <td>@Html.EditorFor(model => Model.Mercaderia.Mercaderias[i].Cantidad, new { @class = "cantidad ", @style = "width:60px", @value = (Model.mostrarRemanente() ? "0" : Model.Mercaderia.Mercaderias[i].Cantidad.ToString("N0")) }) @Site.Models.SpinnerMinusHtmlHelper.SpinnerMinus("Mercaderia_Mercaderias_" + i.ToString() + "__Cantidad") @Site.Models.SpinnerPlusHtmlHelper.SpinnerPlus("Mercaderia_Mercaderias_" + i.ToString() + "__Cantidad") </td>
+                @if (Model.mostrarRemanente()) { <td class="remanente" style="text-align:center">@Model.Mercaderia.Mercaderias[i].Cantidad.ToString("N0")</td>}
                 @if (Model.Tipo == "Venta") {
                     <td>@Html.EditorFor(model => Model.Mercaderia.Mercaderias[i].PrecioUnitario, new { @class = "preciounitario", @style = "width:60px" }) @Site.Models.SpinnerMinusHtmlHelper.SpinnerMinus("Mercaderia_Mercaderias_" + i.ToString() + "__PrecioUnitario") @Site.Models.SpinnerPlusHtmlHelper.SpinnerPlus("Mercaderia_Mercaderias_" + i.ToString() + "__PrecioUnitario") </td>
                 }
-                <td>@Html.EditorFor(model => Model.Mercaderia.Mercaderias[i].Peso, new { @class = "peso ", @style = "width:60px" }) @Site.Models.SpinnerMinusHtmlHelper.SpinnerMinus("Mercaderia_Mercaderias_" + i.ToString() + "__Peso") @Site.Models.SpinnerPlusHtmlHelper.SpinnerPlus("Mercaderia_Mercaderias_" + i.ToString() + "__Peso") </td>
+                <td>@Html.EditorFor(model => Model.Mercaderia.Mercaderias[i].Peso, new { @class = "peso ", @style = "width:60px", @value = (Model.mostrarRemanente() ? "0" : Model.Mercaderia.Mercaderias[i].Peso.ToString("N2")) }) @Site.Models.SpinnerMinusHtmlHelper.SpinnerMinus("Mercaderia_Mercaderias_" + i.ToString() + "__Peso") @Site.Models.SpinnerPlusHtmlHelper.SpinnerPlus("Mercaderia_Mercaderias_" + i.ToString() + "__Peso") </td>
                 @*<td>@Html.EditorFor(model => Model.Mercaderia.Mercaderias[i].Bultos, new { @class = "bultos ", @style = "width:60px" }) @Site.Models.SpinnerMinusHtmlHelper.SpinnerMinus("Mercaderia_Mercaderias_" + i.ToString() + "__Bultos") @Site.Models.SpinnerPlusHtmlHelper.SpinnerPlus("Mercaderia_Mercaderias_" + i.ToString() + "__Bultos") </td>*@
                 @if (Model.Tipo == "Venta") {<td>@Html.EditorFor(model => Model.Mercaderia.Mercaderias[i].Precio, new { @class = "precio", @style = "width:60px" }) @Site.Models.SpinnerMinusHtmlHelper.SpinnerMinus("Mercaderia_Mercaderias_" + i.ToString() + "__Precio") @Site.Models.SpinnerPlusHtmlHelper.SpinnerPlus("Mercaderia_Mercaderias_" + i.ToString() + "__Precio") </td>}
                 @*<td>@Html.EditorFor(model => Model.Mercaderia.Mercaderias[i].Observaciones)</td>*@
@@ -42,6 +44,7 @@
     <tfoot>
         @Html.AgregarLineaTr(6)
         <tr>
+            @if (Model.mostrarRemanente()) {<th></th>}
             <th colspan="@(Model.Tipo == "Venta"? "4": "3" )" style="text-align:right"><label class="intralabel">Total</label></th>
             <td>@Html.EditorFor(model => Model.Mercaderia.Peso, new { @class = "pesototal" })</td>
             @*<td>@Html.EditorFor(model => Model.Mercaderia.Bultos, new { @class = "bultostotal" })</td>*@
@@ -51,6 +54,15 @@
 </table>
 <script type="text/javascript">
     $(".agregarLineaRow").prepend('<td class="agregarLinea" style="text-align:left">Dejar vacío para borrar la línea</td>');
+    @if (Model.mostrarRemanente())    {
+        <text>
+            $(".cantidad").val('0');
+            $(".peso").val('0,00');
+            $(".precio").val('0,00');
+            $(".pesototal").val('0,00');
+            $(".preciototal").val('0,00');
+        </text>
+    }
 </script>
 @if (Model.TipoEventoID > new EventoTipo("Recepcion").ID) {
     <br/>

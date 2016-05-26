@@ -571,6 +571,10 @@ namespace Site.Models {
             Mercaderia.DoDelete();
         }
 
+        public bool mostrarRemanente(){
+            return this.IsNew() && ! new EventoTipo(this.TipoEventoID).SumaMercaderia ;
+        }
+
         public bool IsNew() {
             return EventoID.IsEmpty();
         }
