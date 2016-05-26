@@ -52,6 +52,10 @@
     $(parent + ' .productolistinput').each(function (i, el) {
         dosuperlistinput(el, function (elControl, data) {
             var row = elControl.closest("tr");
+            row.find("td").each(function (i, elInput) {
+                elInput = $(elInput);
+                if (elInput.hasClass("remanente")) elInput.text("").change();                
+            });
             row.find("input").each(function (i, elInput) {
                 elInput = $(elInput);
                 if (elInput.attr("name").endsWith("PesoUnitario") && data.PesoUnitario != null && data.PesoUnitario > 0) elInput.val(data.PesoUnitario).change();
@@ -702,6 +706,15 @@ $(function () {
         load: function () { doinitialize('.newelements'); }
     });
 
+    //evitar submit on enter
+    $(document).ready(function () {
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
     // causa un doble request, esta mal
     //$.ajax({
     //    // url, data, etc.
@@ -1358,6 +1371,10 @@ function AgregarLinea(table) {
                 el.attr("id", id.replace("_" + index + "__", "_" + nextIndex + "__"));
             }
         }
+    });
+    row.find("td").each(function (i, elInput) {
+        elInput = $(elInput);
+        if (elInput.hasClass("remanente")) elInput.text("").change();
     });
     table.find("tbody").append(row);
 
