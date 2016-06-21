@@ -1,0 +1,16 @@
+@model Cargamento
+
+<div class="notificacion-lista nicescroll">
+@if (Model.Observaciones.Count == 0) { 
+    <div>No tiene observaciones</div>
+}
+
+@foreach (var item in Model.Observaciones) {
+    <div class="notificacion">
+        <b>@Html.Raw(item.Texto)</b>
+        @if (!item.Cuerpo.IsEmpty()) {
+            <p class="cuerpo">@Html.Raw(item.Cuerpo)</p>
+        }
+    </div>
+}
+</div>

@@ -629,6 +629,7 @@
     <Content Include="Views\Reporte\Liquidacion.cshtml" />
     <Content Include="Views\Reporte\ReporteActividad.cshtml" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\Cargamento\Observaciones.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

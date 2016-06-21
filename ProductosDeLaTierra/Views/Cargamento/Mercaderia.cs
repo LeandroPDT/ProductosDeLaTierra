@@ -91,7 +91,7 @@ namespace Site.Models {
 
         // elimina ItemMercaderia/s vacios
         private void validateMercaderias() {
-            _Mercaderias = (from ItemMercaderia im in _Mercaderias where (!im.ProductoID.IsEmpty()  && (im.Peso > 0 || im.Cantidad > 0 || im.Bultos > 0)) select im).ToList();
+            _Mercaderias = (from ItemMercaderia im in _Mercaderias where (!im.ProductoID.IsEmpty()  && !im.sinExistencias()) select im).ToList();
         }
 
         public virtual void AfterSave() {

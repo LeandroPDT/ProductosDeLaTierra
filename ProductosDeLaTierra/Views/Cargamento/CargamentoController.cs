@@ -89,6 +89,13 @@ namespace Site.Controllers
                 return AccessDeniedView();
         }
 
+        [HttpGet]
+        [CustomAuthorize(Roles = Permiso)]
+        public ActionResult Observaciones(int id)
+        {
+            var VM = Models.Cargamento.SingleOrDefault(id);
+            return PartialView("Observaciones", VM);
+        }
 
         /* por ahora no necesito seleccionar cargamentos individualmente
         [NoCache]

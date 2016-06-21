@@ -99,12 +99,7 @@ namespace Site.Models {
         [ResultColumn]
         [Display(Name = "Cliente")]
         public String Cliente { get; set; }
-
-        [PetaPoco.Column("Observaciones")]
-		[Display(Name = "Observaciones")]
-		[DataType(DataType.MultilineText)]
-		public String Observaciones{ get; set; }
-
+        
         [PetaPoco.Column("Recibido")]
         [Display(Name = "Recibido")]
         public bool Recibido { get; set; }
@@ -284,6 +279,28 @@ namespace Site.Models {
 
         public bool IsNew(){
             return CargamentoID.IsEmpty();
+        }
+
+        public List<Observacion> Observaciones {
+            get {
+                var sql = Evento.BaseQuery();
+                sql.Append("WHERE CargamentoID = @0 AND Notas IS NOT NULL", this.CargamentoID);
+                sql.Append("ORDER BY Fecha ASC");
+                var result = DbHelper.CurrentDb().Fetch<Evento>(sql);
+                var retval = new List<Observacion>();
+                foreach(Evento evento in result) {
+                    if (!evento.Notas.IsEmpty())
+                    {
+                        retval.Add(new Observacion() { Texto = evento.Tipo + " del " + evento.Fecha.ToShortDateString(), Cuerpo = evento.Notas });
+                    }
+                }
+                return retval;
+            }
+        }
+
+        public class Observacion{
+            public String Texto { get; set; }
+            public String Cuerpo { get; set; }
         }
 
         // podrá gestionar si tiene el permiso y, o es empleado o participa del evento (con el rol que puede editarlo).

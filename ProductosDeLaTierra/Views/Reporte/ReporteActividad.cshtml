@@ -47,18 +47,7 @@
              Grilla.Column("PrecioUnitarioPromedio", "Precio Unitario ($/Un.)"),
              Grilla.Column("Total", "Total ($)"),
              Grilla.Column("Remanente", "Remanente (Un.)"),
-             Grilla.Column("", "", format: @<a id='@(item.NumeroRemito.ToString() + item.ProductoID)' style='display:text-decoration:none;cursor:pointer;  display: @(item.Observaciones == ""? "none":"block")'>
-                                                    <i class='icon-search'></i>
-                                                      <script>
-                                                          $('#@(item.NumeroRemito.ToString() + item.ProductoID)').webuiPopover({
-                                                                width: 'auto',
-                                                                height: 'auto',
-                                                                closeable: true,
-                                                                cache: false,
-                                                                content: (`@(item.Observaciones.Replace("\n", "\t"))`).replace(new RegExp("\t", 'g'), "<br>")
-                                                            });
-                                                      </script>                                
-                                                  </a>),
+             Grilla.Column("", "", format: @<a class="masinfo" href="/Cargamento/Observaciones/@item.CargamentoID" style='text-decoration:none;cursor:pointer;  display: @(item.TieneObservaciones? "block":"none")'><i class='icon-search'></i></a>),
             Grilla.Column("","",format: @<a tabindex = "-1" class="masinfo" data-width="300"  style='text-decoration:none;cursor:pointer; display: @(item.TieneArchivosAdjuntos? "block":"none")' href="/ArchivosAdjuntos/Galeria/@item.CargamentoID?Nombre=Cargamento">
                                             <h3><i class="icon-attach"></i></h3>
                                         </a>)));

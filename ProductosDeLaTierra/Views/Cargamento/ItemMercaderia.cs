@@ -125,7 +125,7 @@ namespace Site.Models {
         }
 
         public bool sinExistencias() {
-            return Peso == 0 && Cantidad == 0 && Bultos == 0;
+            return Cantidad == 0;//&& Peso == 0 && Bultos == 0; solo se valida que se acabaron las cantidades para determinar si se agoto un producto.
         }
 
         public bool Equals(ItemMercaderia other) {

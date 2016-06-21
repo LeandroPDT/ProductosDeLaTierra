@@ -214,7 +214,7 @@ namespace Site.Areas.Config.Controllers {
         {
             try {
                 var db = DbHelper.CurrentDb();
-                //db.Execute("DELETE FROM UsuarioContribuyente WHERE UsuarioID = @0 DELETE FROM Usuario WHERE UsuarioID = @0", id);
+                db.Execute("DELETE FROM Usuario WHERE UsuarioID = @0", id);
                 
                 if (Request.IsAjaxRequest())
                 {

@@ -1372,6 +1372,10 @@ function AgregarLinea(table) {
             }
         }
     });
+    row.find("td").each(function (i, elInput) {
+        elInput = $(elInput);
+        if (elInput.hasClass("remanente")) elInput.text("").change();
+    });
     table.find("tbody").append(row);
 
     // reinicializo jQuery en los nuevos items

@@ -69,7 +69,7 @@ namespace Site.Models {
             sql.Append("ISNULL(Sum(ItemVenta.Precio) / ISNULL(NULLIF(Count(distinct Decomisacion.EventoID), 0), 1), 0) / NULLIF(Sum(ItemVenta.Cantidad) / ISNULL(NULLIF(Count(distinct Decomisacion.EventoID), 0), 1), 0) as PrecioUnitarioPromedio,");
             sql.Append("ISNULL(Sum(ItemVenta.Precio )/ISNULL(NULLIF(Count(distinct Decomisacion.EventoID),0),1),0 ) as Total,");
             sql.Append("ItemRecepcion.Cantidad-( ISNULL(Sum(ItemVenta.Cantidad)/ ISNULL(NULLIF(Count(distinct Decomisacion.EventoID),0),1) ,0) + ISNULL(Sum(ItemDecomisacion.Cantidad)/ ISNULL(NULLIF(Count(distinct ItemVenta.ItemMercaderiaID),0),1),0) ) as Remanente,");
-            sql.Append("(CASE WHEN Envio.Notas IS NULL	THEN '' ELSE ('Envío' + ' del ' + CONVERT(VARCHAR(10), Envio.Fecha, 103) + ' :\n'+ CAST(Envio.Notas as NVARCHAR(MAX)) +'\n\n') END)+(CASE WHEN Recepcion.Notas IS NULL  THEN '' ELSE('Recepcíon' + ' del ' + CONVERT(VARCHAR(10), Recepcion.Fecha, 103) + ' :\n' + CAST(Recepcion.Notas as NVARCHAR(MAX)) + '\n\n') END) + (CASE WHEN Venta.Notas IS NULL  THEN '' ELSE('Venta' + ' del ' + CONVERT(VARCHAR(10), Venta.Fecha, 103) + ' :\n' + CAST(Venta.Notas as NVARCHAR(MAX)) + '\n\n') END) +(CASE WHEN Decomisacion.Notas IS NULL THEN '' ELSE('Decomisacíon' + ' del ' + CONVERT(VARCHAR(10), Decomisacion.Fecha, 103) + ' :\n' + CAST(Decomisacion.Notas as NVARCHAR(MAX)) + '\n\n') END) as Observaciones,");
+            sql.Append("max(CASE WHEN (Envio.Notas IS NOT NULL OR Recepcion.Notas IS NOT NULL OR Venta.Notas IS NOT NULL OR Decomisacion.Notas IS NOT NULL) THEN 1 ELSE 0 END) as TieneObservaciones,");
             sql.Append("(CASE WHEN EXISTS (SELECT * FROM ArchivoAdjunto WHERE ArchivoAdjunto.Entidad = 'Cargamento' AND ArchivoAdjunto.ID = Cargamento.CargamentoID)  THEN 1 ELSE 0 END) as TieneArchivosAdjuntos,");
             sql.Append("Cargamento.CargamentoID as CargamentoID,");
             sql.Append("Producto.ProductoID as ProductoID");
@@ -115,7 +115,6 @@ namespace Site.Models {
             sql.Append("Convert(varchar(50),Producto.Descripcion),");
             sql.Append("ItemEnvio.Cantidad,");
             sql.Append("ItemRecepcion.Cantidad,");
-            sql.Append("(CASE WHEN Envio.Notas IS NULL	THEN '' ELSE ('Envío' + ' del ' + CONVERT(VARCHAR(10), Envio.Fecha, 103) + ' :\n'+ CAST(Envio.Notas as NVARCHAR(MAX)) +'\n\n') END)+(CASE WHEN Recepcion.Notas IS NULL  THEN '' ELSE('Recepcíon' + ' del ' + CONVERT(VARCHAR(10), Recepcion.Fecha, 103) + ' :\n' + CAST(Recepcion.Notas as NVARCHAR(MAX)) + '\n\n') END) + (CASE WHEN Venta.Notas IS NULL  THEN '' ELSE('Venta' + ' del ' + CONVERT(VARCHAR(10), Venta.Fecha, 103) + ' :\n' + CAST(Venta.Notas as NVARCHAR(MAX)) + '\n\n') END) +(CASE WHEN Decomisacion.Notas IS NULL THEN '' ELSE('Decomisacíon' + ' del ' + CONVERT(VARCHAR(10), Decomisacion.Fecha, 103) + ' :\n' + CAST(Decomisacion.Notas as NVARCHAR(MAX)) + '\n\n') END),");
             sql.Append("Cargamento.CargamentoID,");
             sql.Append("Producto.ProductoID");
             sql.Append("ORDER BY Cargamento.FechaEnvio,Cargamento.NumeroRemito  ASC");
@@ -167,7 +166,7 @@ namespace Site.Models {
 
             [Display(Name = "Observaciones")]
             [DataType(DataType.Currency)]
-            public String Observaciones { get; set; }
+            public bool TieneObservaciones { get; set; }
                         
             public bool TieneArchivosAdjuntos { get; set; }
 
