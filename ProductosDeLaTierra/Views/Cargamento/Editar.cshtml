@@ -1,4 +1,4 @@
-﻿@model Site.Models.Producto
+﻿@model Site.Models.Cobranza
 
 @{
     ViewBag.Title = Model.ToString();
@@ -12,7 +12,7 @@
     <h1>@b.Visitar(ViewBag.Title)</h1>
 }
 <div class="newelements">
-    @using (Html.BeginForm("Editar", "Cargamento")) {
+    @using (Html.BeginForm("Editar", "Cobranza")) {
         @Html.ValidationSummary()
         @Html.HiddenFor(model => Model.ProductoID)
         if (!Sitio.EsEmpleado) { 
@@ -28,7 +28,7 @@
         </tr>            
         }
         <tr>
-            <th>@Html.LabelFor(model => model.CodigoArticulo)</th>
+            <th>@Html.LabelFor(model => model.)</th>
             <td>@Html.EditorFor(model => model.CodigoArticulo)</td>
         </tr>
         <tr>

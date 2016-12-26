@@ -1,0 +1,59 @@
+﻿@model Site.Models.IndexCobranzaViewModel
+
+@{
+    ViewBag.Title = "Cobranzas registradas";
+}
+
+<div class="botonera">
+    <a href="/Cobranza/Nuevo" data-callback="location.reload()"><h3><i class="icon-plus"></i> Registrar Cobranza</h3></a>
+    
+</div>
+
+<h1>@b.Visitar(ViewBag.Title)</h1>
+
+@using (Html.BeginForm()) {
+    <div class="formbuscar">
+        <label class="intralabel">Referencia:</label>@Html.EditorFor(model => Model.q, new { @placeholder = "Por Cod. Referencia", @style = "width:200px" })
+        <label class="intralabel">Registradas Desde:</label>@Html.EditorFor(model => model.FechaDesde)
+        <label class="intralabel">Hasta:</label>        @Html.EditorFor(model => model.FechaHasta)
+
+        @if (Sitio.EsEmpleado) {
+            <br />
+            <label class="intralabel">Proveedor:</label>@Html.UsuarioSuperList("UsuarioID", "Usuario", Model.UsuarioID, Model.Usuario,new UsuarioSuperListHtmlHelper.Options(){Rol="Proveedor"})
+        }
+        <br />
+        <label class="intralabel">Ver un máximo de:</label>@Html.DropDownList("CantidadPorPagina", CantidadPorPagina.GetSelectList(Model.CantidadPorPagina, ""))
+        <input type="submit" value="Refrescar" class="defaultbutton" />
+
+    </div>
+}
+
+@Html.ResultadoBusqueda(Model.Resultado, Model.CantidadPorPagina)
+
+@{ var Grilla = new BizGrid(source: Model.Resultado);
+    var columns = new List<BizGridColumn>();
+    columns.AddRange(collection:Grilla.Columns(
+             Grilla.Column("Referencia"),
+             Grilla.Column("Fecha", "Fecha")));
+    if (Sitio.EsEmpleado) {
+        columns.Add(Grilla.Column("Proveedor"));
+    }
+    columns.Add(Grilla.Column("Monto", "Monto"));
+    columns.Add(Grilla.Column("admin", "", format: @<span>
+    @if (Seguridad.CanAccess(Seguridad.Permisos.EventoCobro) && !Seguridad.CanEdit(Seguridad.Permisos.EventoCobro))
+    {
+        <a href="/Cobranza/Editar/@item.CobranzaID.ToString() " class="button" data-callback="location.reload()">Ver</a>
+    }
+    @if (Seguridad.CanEdit(Seguridad.Permisos.EventoCobro) && Seguridad.CanEdit(Seguridad.Permisos.EventoCobro))
+    {
+        <a href="/Cobranza/Editar/@item.CobranzaID.ToString()" class="button" data-callback="location.reload()">Editar</a>
+    }               
+    @if (Seguridad.CanDelete(Seguridad.Permisos.EventoCobro))
+    {
+        <a href="/Cobranza/Borrar/@item.CobranzaID.ToString()" class="button minidelete"><i class="icon-remove"></i></a>
+    }                
+    
+                </span>));
+    }
+
+@Grilla.GetHtml(columns: columns)

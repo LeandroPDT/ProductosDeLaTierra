@@ -49,12 +49,20 @@
             <td>@Html.UsuarioSuperList("Cargamento.ClienteID", "Cargamento.Cliente",Model.Cargamento.ClienteID,Model.Cargamento.Cliente,new UsuarioSuperListHtmlHelper.Options(){Rol = "Cliente"})</td>
         </tr>            
         <tr>
+            <th colspan="2">@Html.LabelFor(model => model.Cargamento.CostoFlete)</th>
+            <td>@Html.EditorFor(model => model.Cargamento.CostoFlete)</td>
+        </tr>
+        <tr>
+            <th colspan="2">@Html.LabelFor(model => model.Cargamento.CostoDescarga)</th>
+            <td>@Html.EditorFor(model => model.Cargamento.CostoDescarga)</td>
+        </tr>
+        <tr>
             <th colspan="2">@Html.LabelFor(model => model.Cargamento.TipoVenta)</th>
             <td>@Html.DropDownListFor(model => model.Cargamento.TipoVenta,Cargamento.TipoVentaSelectList(Model.Cargamento.TipoVenta))</td>
-        </tr>            
+        </tr>  
         <tr>
-            <th>@Html.LabelFor(model => model.Cargamento.Observaciones)</th>
-            <td colspan="2">@Html.EditorFor(model => model.Cargamento.Observaciones, new { @style = "width:300px" })</td>
+            <th>@Html.LabelFor(model => model.Notas)</th>
+            <td colspan="2">@Html.EditorFor(model => model.Notas, new { @style = "width:300px" })</td>
         </tr>
         <tr>
             <td colspan="3">

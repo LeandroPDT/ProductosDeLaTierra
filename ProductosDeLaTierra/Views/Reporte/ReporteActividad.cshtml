@@ -35,7 +35,7 @@
 @{ var Grilla = new BizGrid(source: Model.Resultado);
     var columns = new List<BizGridColumn>();
     columns.AddRange(collection: Grilla.Columns(
-             Grilla.Column("NumeroRemito", "Nro. Remito"),
+             Grilla.Column("NumeroRemito", "Nro. Remito",format:@<b>@item.NumeroRemito</b>),
              Grilla.Column("FechaEnvio", "Fecha Envío"),
              Grilla.Column("Proveedor"),
              Grilla.Column("Cliente"),
@@ -43,10 +43,10 @@
              Grilla.Column("Enviado", "Enviado (Un.)"),
              Grilla.Column("Recibido", "Recibido (Un.)"),
              Grilla.Column("Vendido", "Vendido (Un.)"),
-             Grilla.Column("Decomisado", "Decomisado (Un.)"),
              Grilla.Column("PrecioUnitarioPromedio", "Precio Unitario ($/Un.)"),
              Grilla.Column("Total", "Total ($)"),
              Grilla.Column("Remanente", "Remanente (Un.)"),
+             Grilla.Column("Decomisado", "Decomisado (Un.)"),
              Grilla.Column("", "", format: @<a class="masinfo" href="/Cargamento/Observaciones/@item.CargamentoID" style='text-decoration:none;cursor:pointer;  display: @(item.TieneObservaciones? "block":"none")'><i class='icon-search'></i></a>),
             Grilla.Column("","",format: @<a tabindex = "-1" class="masinfo" data-width="300"  style='text-decoration:none;cursor:pointer; display: @(item.TieneArchivosAdjuntos? "block":"none")' href="/ArchivosAdjuntos/Galeria/@item.CargamentoID?Nombre=Cargamento">
                                             <h3><i class="icon-attach"></i></h3>
@@ -54,3 +54,31 @@
 
 }
 @Grilla.GetHtml(columns: columns)
+
+<script type="text/javascript">
+    $(".sortable").bind("sortEnd",function (e,t) {
+        var row = $(this).children('thead').eq(0);
+        var numberOfColumnToDiscriminate = row.find(".headerSortDown, .headerSortUp").index();
+        var tbody = $(this).children('tbody');
+        var actualColumnValue = '';
+        var actualRowBackgroundColor = '#eaeaea';
+        var nextRowBackgroundColor = '#fafafa';
+        tbody.children('tr').each(function () {
+            var valueOfTheDiscriminationColumn = $(this).children('td').eq(numberOfColumnToDiscriminate).text();
+            if (valueOfTheDiscriminationColumn == actualColumnValue) {
+                $(this).css("background-color", actualRowBackgroundColor);
+            } else {
+                actualColumnValue = valueOfTheDiscriminationColumn;
+                var auxColor = actualRowBackgroundColor;
+                actualRowBackgroundColor = nextRowBackgroundColor;
+                nextRowBackgroundColor = auxColor;
+                $(this).css("background-color", actualRowBackgroundColor);
+            }
+        });
+    });
+    $(function () {
+        $(".sortable").children('thead').eq(0).children('tr').eq(0).children('th').eq(0).get(0).click()
+        $(".sortable").children('thead').eq(0).children('tr').eq(0).children('th').eq(0).get(0).click()
+    });
+    
+</script>

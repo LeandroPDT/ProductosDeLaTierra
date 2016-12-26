@@ -514,6 +514,13 @@ namespace Site.Models {
             if (SoloSinResolver) {
                 sql.Append("AND Incidente.ResueltoDev = 0");
             }
+            if (!Sitio.EsEmpleado)
+            {
+                if (Sitio.Usuario.ProveedorID.IsEmpty())
+                    sql.Append("AND Incidente.US_ID = @0", Sitio.Usuario.UsuarioID);
+                else
+                    sql.Append("AND (Incidente.US_ID = @0 OR Incidente.US_ID = @1)", Sitio.Usuario.UsuarioID, Sitio.Usuario.ProveedorID);
+            }
 
             if (!this.q.IsEmpty())
                 sql.AppendKeywordMatching(this.q, "Incidente.Titulo", "Incidente.Notas");
@@ -559,7 +566,12 @@ namespace Site.Models {
                 and incidenteComentario.status = 'cerrado'");
             sql.Append("WHERE Incidente.Titulo IS NOT NULL"); // por las dudas que haya cosas en blanco
             sql.Append("AND Incidente.Cerrado <> 0");
-
+            if (!Sitio.EsEmpleado){
+                if (Sitio.Usuario.ProveedorID.IsEmpty())
+                    sql.Append("AND Incidente.US_ID = @0", Sitio.Usuario.UsuarioID);
+                else
+                    sql.Append("AND (Incidente.US_ID = @0 OR Incidente.US_ID = @1)", Sitio.Usuario.UsuarioID, Sitio.Usuario.ProveedorID);
+            }
             sql.Append("group by Incidente.IncidenteID, Titulo, Substring(Notas, 1, 500)");
             sql.Append("having Max(incidenteComentario.Fecha) between @0 and @1", FechaDesde, FechaHasta);
             sql.Append("ORDER BY FechaCerrado");

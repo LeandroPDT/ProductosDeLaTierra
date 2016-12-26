@@ -194,7 +194,11 @@
     <Compile Include="Areas\Config\Views\Permisos\PermisoConcedido.g.cs" />
     <Compile Include="Areas\Config\Views\Permisos\PermisosController.cs" />
     <Compile Include="Areas\Eventos\EventoAreaRegistration.cs" />
+    <Compile Include="Views\Cobranza\ItemCobranza.cs" />
     <Compile Include="Areas\Eventos\Views\Evento\IndexEventoViewModel.cs" />
+    <Compile Include="Views\Cobranza\IndexCobranzaViewModel.cs" />
+    <Compile Include="Views\Cobranza\Cobranza.cs" />
+    <Compile Include="Views\Cobranza\CobranzaController.cs" />
     <Compile Include="Models\PaginaVisita.g.cs" />
     <Compile Include="Models\SuperList\ProductoSuperList.cs" />
     <Compile Include="Models\SuperList\LoteSuperList.cs" />
@@ -334,6 +338,7 @@
     <Content Include="App_Data\Creation\017. ArchivoAdjunto.sql" />
     <Content Include="App_Data\Creation\018. Producto.sql" />
     <Content Include="App_Data\Creation\019. Mercaderia.sql" />
+    <Content Include="App_Data\Creation\030. ItemCobranza.sql" />
     <Content Include="App_Data\Creation\021. Cargamento.sql" />
     <Content Include="App_Data\Creation\020. ItemMercaderia.sql" />
     <Content Include="App_Data\Creation\023. ArchivoAdjunto.sql" />
@@ -344,8 +349,13 @@
     <Content Include="App_Data\Creation\027. IncidenteComentario.sql" />
     <Content Include="App_Data\Creation\028. IncidenteSubscripcion.sql" />
     <Content Include="App_Data\DbUp\001. Usuario.ProveedorID .sql" />
+    <Content Include="App_Data\DbUp\004. Permiso EventoCobro.sql" />
     <Content Include="App_Data\DbUp\003. Permiso ReporteActividad.sql" />
     <Content Include="App_Data\DbUp\002. Administrador de Proveedor.sql" />
+    <Content Include="App_Data\Creation\029. Cobranza.sql" />
+    <Content Include="App_Data\DbUp\005. Campo Cobrado Cargamento.sql" />
+    <Content Include="App_Data\DbUp\007. Campo Medio ItemCobranza.sql" />
+    <Content Include="App_Data\DbUp\006. MercaderiaID NULL Evento.sql" />
     <Content Include="App_Data\scrap.sql" />
     <Content Include="Content\Images\15.gif" />
     <Content Include="Content\Images\calendar.gif" />
@@ -391,6 +401,8 @@
     <Content Include="Areas\Config\Views\_ViewStart.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Views\Cobranza\Editar.cshtml" />
+    <Content Include="Views\Cobranza\Index.cshtml" />
     <None Include="bundleconfig.json" />
     <Content Include="Content\webfont\fonts\bizlib.eot" />
     <Content Include="Content\webfont\fonts\bizlib.ttf" />

@@ -47,6 +47,10 @@ namespace Site.Models {
         
         [Display(Name="Ganancia Total")]
         public Double GananciaTotal  { get; set; }
+        
+        [Display(Name = "% Comision")]
+        public Double PorcComision { get; set; }
+        
 
         public List<LiquidacionItem> ItemsVendidos { get; set;}
 
@@ -61,22 +65,23 @@ namespace Site.Models {
 
                 var sql = PetaPoco.Sql.Builder;
                 sql.Append("SELECT ");
-                sql.Append("Venta.Fecha as Fecha,");
+                sql.Append("VentaODecomisacion.Fecha as Fecha,");
                 sql.Append("ISNULL(Convert(varchar(12),Producto.CodigoArticulo ),'') + ' - ' + Convert(varchar(50),Producto.Descripcion) as Articulo,");
-                sql.Append("ItemVenta.Cantidad as Cantidad,");
-                sql.Append("ItemVenta.PrecioUnitario as Precio,");
-                sql.Append("ItemVenta.Precio as Total");
-                sql.Append("FROM Evento Venta");
-                sql.Append("INNER JOIN ItemMercaderia ItemVenta on ItemVenta.MercaderiaID = Venta.MercaderiaID");
-                sql.Append("INNER JOIN Producto on  ItemVenta.ProductoID = Producto.ProductoID");
-                sql.Append("WHERE Venta.CargamentoID = @0 AND Venta.TipoEventoID = @1", Cargamento.CargamentoID,new EventoTipo("Venta").ID);            
-                sql.Append("ORDER BY Venta.Fecha DESC");
+                sql.Append("ItemVentaODecomisacion.Cantidad as Cantidad,");
+                sql.Append("ItemVentaODecomisacion.PrecioUnitario as Precio,");
+                sql.Append("ItemVentaODecomisacion.Precio as Total,");
+                sql.Append("VentaODecomisacion.TipoEventoID as Tipo");
+                sql.Append("FROM Evento VentaODecomisacion");
+                sql.Append("INNER JOIN ItemMercaderia ItemVentaODecomisacion on ItemVentaODecomisacion.MercaderiaID = VentaODecomisacion.MercaderiaID");
+                sql.Append("INNER JOIN Producto on  ItemVentaODecomisacion.ProductoID = Producto.ProductoID");
+                sql.Append("WHERE VentaODecomisacion.CargamentoID = @0 AND (VentaODecomisacion.TipoEventoID = @1 OR VentaODecomisacion.TipoEventoID = @2)", Cargamento.CargamentoID,new EventoTipo("Venta").ID, new EventoTipo("Decomisacion").ID);            
+                sql.Append("ORDER BY VentaODecomisacion.Fecha DESC");
                 ItemsVendidos = DbHelper.CurrentDb().Fetch<LiquidacionItem>(sql);
                 Ganancia = (from LiquidacionItem imVendido in ItemsVendidos select imVendido.Total).Sum();
                 var usuarioProveedor = Usuario.SingleOrDefault(Cargamento.ProveedorID)??new Usuario();
-                var porcComision = usuarioProveedor.Comision/100;
+                PorcComision = usuarioProveedor.Comision/100;
 
-                ComisionCobrada = porcComision * Ganancia;
+                ComisionCobrada = PorcComision * Ganancia;
                 CostoDescarga = Cargamento.CostoDescarga;
                 CostoFlete = Cargamento.CostoFlete;
 
@@ -103,7 +108,9 @@ namespace Site.Models {
             
 		    [DataType(DataType.Currency)]
             public Double Total { get; set; }
-            
+
+            public int Tipo { get; set; }
+
         }
 
     }

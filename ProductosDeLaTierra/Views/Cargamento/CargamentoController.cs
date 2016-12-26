@@ -97,47 +97,80 @@ namespace Site.Controllers
             return PartialView("Observaciones", VM);
         }
 
-        /* por ahora no necesito seleccionar cargamentos individualmente
+
         [NoCache]
-        public JsonResult Lista(string term, string TipoVenta, string Estado) {
-            var retval = new List<IDNombrePar>();
+        public JsonResult Lista(string term, string Estado, int? ProveedorID)
+        {
+            var retval = new List<InfoCargamento>();
             var db = DbHelper.CurrentDb();
             var sql = PetaPoco.Sql.Builder;
-            sql.Append("SELECT TOP 25 CargamentoID as ID, Cargamento.Referencia as Nombre,  'Raza: '+ Substring( (SELECT Nombre FROM Raza WHERE Cargamento.RazaID=Raza.RazaID) , 1, 50)"+ ( new Cargamento.EstadoCargamento(Estado).implicaActivo? "+ ' - Dias de vida: ' + CONVERT(char, CONVERT(int, CONVERT(DATETIME, '"+DateTime.Today.ToMMDDYYYY()+"') - FechaNacimiento ))": "") +" as ExtraInfo");
+            sql.Append("SELECT TOP 25 CargamentoID as ID, Cargamento.NumeroRemito as Nombre,  'Proveedor: '+ Proveedor.Nombre + ' Cliente: Cliente.Nombre' as ExtraInfo, Cargamento.Ganancia as Ganancia");
             sql.Append("FROM Cargamento");
+            sql.Append("INNER JOIN Usuario Proveedor ON Proveedor.UsuarioID = Cargamento.ProveedorID");
+            sql.Append("INNER JOIN Usuario Cliente ON Cliente.UsuarioID = Cargamento.ClienteID");
             sql.Append("Where 1=1");
-            Cargamento.AppendTipoVentaMatching(sql, TipoVenta);
-            Cargamento.AppendEstadoMatching(sql, Estado);
-            if (!term.IsEmpty())
-                sql.AppendKeywordMatching(term, "Cargamento.Referencia");
-            sql.Append("ORDER BY Cargamento.Referencia");            
-            retval = db.Query<IDNombrePar>(sql).ToList();
+            var estadoReference = new Cargamento();
+            if (!Estado.IsEmpty()) {
+                //estadoReference.Estado = Estado;                TODO
+                estadoReference.Estado = "Vendido";
+                sql.Append("AND Cargamento.Recibido = @0 AND Cargamento.Vendido = @1 AND Cargamento.Cobrado = @2", estadoReference.Recibido,estadoReference.Vendido, estadoReference.Cobrado);
+            }
+            if (!ProveedorID.IsEmpty())
+            {
+                sql.Append("AND Cargamento.ProveedorID = @0", ProveedorID ?? 0);
+            }
+            sql.AppendKeywordMatching(term, "Cargamento.NumeroRemito");
+            sql.Append("ORDER BY Cargamento.NumeroRemito");
+            retval = db.Query<InfoCargamento>(sql).ToList();
             return Json(retval, JsonRequestBehavior.AllowGet);
         }
 
         [NoCache]
-        public JsonResult ListaValidar(string Numero, string Genero, string Estado) {
-            if (Numero.AsInt() > 0) {
+        public JsonResult ListaValidar(string id, string Estado, int? ProveedorID)
+        {
+            var retval = new List<InfoCargamento>();
+            if (!id.IsEmpty())
+            {
                 var db = DbHelper.CurrentDb();
                 var sql = PetaPoco.Sql.Builder;
-                sql.Append("SELECT TOP 1 CargamentoID as ID, Numero as Nombre");
+                sql.Append("SELECT TOP 1 CargamentoID as ID, Cargamento.NumeroRemito as Nombre,  'Proveedor: '+ Proveedor.Nombre + ' Cliente: Cliente.Nombre' as ExtraInfo, Cargamento.Ganancia as Ganancia");
                 sql.Append("FROM Cargamento");
-                sql.Append("Where Cargamento.Numero = @0", Numero);
-                Cargamento.AppendGeneroMatching(sql, Genero);
-                Cargamento.AppendEstadoMatching(sql, Estado);
+                sql.Append("INNER JOIN Usuario Proveedor ON Proveedor.UsuarioID = Cargamento.ProveedorID");
+                sql.Append("INNER JOIN Usuario Cliente ON Cliente.UsuarioID = Cargamento.ClienteID");
+                sql.Append("Where 1=1");
+                if (!ProveedorID.IsEmpty())
+                {
+                    sql.Append("AND Cargamento.ProveedorID = @0", ProveedorID);
+                }
 
-                var retval = db.Query<IDNombrePar>(sql);
+                retval = db.Query<InfoCargamento>(sql).ToList();
                 return Json(retval, JsonRequestBehavior.AllowGet);
             }
             else {
-                var retval = new List<IDNombrePar>();
                 return Json(retval, JsonRequestBehavior.AllowGet);
             }
-            
+
         }
-         * */
+
+
         private ViewResult AccessDeniedView() {
             return new ViewResult { ViewName = Request.IsAjaxRequest() ? "~/Views/Shared/_AccessDeniedAjax.cshtml" : "~/Views/Shared/AccessDenied.cshtml" };
+        }
+
+
+        public class InfoCargamento
+        {
+            public int ID { get; set; }
+            public string Nombre { get; set; }
+            public string ExtraInfo { get; set; }
+            public double Ganancia { get; set; }
+            public InfoCargamento() { }
+            public InfoCargamento(int ID, string Nombre, string ExtraInfo)
+            {
+                this.ID = ID;
+                this.Nombre = Nombre;
+                this.ExtraInfo= ExtraInfo;
+            }
         }
 
     }

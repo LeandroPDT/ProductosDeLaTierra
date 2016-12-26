@@ -102,22 +102,29 @@ namespace Site.Models {
         
         [PetaPoco.Column("Recibido")]
         [Display(Name = "Recibido")]
+        [Required]
         public bool Recibido { get; set; }
 
         [PetaPoco.Column("Vendido")]
         [Display(Name = "Vendido")]
         [Required]
         public bool Vendido { get; set; }
-        
+
+        [PetaPoco.Column("Cobrado")]
+        [Display(Name = "Cobrado")]
+        [Required]
+        public bool Cobrado { get; set; }
+
         [ResultColumn]
         [Display(Name="Estado")]
         public String Estado {
             get {
-                return Vendido ? "Vendido" : Recibido ? "Recibido" : "Enviado";
+                return Cobrado? "Cobrado" : Vendido ? "Vendido" : Recibido ? "Recibido" : "Enviado";
             }
             set {
-                Vendido = (value == "Vendido");
-                Recibido = (value == "Vendido") || (value == "Recibido");
+                Cobrado = (value == "Cobrado");
+                Vendido = Cobrado || (value == "Vendido");
+                Recibido = Vendido || (value == "Recibido");
             }
         }
 
@@ -270,6 +277,7 @@ namespace Site.Models {
                 EstadoCargamento estadoBuscado = new EstadoCargamento(Estado);
                 sql.Append(String.Concat("AND Cargamento.Recibido = ", estadoBuscado.implicaRecibido==true?"1":"0"));
                 sql.Append(String.Concat("AND Cargamento.Vendido = ", estadoBuscado.implicaVendido==true?"1":"0"));
+                sql.Append(String.Concat("AND Cargamento.Cobrado = ", estadoBuscado.implicaCobrado == true ? "1" : "0"));
             }
         }
 
@@ -328,15 +336,17 @@ namespace Site.Models {
         public class EstadoCargamento {
             public string nombre {get;set;}
             public bool implicaRecibido {get;set;}
-            public bool implicaVendido {get;set;}
+            public bool implicaVendido {get;set; }
+            public bool implicaCobrado { get; set; }
             public bool implicaEnviado {
                 get{
-                    return implicaRecibido ? false : implicaVendido ? false : true;
+                    return implicaRecibido ? false : implicaVendido ? false : implicaCobrado ? false : true;
                 }
                 set{
                     if (value == true) {
                         implicaVendido = false;
                         implicaRecibido = false;
+                        implicaCobrado= false;
                     }
                 }
             }
@@ -346,6 +356,7 @@ namespace Site.Models {
                 this.nombre=o.nombre;
                 this.implicaVendido=o.implicaVendido;
                 this.implicaRecibido=o.implicaRecibido;
+                this.implicaCobrado = o.implicaCobrado;
             }
 
             public EstadoCargamento() {
@@ -358,9 +369,10 @@ namespace Site.Models {
 
             public static List<EstadoCargamento> Lista() {
                 var retval = new List<EstadoCargamento>();
-                retval.Add( new EstadoCargamento(){nombre="Enviado",implicaRecibido=false,implicaVendido=false});
-                retval.Add( new EstadoCargamento(){nombre="Recibido",implicaRecibido=true,implicaVendido=false});
-                retval.Add( new EstadoCargamento(){nombre="Vendido",implicaRecibido=true,implicaVendido=true});
+                retval.Add( new EstadoCargamento(){nombre="Enviado",implicaRecibido=false,implicaVendido=false, implicaCobrado = false });
+                retval.Add( new EstadoCargamento(){nombre="Recibido",implicaRecibido=true,implicaVendido=false, implicaCobrado = false });
+                retval.Add( new EstadoCargamento(){nombre="Vendido",implicaRecibido=true,implicaVendido=true, implicaCobrado = false });
+                retval.Add(new EstadoCargamento() { nombre = "Cobrado", implicaRecibido = true, implicaVendido = true, implicaCobrado = true });
                 return retval;
             }
 

@@ -89,19 +89,19 @@ namespace Site.Models {
             AfterSave();
         }
 
-        // elimina ItemMercaderia/s vacios
-        private void validateMercaderias() {
-            _Mercaderias = (from ItemMercaderia im in _Mercaderias where (!im.ProductoID.IsEmpty()  && !im.sinExistencias()) select im).ToList();
-        }
-
         public virtual void AfterSave() {
             if (HasItems()) {
                 foreach (ItemMercaderia im in _Mercaderias) {
                     im.MercaderiaID = MercaderiaID;
                     DbHelper.CurrentDb().SaveAndLog(im);
-                }   
+                }
             }
-        }  
+        }
+
+        // elimina ItemMercaderia/s vacios
+        private void validateMercaderias() {
+            _Mercaderias = (from ItemMercaderia im in _Mercaderias where (!im.ProductoID.IsEmpty()  && !im.sinExistencias()) select im).ToList();
+        }
 
         public bool Equals(Mercaderia other) {
             validateMercaderias();

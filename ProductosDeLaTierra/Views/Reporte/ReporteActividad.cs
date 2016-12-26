@@ -106,8 +106,8 @@ namespace Site.Models {
                 sql.AppendKeywordMatching(this.Producto, "ISNULL(Convert(varchar(12),Producto.CodigoArticulo ),'') + ' - ' + ISNULL(Convert(varchar(50),Producto.Descripcion),'')");
             }
             sql.Append("GROUP BY ");
-            sql.Append("Cargamento.NumeroRemito,");
             sql.Append("Cargamento.FechaEnvio,");
+            sql.Append("Cargamento.NumeroRemito,");
             sql.Append("Proveedor.Nombre,");
             sql.Append("Cliente.Nombre,");
             sql.Append("Producto.ProductoID,");
@@ -117,9 +117,9 @@ namespace Site.Models {
             sql.Append("ItemRecepcion.Cantidad,");
             sql.Append("Cargamento.CargamentoID,");
             sql.Append("Producto.ProductoID");
-            sql.Append("ORDER BY Cargamento.FechaEnvio,Cargamento.NumeroRemito  ASC");
+            sql.Append("ORDER BY Cargamento.FechaEnvio  DESC");
             Resultado = DbHelper.CurrentDb().Fetch<ReporteActividadItem>(sql);
-            Resultado.Reverse();
+            //Resultado.Reverse();
         }
 
 

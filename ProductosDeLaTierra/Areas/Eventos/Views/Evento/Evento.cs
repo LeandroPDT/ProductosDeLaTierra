@@ -39,7 +39,7 @@ namespace Site.Models {
 		[Display(Name = "Ganancia ($)")]
 		[DataType(DataType.Currency)]
         [Required]
-		public Decimal Ganancia { get; set; }
+		public double Ganancia { get; set; }
 
         [PetaPoco.Column("Notas")]
 		[Display(Name = "Notas")]
@@ -121,7 +121,7 @@ namespace Site.Models {
                 ModelState.AddModelError("FechaEnvio", "Debe especificar una fecha que no sea posterior a hoy");
                 return false;
             }
-            if (Cargamento.IsValid(ModelState) && Mercaderia.IsValid(ModelState) && validateRelatedObjects(ModelState)) {
+            if (Cargamento.IsValid(ModelState) && (!new EventoTipo(TipoEventoID).TieneMercaderia || (Mercaderia.IsValid(ModelState) && validateRelatedObjects(ModelState)))) {
                 string nombreEvento = new EventoTipo(TipoEventoID).Nombre;
                 string estadoInicialValido=new EventoTipo(TipoEventoID).EstadoInicial;
                 if (IsNew() && (Cargamento.Estado != estadoInicialValido )) {
@@ -129,7 +129,7 @@ namespace Site.Models {
                     return false;
                 }
                 string estadoFinalValido=new EventoTipo(TipoEventoID).EstadoFinal;
-                if (!IsNew() && (Cargamento.Estado != estadoFinalValido && !Cargamento.EnEstadoFinal)) {
+                if (!IsNew() && (Cargamento.Estado != estadoFinalValido && !Cargamento.Vendido && new EventoTipo(TipoEventoID).TieneMercaderia)) {
                     ModelState.AddModelError("NumeroRemito", "El cargamento debe estar "+estadoFinalValido+" para editar su "+nombreEvento);
                     return false;
                 }
@@ -137,18 +137,7 @@ namespace Site.Models {
             }
             return false;
         }
-
-        /* No lo ncesitamos todavia
-        public Evento ToEvento() {
-            return this;
-        }
-
-        public T FromEvento<T>(Evento otroEvento) {
-            // nos evita asignar uno por uno los atributos.
-            AutoMapper.Mapper.CreateMap<Evento, T>();
-            return AutoMapper.Mapper.Map<T>(otroEvento);
-        }
-        */
+        
         public void Save() {
             var db = DbHelper.CurrentDb();
             using (var scope = db.GetTransaction()) {
@@ -164,22 +153,25 @@ namespace Site.Models {
             updateRelatedObjects();
             Cargamento.DoSave();
             CargamentoID = Cargamento.CargamentoID;
-            Mercaderia.DoSave();
-            MercaderiaID = Mercaderia.MercaderiaID;
-            
+            if (new EventoTipo(this.TipoEventoID).TieneMercaderia) {
+                Mercaderia.DoSave();
+                MercaderiaID = Mercaderia.MercaderiaID;
+            }            
         }
 
         private bool validateRelatedObjects(ModelStateDictionary state) {
             Mercaderia oldMercaderia = IsNew()?new Mercaderia():Mercaderia.SingleOrDefault(MercaderiaID??0)?? new Mercaderia();
             bool eventoSumaMercaderia = new EventoTipo(TipoEventoID).SumaMercaderia;
+            /*
             if (!eventoSumaMercaderia && (Cargamento.Mercaderia.Peso < (Mercaderia.Peso-oldMercaderia.Peso))) {
                 state.AddModelError("Mercaderia.Peso","El peso de la mercadería no puede ser mayor al peso de la mercadería del cargamento");
                 return false;
             }
-            if (!eventoSumaMercaderia && (Cargamento.Mercaderia.Bultos < (Mercaderia.Bultos-oldMercaderia.Bultos))) {
+            if (!eventoSumaMercaderia && (Cargamento.Mercaderia.Bultos <= (Mercaderia.Bultos-oldMercaderia.Bultos))) {
                 state.AddModelError("Mercaderia.Bultos","Los bultos de la mercadería no pueden ser mayores a los bultos de la mercadería del cargamento");
                 return false;
             }
+            */
             foreach (ItemMercaderia im in Mercaderia.Mercaderias) {
                 if (im.ProveedorID != Cargamento.ProveedorID) {
                     state.AddModelError("Mercaderia.Mercaderias_" + Mercaderia.Mercaderias.IndexOf(im) + "__Descripcion", "No pueden agregarse artículos a las mercaderías que no sean del proveedor del cargamento");
@@ -242,79 +234,92 @@ namespace Site.Models {
         private void reverseEstado() {
             string estadoInicialValido=new EventoTipo(TipoEventoID).EstadoInicial;
             string estadoFinalValido=new EventoTipo(TipoEventoID).EstadoFinal;
-            Cargamento.Estado = (Cargamento.Estado == estadoFinalValido || Cargamento.EnEstadoFinal)? estadoInicialValido : Cargamento.Estado;
+            Cargamento.Estado = (Cargamento.Estado == estadoFinalValido || (Cargamento.EnEstadoFinal && new EventoTipo(this.TipoEventoID).TieneMercaderia))? estadoInicialValido : Cargamento.Estado;
         }
 
         private void updateMercaderia() {
             bool cargamentoVendido = true;
             bool eventoSumaMercaderia = new EventoTipo(this.TipoEventoID).SumaMercaderia;
+            bool eventoTieneMercaderia = new EventoTipo(this.TipoEventoID).TieneMercaderia;
             Mercaderia oldMercaderia = IsNew()?new Mercaderia():Mercaderia.SingleOrDefault(MercaderiaID??0)?? new Mercaderia();
-            
-            Cargamento.Ganancia += eventoSumaMercaderia ? 0 : Tipo=="Decomisación"? 0:Mercaderia.Precio-oldMercaderia.Precio;
-            var mercaderiaCargamento = Cargamento.Mercaderia;
-            if (eventoSumaMercaderia) {
-                mercaderiaCargamento.Precio = Mercaderia.Precio;
-                mercaderiaCargamento.Peso=  Mercaderia.Peso;
-                mercaderiaCargamento.Bultos=  Mercaderia.Bultos;            
-            }
-            else {
-                mercaderiaCargamento.Precio += -(Mercaderia.Precio-oldMercaderia.Precio);
-                mercaderiaCargamento.Peso+=  -(Mercaderia.Peso-oldMercaderia.Peso);
-                mercaderiaCargamento.Bultos+= -(Mercaderia.Bultos-oldMercaderia.Bultos); 
-            }
-            foreach(ItemMercaderia im in Mercaderia.Mercaderias){
-                ItemMercaderia itemACambiar = (from ItemMercaderia cargamentoIm in mercaderiaCargamento.Mercaderias where cargamentoIm.ProductoID == im.ProductoID select cargamentoIm).SingleOrDefault();
-                if (itemACambiar == null ) {
-                    // es nuevo en el cargamento
-                    // debo clonarlo para que las mercaderias referencien a distintos ItemMercaderias
-                    ItemMercaderia oldImChanged = (from ItemMercaderia oldIm in oldMercaderia.Mercaderias where oldIm.ProductoID == im.ProductoID && oldIm.ItemMercaderiaID == im.ItemMercaderiaID select oldIm).SingleOrDefault();
-                    
-                    if (oldImChanged == null) {
-                        // si no existia previamente, solo permito que altere las mercaderias del cargamento si es un evento que suma mercaderia, estilo checkpoint del estado del cargamento.
-                        if (eventoSumaMercaderia) { 
-                            mercaderiaCargamento.Mercaderias.Add(new ItemMercaderia() { ProductoID = im.ProductoID, Bultos = im.Bultos, Peso = im.Peso, PrecioUnitario = im.PrecioUnitario,PesoUnitario = im.PesoUnitario,  PrecioKg = im.PrecioKg, Cantidad = im.Cantidad, Precio = im.Precio });
-                            // el cargamento no puede estar vendido en este caso porque se acaba de agregar un elemento
-                            cargamentoVendido = false;
+
+            var liquidacionCargamento = new Liquidacion(Cargamento.CargamentoID);
+            Cargamento.Ganancia += eventoSumaMercaderia ? -(Cargamento.CostoFlete-liquidacionCargamento.CostoFlete)-(Cargamento.CostoDescarga- liquidacionCargamento.CostoDescarga) : Tipo=="Decomisación"? 0: eventoTieneMercaderia? (Mercaderia.Precio-oldMercaderia.Precio)*(1-liquidacionCargamento.PorcComision) : - (Ganancia- (IsNew()?0:Evento.SingleOrDefault(EventoID).Ganancia)) ;
+
+            if (eventoTieneMercaderia) {
+                var mercaderiaCargamento = Cargamento.Mercaderia;
+                if (eventoSumaMercaderia) {
+                    mercaderiaCargamento.Precio = Mercaderia.Precio;
+                    mercaderiaCargamento.Peso = Mercaderia.Peso;
+                    mercaderiaCargamento.Bultos = Mercaderia.Bultos;
+                } else {
+                    mercaderiaCargamento.Precio += -(Mercaderia.Precio - oldMercaderia.Precio);
+                    mercaderiaCargamento.Peso += -(Mercaderia.Peso - oldMercaderia.Peso);
+                    mercaderiaCargamento.Bultos += -(Mercaderia.Bultos - oldMercaderia.Bultos);
+                }
+                foreach (ItemMercaderia im in Mercaderia.Mercaderias) {
+                    ItemMercaderia itemACambiar = (from ItemMercaderia cargamentoIm in mercaderiaCargamento.Mercaderias where cargamentoIm.ProductoID == im.ProductoID select cargamentoIm).SingleOrDefault();
+                    if (itemACambiar == null) {
+                        // es nuevo en el cargamento
+                        // debo clonarlo para que las mercaderias referencien a distintos ItemMercaderias
+                        ItemMercaderia oldImChanged = (from ItemMercaderia oldIm in oldMercaderia.Mercaderias where oldIm.ProductoID == im.ProductoID && oldIm.ItemMercaderiaID == im.ItemMercaderiaID select oldIm).SingleOrDefault();
+
+                        if (oldImChanged == null) {
+                            // si no existia previamente, solo permito que altere las mercaderias del cargamento si es un evento que suma mercaderia, estilo checkpoint del estado del cargamento.
+                            if (eventoSumaMercaderia) {
+                                mercaderiaCargamento.Mercaderias.Add(new ItemMercaderia() { ProductoID = im.ProductoID, Bultos = im.Bultos, Peso = im.Peso, PrecioUnitario = im.PrecioUnitario, PesoUnitario = im.PesoUnitario, PrecioKg = im.PrecioKg, Cantidad = im.Cantidad, Precio = im.Precio });
+                                // el cargamento no puede estar vendido en este caso porque se acaba de agregar un elemento
+                                cargamentoVendido = false;
+                            }
+                        } else {
+                            // si el item existia en el evento pero no en el cargamento, acepto que sea una modificacion de eventos que restan mercaderia
+                            if (!eventoSumaMercaderia) {
+                                mercaderiaCargamento.Mercaderias.Add(new ItemMercaderia() { ProductoID = im.ProductoID, Bultos = -(im.Bultos - oldImChanged.Bultos), Peso = -(im.Peso - oldImChanged.Peso), PrecioUnitario = oldImChanged.PrecioUnitario, PesoUnitario = oldImChanged.PesoUnitario, PrecioKg = oldImChanged.PrecioKg, Cantidad = -(im.Cantidad - oldImChanged.Cantidad), Precio = -(im.Precio - oldImChanged.Precio) });
+                                // el cargamento no puede estar vendido en este caso porque se acaba de agregar un elemento
+                                cargamentoVendido = false;
+                            }
                         }
-                    }
-                    else {
-                        // si el item existia en el evento pero no en el cargamento, acepto que sea una modificacion de eventos que restan mercaderia
-                        if (!eventoSumaMercaderia) { 
-                            mercaderiaCargamento.Mercaderias.Add(new ItemMercaderia() { ProductoID = im.ProductoID, Bultos = -(im.Bultos-oldImChanged.Bultos), Peso = -(im.Peso-oldImChanged.Peso), PrecioUnitario = oldImChanged.PrecioUnitario,PesoUnitario = oldImChanged.PesoUnitario,  PrecioKg = oldImChanged.PrecioKg, Cantidad = -(im.Cantidad-oldImChanged.Cantidad), Precio = -(im.Precio-oldImChanged.Precio)});
-                            // el cargamento no puede estar vendido en este caso porque se acaba de agregar un elemento
-                            cargamentoVendido = false;
+                    } else {
+                        double nuevoPeso;
+                        int nuevaCantidad;
+                        ItemMercaderia oldImChanged = (from ItemMercaderia oldIm in oldMercaderia.Mercaderias where oldIm.ProductoID == im.ProductoID && oldIm.ItemMercaderiaID == im.ItemMercaderiaID select oldIm).SingleOrDefault();
+
+                        if (oldImChanged == null) {
+                            // no existia el item en el evento.  
+                            nuevoPeso = eventoSumaMercaderia ? im.Peso : -im.Peso;
+                            nuevaCantidad = eventoSumaMercaderia ? im.Cantidad : -im.Cantidad;
+                            itemACambiar.actualizarAgregaciones(eventoSumaMercaderia, new ItemMercaderia() { Bultos = im.Bultos, Peso = nuevoPeso, PrecioUnitario = im.PrecioUnitario, PesoUnitario = im.PesoUnitario, PrecioKg = im.PrecioKg, Cantidad = nuevaCantidad, Precio = im.Precio });
+                        } else {
+                            if (!oldImChanged.Equals(im)) {
+                                //el item existia pero cambio en alguna propiedad
+                                nuevoPeso = eventoSumaMercaderia ? (im.Peso - oldImChanged.Peso) : -(im.Peso - oldImChanged.Peso);
+                                nuevaCantidad = eventoSumaMercaderia ? (im.Cantidad - oldImChanged.Cantidad) : -(im.Cantidad - oldImChanged.Cantidad);
+                                itemACambiar.actualizarAgregaciones(eventoSumaMercaderia && IsNew(), new ItemMercaderia() { Bultos = im.Bultos, Peso = nuevoPeso, PrecioUnitario = im.PrecioUnitario, PesoUnitario = im.PesoUnitario, PrecioKg = im.PrecioKg, Cantidad = nuevaCantidad, Precio = im.Precio });
+                            }
                         }
+                        cargamentoVendido = itemACambiar.sinExistencias() && cargamentoVendido;
                     }
                 }
-                else {
-                    double nuevoPeso;
-                    int nuevaCantidad;
-                    ItemMercaderia oldImChanged = (from ItemMercaderia oldIm in oldMercaderia.Mercaderias where oldIm.ProductoID == im.ProductoID && oldIm.ItemMercaderiaID == im.ItemMercaderiaID select oldIm).SingleOrDefault();
-                    
-                    if (oldImChanged == null) {
-                        // no existia el item en el evento.  
-                        nuevoPeso = eventoSumaMercaderia ? im.Peso : -im.Peso;
-                        nuevaCantidad = eventoSumaMercaderia ? im.Cantidad : -im.Cantidad;
-                        itemACambiar.actualizarAgregaciones(eventoSumaMercaderia,new ItemMercaderia() {  Bultos = im.Bultos, Peso = nuevoPeso, PrecioUnitario = im.PrecioUnitario,PesoUnitario = im.PesoUnitario,  PrecioKg = im.PrecioKg, Cantidad = nuevaCantidad, Precio = im.Precio });
-                    }
-                    else {
-                        if (!oldImChanged.Equals(im)) {
-                            //el item existia pero cambio en alguna propiedad
-                            nuevoPeso = eventoSumaMercaderia ? (im.Peso - oldImChanged.Peso):-(im.Peso - oldImChanged.Peso);
-                            nuevaCantidad = eventoSumaMercaderia ? (im.Cantidad - oldImChanged.Cantidad) : -(im.Cantidad - oldImChanged.Cantidad);
-                            itemACambiar.actualizarAgregaciones(eventoSumaMercaderia&&IsNew(),new ItemMercaderia() {  Bultos = im.Bultos, Peso = nuevoPeso, PrecioUnitario = im.PrecioUnitario,PesoUnitario = im.PesoUnitario, PrecioKg = im.PrecioKg, Cantidad = nuevaCantidad, Precio = im.Precio });
-                        }
-                    }
-                    cargamentoVendido = itemACambiar.sinExistencias()&& cargamentoVendido;
-                }
             }
+            EventoTipo tipo = new EventoTipo(TipoEventoID);
             int cantidadRemanentes = (from ItemMercaderia im in Cargamento.Mercaderia.Mercaderias where !im.sinExistencias() select im).ToList().Count;
             if (cargamentoVendido || cantidadRemanentes == 0){
-                if (!Cargamento.IsNew() && Cargamento.Estado=="Recibido" && cantidadRemanentes == 0)
-                    Cargamento.Estado = "Vendido";
+                if (tipo.TieneMercaderia) {
+                    if (!Cargamento.IsNew() && Cargamento.Estado == "Recibido" && cantidadRemanentes == 0) {
+                        Cargamento.Estado = "Vendido";
+                        //Cargamento.Ganancia = liquidacionCargamento.GananciaTotal + (IsNew()?Ganancia: Ganancia- Evento.SingleOrDefault(EventoID).Ganancia) * (liquidacionCargamento.PorcComision);
+                    }
+                } else {
+                    if (!Cargamento.IsNew() && ((IsNew() && Cargamento.Estado == "Vendido") || (!IsNew())) && ((Cargamento.Ganancia <= 0) && Ganancia>=0)) {
+                        Cargamento.Estado = "Cobrado";
+                    } else {
+                        Cargamento.Estado = "Vendido";
+                        //Cargamento.Ganancia = liquidacionCargamento.GananciaTotal + (IsNew() ? Ganancia : Ganancia - Evento.SingleOrDefault(EventoID).Ganancia) * (liquidacionCargamento.PorcComision);
+                    }
                 }
+            }
             else{
-                if (!eventoSumaMercaderia && cantidadRemanentes>0) {
+                if (!eventoSumaMercaderia && cantidadRemanentes>0 && tipo.TieneMercaderia) {
                     // si el evento no suma mercaderia y no se vaciaron los items del cargamento entonces aun no esta vendido.
                     reverseEstado();
                 }
@@ -322,8 +327,8 @@ namespace Site.Models {
         }
 
         public void notifyIfObjectEnds() {
-            if (Cargamento.EnEstadoFinal) {
-                EventoTipo tipo = new EventoTipo(TipoEventoID);
+            EventoTipo tipo = new EventoTipo(TipoEventoID);
+            if ((Cargamento.Vendido || Cargamento.Cobrado) && IsNew()) {
                 string url = "http://" + Sitio.WebsiteURL + "/Reporte/Liquidacion/"+ CargamentoID.ToString();
                 string title = "[ProductosDeLaTierra] "+Cargamento.ToString()+" "+Cargamento.Estado;
                 string message = Cargamento.ToString()+", enviado al cliente "+Cargamento.Cliente+", está "+Cargamento.Estado;
@@ -334,9 +339,10 @@ namespace Site.Models {
         }
 
         public void notifyIfExistsDiffrence() {
+            EventoTipo tipo = new EventoTipo(TipoEventoID);
             // solo se notifica si no es el evento inicial, el evento define la mercaderia del cargamento y existe una difecencia con las mercaderias actuales del mismo.
-            if (new EventoTipo(TipoEventoID).SumaMercaderia && !Mercaderia.Equals(prevCheckpointEvent().Mercaderia) && TipoEventoID>1 ) {
-                EventoTipo tipo = new EventoTipo(TipoEventoID);
+            if (tipo.TieneMercaderia && tipo.SumaMercaderia && !Mercaderia.Equals(prevCheckpointEvent().Mercaderia) && TipoEventoID>1 ) {
+                
                 string url = "http://" + Sitio.WebsiteURL +"/Eventos/Evento/Editar/" + tipo.Nombre + "/" + CargamentoID.ToString(); // solo puede ir el cargamento id porque suma mercaderia y es unico para cada cargamento.
                 string title = "[ProductosDeLaTierra] Diferencia de mercadería entre "+new Evento(){TipoEventoID=this.TipoEventoID-1}.Tipo+" y "+ Tipo +" de "+Cargamento.ToString();
                 string message = "Se registró una diferencia entre las mercaderías en " + new Evento(){TipoEventoID=this.TipoEventoID-1}.Tipo + " y " + Tipo + " de " + Cargamento.ToString();
@@ -382,7 +388,12 @@ namespace Site.Models {
                     AdministradoresNotificables.Add(usuarioANotificar);
                 }
             }
-            return AdministradoresNotificables;
+            var distinctUsuarios = new List<Usuario>();
+            foreach(Usuario us in AdministradoresNotificables) {
+                if (!distinctUsuarios.Any(usuario => us.Email==usuario.Email))
+                    distinctUsuarios.Add(us);
+            }
+            return distinctUsuarios;
         }
 
         public void notify(ModelStateDictionary state) {                
@@ -467,9 +478,10 @@ namespace Site.Models {
 
         private void updateRelatedObjects(){
             updateEstado();
-            
+            EventoTipo tipo = new EventoTipo(TipoEventoID);
+
             Mercaderia oldMercaderia = IsNew()?new Mercaderia():Mercaderia.SingleOrDefault(MercaderiaID??0)?? new Mercaderia();
-            if (!oldMercaderia.Equals(Mercaderia)) {
+            if (!oldMercaderia.Equals(Mercaderia) || !tipo.TieneMercaderia) {
                 try {
                     notifyIfExistsDiffrence();
                 } catch(Exception){
@@ -529,32 +541,40 @@ namespace Site.Models {
 
         // se tomaran acciones para dejar la base de datos en un estado válido y eliminar el objeto .
         public virtual void BeforeDelete() {
-            if (MercaderiaID > 0){
-                foreach (ItemMercaderia im in Mercaderia.Mercaderias) {
-                    im.Peso = im.Cantidad = im.Bultos = 0;
-                }
-                Mercaderia.Peso = Mercaderia.Precio = Mercaderia.Bultos = 0;
-                if (new EventoTipo(TipoEventoID).SumaMercaderia) {
-                    if ((TipoEventoID-1) == 0) {
-                        // se elimina el evento que dio origen al cargamento.
-                        // si este evento dio origen, se encarga de borrar todo.
-                        DbHelper.CurrentDb().Execute("DELETE FROM Evento WHERE EventoID = @0", this.EventoID);
-                        Cargamento.DoDelete();
+            var tipo = new EventoTipo(TipoEventoID);
+            if (tipo.TieneMercaderia) {
+                if (MercaderiaID > 0){
+                    foreach (ItemMercaderia im in Mercaderia.Mercaderias) {
+                        im.Peso = im.Cantidad = im.Bultos = 0;
+                    }
+                    Mercaderia.Peso = Mercaderia.Precio = Mercaderia.Bultos = 0;
+                    if (tipo.SumaMercaderia) {
+                        if ((TipoEventoID-1) == 0) {
+                            // se elimina el evento que dio origen al cargamento.
+                            // si este evento dio origen, se encarga de borrar todo.
+                            DbHelper.CurrentDb().Execute("DELETE FROM Evento WHERE EventoID = @0", this.EventoID);
+                            Cargamento.DoDelete();
+                        }
+                        else {
+                            reverseEstado();
+                            Evento eventToRestore = prevCheckpointEvent();
+                            eventToRestore.EventoID = 0;
+                            eventToRestore.Cargamento = Cargamento;
+                            eventToRestore.updateRelatedObjects();
+                            Cargamento.DoSave();
+                        }
                     }
                     else {
+                        updateMercaderia();
                         reverseEstado();
-                        Evento eventToRestore = prevCheckpointEvent();
-                        eventToRestore.EventoID = 0;
-                        eventToRestore.Cargamento = Cargamento;
-                        eventToRestore.updateRelatedObjects();
                         Cargamento.DoSave();
                     }
                 }
-                else {
-                    updateMercaderia();
-                    reverseEstado();
-                    Cargamento.DoSave();
-                }
+            } else {
+                Ganancia = 0;
+                updateMercaderia();
+                reverseEstado();
+                Cargamento.DoSave();
             }
         }
 
@@ -568,7 +588,9 @@ namespace Site.Models {
 
         // solo se tomaran acciones para eliminar los objetos que alla creado.
         public virtual void AfterDelete() {
-            Mercaderia.DoDelete();
+            EventoTipo type = new EventoTipo(TipoEventoID);
+            if (type.TieneMercaderia)
+                Mercaderia.DoDelete();
         }
 
         public bool mostrarRemanente(){

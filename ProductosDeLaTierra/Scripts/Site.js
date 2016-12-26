@@ -71,7 +71,30 @@
                         $(this).val("").change();
                 });
             });            
-        });
+    });
+
+    $(parent + ' .cargamentolistinput').each(function (i, el) {
+        dosuperlistinput(el, function (elControl, data) {
+            var row = elControl.closest("tr");
+            row.find("td").each(function (i, elInput) {
+                elInput = $(elInput);
+                if (elInput.hasClass("remanente") && data.Ganancia != null && data.Ganancia >= 0)
+                    elInput.text(parseFloat(data.Ganancia, 10).toFixed(2)).change();
+            });
+            row.find("input").each(function (i, elInput) {
+                elInput = $(elInput);
+                if (elInput.attr("name") != null && elInput.attr("name").endsWith("CargamentoID") && data.ID != null && data.ID > 0)
+                    elInput.val(data.ID).change()
+            });
+        }
+            , function (elControl) { // OnFailture: si falla que lleve todos los valores de la linea a vacio.
+                var row = elControl.closest("tr");
+                row.find("input").each(function (i, elInput) {
+                    if (!$(this).attr("name").endsWith("ItemCargamentoID"))
+                        $(this).val("").change();
+                });
+            });
+    });
 
     $(parent + ' .usuariolistinput').each(function (i, el) {
         var onSuccess = null;
@@ -79,6 +102,10 @@
             // si se selecciona el proveedor, entonces altero los controles para que solo busquen productos de este proveedor.
             onSuccess= function (elControl, data) {
                 $(".productolistinput").each(function (i, el) {
+                    $(this).data('params')['ProveedorID'] = data.ID;
+                    $(this).attr('data-params', '{"ProveedorID":"' + data.ID + '"}');
+                });
+                $(".cargamentolistinput").each(function (i, el) {
                     $(this).data('params')['ProveedorID'] = data.ID;
                     $(this).attr('data-params', '{"ProveedorID":"' + data.ID + '"}');
                 });
@@ -1047,7 +1074,7 @@ function dolistinput(el, OnSuccess, OnFailture) {
     el.blur(function (event) {
         if ($.trim(el.val()) == "") {
             elprev.val("0").change();
-            el.change();
+             el.change();
             if (tieneExtraInfo) elExtraInfo.hide();
         }
         else if ((elprev.val() == "0" || elprev.val() == "") && (el.val() != "")) {

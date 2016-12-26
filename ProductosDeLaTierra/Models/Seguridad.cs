@@ -26,8 +26,10 @@ namespace Site.Models {
             Liquidacion = 10,
             Modificar_Cualquier_Incidente = 11,
             Remanente = 12,
-            ReporteActividad = 13
-	    }
+            ReporteActividad = 13,
+            EventoCobro = 14,
+            Cobranza = 15
+        }
 
 		public static void CheckNuevosPermisos() {
 			var db = DbHelper.CurrentDb();

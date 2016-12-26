@@ -206,6 +206,7 @@ table.sortable thead .header,
 	background-position: center right;
 	background-repeat: no-repeat;
 	cursor: pointer;
+    padding-right: 15px;
 }
 
 table.sortable thead .headerSortUp,
@@ -353,6 +354,7 @@ table.simpletable2 tfoot {font-weight: bold; border-top: 1px solid #ccc; }
 .enviado { color: #a00000;font-weight:bold;}
 .recibido { color: #ba8318;font-weight:bold;}
 .vendido { color: green;font-weight:bold;}
+.cobrado { color: #000066;font-weight:bold;}
 
 .help {border: 1px solid white; margin: 0 5px; float: right;}
 #autohelp {position: fixed; right: 0; top: 110px; border: 1px solid #ffff66; background: #ffffe6; width: 100px; min-height: 50px; padding: 10px;}

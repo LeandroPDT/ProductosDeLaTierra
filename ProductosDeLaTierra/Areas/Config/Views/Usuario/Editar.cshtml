@@ -46,8 +46,8 @@
 	        <tr>
                 <th>@Html.LabelFor(model => model.Email)</th>
                 <td>@Html.EditorFor(model => model.Email, new { style = "width: 400px" })
-                    @Html.ValidationMessageFor(model => model.Email)
-                    <div class="smalltext">Se usará para comunicarse con el usuario y para recuperación de contraseña</div>
+                    @*@Html.ValidationMessageFor(model => model.Email)*@
+                    <div class="smalltext">Se usará para comunicarse con el usuario y para recuperación de contraseña.<br/>Pueden cargarse múltiples mail separados por ";".</div>
                 </td>
 	        </tr>
 	        <tr>

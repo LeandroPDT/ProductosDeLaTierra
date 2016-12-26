@@ -288,7 +288,9 @@ namespace Site.Models {
 				m = new BizMenu("Productos", "/Producto", "", "",8);
 				//m.subMenu = EventosSubMenu();
 				retval.Add(m);
-				m = new BizMenu("Reportes", "/Reporte", "", "",13);
+                m = new BizMenu("Cobranzas", "/Cobranza", "", "", 14);
+                retval.Add(m);
+                m = new BizMenu("Reportes", "/Reporte", "", "",13);
 				m.subMenu = ReporteSubMenu();
 				retval.Add(m);
             }

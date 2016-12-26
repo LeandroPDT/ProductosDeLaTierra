@@ -40,7 +40,6 @@ namespace Site.Models
 
         [Column("EMail")]
         [Display(Name = "EMail")]
-        [DataType(DataType.EmailAddress)]
         [Required]
         public String Email { get; set; }
 

@@ -1,0 +1,93 @@
+﻿@model Site.Models.Cobranza
+
+@{
+    ViewBag.Title = Model.ToString();
+}
+
+@if (!Request.IsAjaxRequest()) {
+    <div class="botonera">
+        @Html.Action("Toolbox", "Entidad", new { e = Entidad.GetFromModel(Model) })
+    </div>
+}
+
+<h1>@b.Visitar(ViewBag.Title)</h1>
+
+<div class="newelements">
+    @using (Html.BeginForm("Editar", "Cobranza")) {
+        @Html.ValidationSummary()
+        @Html.HiddenFor(model => Model.CobranzaID)
+        if (!Sitio.EsEmpleado) {
+            @Html.HiddenFor(model => Model.ProveedorID)
+        }
+        <br />
+        <table class="formulario">
+            <tr>
+                <th><label class="intralabel">Fecha</label></th>
+                <td>@Html.EditorFor(model => model.Fecha)</td>
+            </tr>
+            @if (Sitio.EsEmpleado) {
+                <tr>
+                    <th>@Html.LabelFor(model => Model.ProveedorID)</th>
+                    <td>@Html.UsuarioSuperList("ProveedorID", "ProveedorIDNombre", Model.ProveedorID.ZeroToNull(), Model.Proveedor, new UsuarioSuperListHtmlHelper.Options() { Rol = "Proveedor" })</td>
+                </tr>
+            }
+            <tr>
+                <th>@Html.LabelFor(model => model.Referencia)</th>
+                <td>@Html.EditorFor(model => model.Referencia)</td>
+            </tr>
+            <tr>
+                <th>@Html.LabelFor(model => model.Notas)</th>
+                <td>@Html.EditorFor(model => model.Notas)</td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <table class="nakedtable" data-initializefunction="">
+                        <thead>
+                            <tr>
+                                <th><label class="intralabel">Cargamento<br />(Nro. Remito)</label></th>
+                                <th>@Html.LabelFor(model => Model.Cobranzas[0].Referencia)</th>
+                                <th>@Html.LabelFor(model => Model.Cobranzas[0].Medio)</th>
+                                <th>@Html.LabelFor(model => Model.Cobranzas[0].Monto)</th>     
+                                <th class="remanente" ><label class="intralabel">Pendiente<br /> de Cobro ($)</label></th>                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Cobranzas.Count(); i++) {
+                                <tr>
+                                    <td>@Html.CargamentoSuperList("CargamentoID", "NumeroRemito", Model.Cobranzas[i].CargamentoID.ZeroToNull(), Model.Cobranzas[i].NumeroRemito.ToString(), "Cobranzas", i, new CargamentoSuperListHtmlHelper.Options() { Estado = "Vendido",ProveedorID = Model.ProveedorID })</td>
+                                    <td>@Html.EditorFor(model => Model.Cobranzas[i].Referencia) </td>                                    
+                                    <td>@Html.DropDownListFor(model => Model.Cobranzas[i].Medio, ItemCobranza.MedioSelectList(Model.Cobranzas[i].Medio)) </td>     
+                                    <td>@Html.EditorFor(model => Model.Cobranzas[i].Monto, new { @class = "precio", @style = "width:60px" }) @Site.Models.SpinnerMinusHtmlHelper.SpinnerMinus("Cobranzas_" + i.ToString() + "__Monto") @Site.Models.SpinnerPlusHtmlHelper.SpinnerPlus("Cobranzas_" + i.ToString() + "__Monto") </td>                                    
+                                    <td class="remanente" style="text-align:center"></td>
+                                    @Html.HiddenFor(model => Model.Cobranzas[i].ItemCobranzaID, new { @value = Model.Cobranzas[i].ItemCobranzaID.ToString() })
+                                    @Html.HiddenFor(model => Model.Cobranzas[i].CobranzaID, new { @value = Model.CobranzaID.ToString() })
+                                    @Html.HiddenFor(model => Model.Cobranzas[i].EventoID, new { @value = Model.Cobranzas[i].EventoID.ToString() })
+                                    @Html.HiddenFor(model => Model.Cobranzas[i].ProveedorID)
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            @Html.AgregarLineaTr(3)
+                            <tr>
+                                <th colspan="3" style="text-align:right"><label class="intralabel">Total</label></th>                                
+                                <td>@Html.EditorFor(model => Model.Monto, new { @class = "preciototal" })</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <script type="text/javascript">
+                        $(".agregarLineaRow").prepend('<td class="agregarLinea" style="text-align:left">Dejar vacío para borrar la línea</td>');
+                    </script>
+                    <br />
+                    <p class="agregarLinea">Valide el formulario a guardar, se requerirán permisos de administrador para borrarlo.</p>
+                </td>
+            </tr>
+
+            @if (!Request.IsAjaxRequest()) {
+                <tr>
+                    <td><input type="submit" value="Guardar" class="defaultbutton" /></td>
+                </tr>
+            }
+        </table>
+    }
+</div>

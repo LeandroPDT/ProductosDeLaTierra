@@ -79,8 +79,10 @@ namespace Site.Models {
             Cargamento.AppendEstadoMatching(sql, Estado);
             Cargamento.AppendTipoVentaMatching(sql, TipoVenta);
 
+            sql.Append("ORDER BY Cargamento.FechaEnvio DESC");
+
             Resultado = DbHelper.CurrentDb().Fetch<Cargamento>(sql);
-            Resultado.Reverse();
+            //Resultado.Reverse();
         }
         
     }

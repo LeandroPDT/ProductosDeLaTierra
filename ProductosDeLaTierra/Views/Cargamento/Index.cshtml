@@ -15,7 +15,7 @@
 
 @using (Html.BeginForm()) {
     <div class="formbuscar">
-        <label class="intralabel">Cargamento:</label>@Html.EditorFor(model => Model.q, new{ @placeholder=  "Por Nro. Remito o Fecha de envío (DD/MM/YYYY)" , @style = "width:250px"})
+        <label class="intralabel">Cargamento:</label>@Html.EditorFor(model => Model.q, new{ @placeholder=  "Por Nro. Remito o Fecha de envío (DD/MM/YYYY)" , @style = "width:300px"})
         <label class="intralabel">Enviados Desde:</label>@Html.EditorFor(model => model.FechaDesde)
         <label class="intralabel">Hasta:</label>        @Html.EditorFor(model => model.FechaHasta)
         <br />
@@ -59,7 +59,7 @@
                     @if (Seguridad.CanAccess(Seguridad.Permisos.EventoVenta) && item.Estado == "Recibido") { <a href="/Eventos/Evento/Nuevo/Venta/@item.CargamentoID.ToString()" class="button " data-callback="location.reload()">Registrar Venta</a>}
                     @if (Seguridad.CanAccess(Seguridad.Permisos.EventoDecomisacion) && item.Estado == "Recibido") { <a href="/Eventos/Evento/Nuevo/Decomisacion/@item.CargamentoID.ToString()" class="button" data-callback="location.reload()">Decomisar Mercadería</a>}
                     @if (Seguridad.CanAccess(Seguridad.Permisos.Liquidacion) && item.Estado != "Enviado") { <a href="/Reporte/Liquidacion/@item.CargamentoID.ToString()" class="button" >Liquidación</a>}
-                    @if (Seguridad.CanAccess(Seguridad.Permisos.Remanente) && item.Estado != "Vendido") {<a href="/Cargamento/VerMercaderia/@item.CargamentoID.ToString()" class="button minidialog">Ver Remanente</a>}
+                    @if (Seguridad.CanAccess(Seguridad.Permisos.Remanente) && item.Estado != "Vendido" && item.Estado != "Cobrado") {<a href="/Cargamento/VerMercaderia/@item.CargamentoID.ToString()" class="button minidialog">Ver Remanente</a>}
                     @if (Seguridad.CanDelete(Seguridad.Permisos.Cargamento)){<a href="/Cargamento/Borrar/@item.CargamentoID.ToString()" class="button minidelete"><i class="icon-remove"></i></a>}
                 </span>)));
     }

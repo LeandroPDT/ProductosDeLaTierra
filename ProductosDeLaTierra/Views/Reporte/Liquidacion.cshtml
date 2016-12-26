@@ -35,8 +35,12 @@
                         <th>@li.Fecha.ToShortDateString()</th>
                         <th style="text-align:left">@li.Articulo</th>
                         <th>@li.Cantidad</th>
-                        <th>@li.Precio.ToString("N2")</th>
-                        <th>@li.Total.ToString("N2")</th>
+                        @if (new EventoTipo(li.Tipo).Nombre == "Decomisacion") {
+                            <th colspan="2" style="text-align:right"><b><i>[ Decomisación ]</i></b></th>
+                        } else {
+                            <th>@li.Precio.ToString("N2")</th>
+                            <th>@li.Total.ToString("N2")</th>
+                        }
                     </tr>                        
                     }
                     <tr>
@@ -52,7 +56,7 @@
                         <th><h4><b>- @Model.CostoDescarga.ToString("N2")</b></h4></th>
                     </tr>
                     <tr>
-                        <th colspan="4" style="text-align:right"><h4><i>Comisión por Ventas ($)</i></h4></th>
+                        <th colspan="4" style="text-align:right"><h4><i>Comisión por Ventas ($) @((Model.Ganancia>0 && Model.ComisionCobrada>0) ? "[ %"+(Model.ComisionCobrada/Model.Ganancia).ToString("N2").Right(2)+" ]":"") </i></h4></th>
                         <th><h4><b>- @Model.ComisionCobrada.ToString("N2")</b></h4></th>
                     </tr>
                     <tr>
